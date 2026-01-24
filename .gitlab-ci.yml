@@ -1,9 +1,19 @@
 # GitLab CI for vauchi-website
 #
 # Landing page + app-files content hosting
+#
+# GitLab Ultimate Features:
+#   - Secret Detection: Prevent credential leaks
+#   - Container Scanning: Docker image vulnerability scanning
+
+# GitLab Ultimate Templates
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
 
 stages:
   - lint
+  - test
   - build
 
 # Lint nginx config
