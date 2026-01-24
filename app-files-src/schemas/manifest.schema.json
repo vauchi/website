@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vauchi.app/schemas/manifest.schema.json",
+  "title": "Content Manifest",
+  "description": "Manifest for Vauchi remote content updates",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "base_url", "content"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version for forward compatibility"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when manifest was generated"
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Base URL for content files"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "networks": {
+          "$ref": "#/$defs/contentEntry"
+        },
+        "locales": {
+          "$ref": "#/$defs/localesEntry"
+        },
+        "themes": {
+          "$ref": "#/$defs/contentEntry"
+        },
+        "help": {
+          "$ref": "#/$defs/contentEntry"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "contentEntry": {
+      "type": "object",
+      "required": ["version", "path", "checksum", "min_app_version"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Semantic version of the content"
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative path to content file"
+        },
+        "checksum": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "SHA-256 checksum with prefix"
+        },
+        "min_app_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Minimum app version required for this content"
+        }
+      }
+    },
+    "localesEntry": {
+      "type": "object",
+      "required": ["version", "path", "min_app_version", "files"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "path": {
+          "type": "string"
+        },
+        "min_app_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "files": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["path", "checksum"],
+            "properties": {
+              "path": { "type": "string" },
+              "checksum": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

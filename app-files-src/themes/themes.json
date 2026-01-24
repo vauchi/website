@@ -1,0 +1,44 @@
+[
+  {
+    "id": "default",
+    "name": "Default",
+    "colors": {
+      "primary": "#6366f1",
+      "secondary": "#8b5cf6",
+      "background": "#ffffff",
+      "surface": "#f8fafc",
+      "text": "#1e293b",
+      "textSecondary": "#64748b",
+      "error": "#ef4444",
+      "success": "#22c55e"
+    }
+  },
+  {
+    "id": "dark",
+    "name": "Dark",
+    "colors": {
+      "primary": "#818cf8",
+      "secondary": "#a78bfa",
+      "background": "#0f172a",
+      "surface": "#1e293b",
+      "text": "#f1f5f9",
+      "textSecondary": "#94a3b8",
+      "error": "#f87171",
+      "success": "#4ade80"
+    }
+  },
+  {
+    "id": "ocean",
+    "name": "Ocean",
+    "colors": {
+      "primary": "#0ea5e9",
+      "secondary": "#06b6d4",
+      "background": "#f0f9ff",
+      "surface": "#e0f2fe",
+      "text": "#0c4a6e",
+      "textSecondary": "#0369a1",
+      "error": "#dc2626",
+      "success": "#16a34a"
+    }
+  }
+]

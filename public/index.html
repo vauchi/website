@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vauchi - Privacy-First Contact Exchange</title>
+    <style>
+        :root {
+            --base: #1e1e2e;
+            --mantle: #181825;
+            --surface0: #313244;
+            --text: #cdd6f4;
+            --subtext0: #a6adc8;
+            --lavender: #b4befe;
+            --mauve: #cba6f7;
+            --sapphire: #74c7ec;
+            --green: #a6e3a1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--base);
+            background-image: radial-gradient(circle at 0% 0%, rgba(203, 166, 247, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 100% 100%, rgba(116, 199, 236, 0.05) 0%, transparent 50%);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(49, 50, 68, 0.3);
+            border: 1px solid rgba(203, 166, 247, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom right, var(--sapphire), var(--mauve));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--lavender);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        h4.tagline {
+            font-size: 1rem;
+            color: var(--subtext0);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2.5rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text);
+            opacity: 0.9;
+        }
+
+        .status-container {
+            text-align: center;
+            margin: 2.5rem 0;
+        }
+
+        .status {
+            padding: 0.6rem 1.5rem;
+            background: rgba(166, 227, 161, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(166, 227, 161, 0.3);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--subtext0);
+            border-top: 1px solid var(--surface0);
+            padding-top: 2rem;
+            margin-top: 1rem;
+        }
+
+        .logo {
+            display: block;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 16px;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(180, 190, 254, 0.1);
+            color: var(--lavender);
+            border: 1px solid rgba(180, 190, 254, 0.2);
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .links a:hover {
+            background: rgba(180, 190, 254, 0.2);
+            border-color: rgba(180, 190, 254, 0.4);
+        }
+
+        .links svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 2rem; }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Vauchi logo" class="logo">
+        <h1>Vauchi</h1>
+        <h2 class="tagline">The last time you'll ever exchange contact info.</h2>
+        
+        <p>Your address book is a graveyard of dead numbers. Vauchi keeps it alive. Exchange once; stay connected -- no matter what changes.</p>
+
+        <div class="features">
+            <p><strong>Silent Updates.</strong> When your details change, your friends’ phones update automatically. No notifications, no noise.</p>
+            
+            <p><strong>Granular Privacy.</strong> You control the visibility. Share work details with colleagues and home addresses with family—all from a single identity.</p>
+            
+            <p><strong>Physical Recovery.</strong> No master passwords to lose. If you lose your device, regain access through in-person verification with your trusted inner circle.</p>
+
+            <p><strong>Zero Platform.</strong> No feeds, no profiles, and no social graphs. It’s open-source infrastructure that you own entirely.</p>
+        </div>
+
+        <div class="links">
+            <a href="https://github.com/vauchi" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+            <a href="https://opencollective.com/vauchi" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12c2.54 0 4.894-.79 6.834-2.135l-3.107-3.109a7.715 7.715 0 1 1 0-13.512l3.107-3.109A11.943 11.943 0 0 0 12 0zm9.865 5.166l-3.109 3.107A7.67 7.67 0 0 1 19.715 12a7.682 7.682 0 0 1-.959 3.727l3.109 3.107A11.943 11.943 0 0 0 24 12c0-2.54-.79-4.894-2.135-6.834z"/></svg>
+                Open Collective
+            </a>
+        </div>
+
+        <div class="footer">
+            Auditable · End-to-End Encrypted · No Accounts Required
+        </div>
+    </div>
+</body>
+</html>

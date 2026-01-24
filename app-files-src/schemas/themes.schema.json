@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vauchi.app/schemas/themes.schema.json",
+  "title": "Themes",
+  "description": "Theme definitions for Vauchi",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "colors"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "description": "Unique lowercase identifier"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Human-readable display name"
+      },
+      "colors": {
+        "type": "object",
+        "required": ["primary", "background", "text"],
+        "properties": {
+          "primary": { "$ref": "#/$defs/hexColor" },
+          "secondary": { "$ref": "#/$defs/hexColor" },
+          "background": { "$ref": "#/$defs/hexColor" },
+          "surface": { "$ref": "#/$defs/hexColor" },
+          "text": { "$ref": "#/$defs/hexColor" },
+          "textSecondary": { "$ref": "#/$defs/hexColor" },
+          "error": { "$ref": "#/$defs/hexColor" },
+          "success": { "$ref": "#/$defs/hexColor" }
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  "$defs": {
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Hex color code"
+    }
+  }
+}

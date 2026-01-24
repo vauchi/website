@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vauchi.app/schemas/locales.schema.json",
+  "title": "Locale Strings",
+  "description": "Localization strings for Vauchi",
+  "type": "object",
+  "additionalProperties": {
+    "type": "string"
+  },
+  "propertyNames": {
+    "pattern": "^[a-z][a-z0-9._]*$"
+  },
+  "minProperties": 1
+}

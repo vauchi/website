@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vauchi.app/schemas/networks.schema.json",
+  "title": "Social Networks",
+  "description": "Social network definitions for Vauchi",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "url"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*$",
+        "description": "Unique lowercase identifier"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Human-readable display name"
+      },
+      "url": {
+        "type": "string",
+        "pattern": "^https?://.*\\{username\\}.*$",
+        "description": "URL template with {username} placeholder"
+      }
+    },
+    "additionalProperties": false
+  }
+}
