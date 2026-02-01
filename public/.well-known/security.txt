@@ -1,0 +1,7 @@
+# Vauchi Security Policy
+# https://securitytxt.org/ | RFC 9116
+
+Contact: mailto:security@vauchi.app
+Expires: 2027-02-01T00:00:00.000Z
+Preferred-Languages: en, de, fr, it
+Policy: https://gitlab.com/vauchi/vauchi/-/blob/main/SECURITY.md
