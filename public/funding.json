@@ -1,0 +1,86 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.1.0",
+  "entity": {
+    "type": "individual",
+    "role": "owner",
+    "name": "Mattia Egloff",
+    "email": "mattia.egloff@pm.me",
+    "description": "Creator and lead developer of Vauchi, an open-source privacy-first contact exchange app. Building software that respects users by default — no tracking, no data harvesting, no ads.",
+    "webpageUrl": {
+      "url": "https://vauchi.app"
+    }
+  },
+  "projects": [
+    {
+      "guid": "vauchi",
+      "name": "Vauchi",
+      "description": "Privacy-focused updatable contact cards via in-person QR exchange. Exchange contact info once, stay in sync forever. End-to-end encrypted with zero-knowledge relay, no accounts, no tracking. Cross-platform: iOS, Android, desktop, CLI.",
+      "webpageUrl": {
+        "url": "https://vauchi.app"
+      },
+      "repositoryUrl": {
+        "url": "https://gitlab.com/vauchi/vauchi"
+      },
+      "licenses": [
+        "spdx:GPL-3.0-or-later"
+      ],
+      "tags": [
+        "privacy",
+        "encryption",
+        "contacts",
+        "rust",
+        "open-source",
+        "e2e-encryption",
+        "qr-code",
+        "cross-platform",
+        "decentralized"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/vauchi",
+        "description": "Recurring or one-time sponsorship via GitHub Sponsors"
+      },
+      {
+        "guid": "liberapay",
+        "type": "payment-provider",
+        "address": "https://liberapay.com/Vauchi/donate",
+        "description": "Recurring donations via Liberapay"
+      }
+    ],
+    "plans": [
+      {
+        "guid": "any-amount-recurring",
+        "status": "active",
+        "name": "Monthly support",
+        "description": "Help fund development, infrastructure, and security audits",
+        "amount": 0,
+        "currency": "CHF",
+        "frequency": "monthly",
+        "channels": [
+          "github-sponsors",
+          "liberapay"
+        ]
+      },
+      {
+        "guid": "any-amount-one-time",
+        "status": "active",
+        "name": "One-time donation",
+        "description": "Any amount helps — funds go toward relay hosting, testing devices, and security audits",
+        "amount": 0,
+        "currency": "CHF",
+        "frequency": "one-time",
+        "channels": [
+          "github-sponsors",
+          "liberapay"
+        ]
+      }
+    ],
+    "history": []
+  }
+}
