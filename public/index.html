@@ -1,7 +1,7 @@
 <!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,30 +9,44 @@
     <title>Vauchi - Privacy-First Contact Exchange</title>
     <style>
       :root {
+        /* Catppuccin Mocha */
         --base: #1e1e2e;
         --mantle: #181825;
+        --crust: #11111b;
         --surface0: #313244;
+        --surface1: #45475a;
+        --surface2: #585b70;
+        --overlay0: #6c7086;
         --text: #cdd6f4;
         --subtext0: #a6adc8;
         --lavender: #b4befe;
         --mauve: #cba6f7;
         --sapphire: #74c7ec;
         --green: #a6e3a1;
+        --red: #f38ba8;
+        --yellow: #f9e2af;
+        --sky: #89dceb;
+        /* Explainer aliases */
+        --accent: #cba6f7;
+        --accent-dim: rgba(203, 166, 247, 0.15);
+        --mono: "SF Mono", "Fira Code", Consolas, monospace;
+        --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
+          sans-serif;
+        --serif: Georgia, "Times New Roman", serif;
       }
 
-      * {
+      *,
+      *::before,
+      *::after {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
 
       body {
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto,
-          sans-serif;
+        font-family: var(--sans);
         background-color: var(--base);
-        background-image:
-          radial-gradient(
+        background-image: radial-gradient(
             circle at 0% 0%,
             rgba(203, 166, 247, 0.05) 0%,
             transparent 50%
@@ -44,22 +58,29 @@
           );
         color: var(--text);
         line-height: 1.6;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         min-height: 100vh;
         padding: 20px;
       }
 
-      .container {
+      .page-wrapper {
         max-width: 680px;
-        width: 100%;
-        background: rgba(49, 50, 68, 0.3);
-        border: 1px solid rgba(203, 166, 247, 0.1);
-        backdrop-filter: blur(12px);
-        padding: 3rem;
-        border-radius: 24px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        padding: 2rem 0;
+      }
+
+      .hero {
+        text-align: center;
+      }
+
+      .logo {
+        display: block;
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        border-radius: 16px;
       }
 
       h1 {
@@ -74,6 +95,7 @@
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        background-clip: text;
         text-align: center;
       }
 
@@ -81,63 +103,25 @@
         font-size: 1.25rem;
         font-weight: 500;
         color: var(--lavender);
-        margin-bottom: 0.5rem;
         text-align: center;
       }
 
-      h4.tagline {
-        font-size: 1rem;
-        color: var(--subtext0);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 2.5rem;
-      }
-
-      p {
+      .content p {
         margin-bottom: 1.5rem;
         font-size: 1.1rem;
         color: var(--text);
         opacity: 0.9;
       }
 
-      .status-container {
-        text-align: center;
-        margin: 2.5rem 0;
-      }
-
-      .status {
-        padding: 0.6rem 1.5rem;
-        background: rgba(166, 227, 161, 0.1);
-        color: var(--green);
-        border: 1px solid rgba(166, 227, 161, 0.3);
-        border-radius: 100px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-      }
-
-      .footer {
-        text-align: center;
-        font-size: 0.9rem;
-        color: var(--subtext0);
-        border-top: 1px solid var(--surface0);
-        padding-top: 2rem;
-        margin-top: 1rem;
-      }
-
-      .logo {
-        display: block;
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1.5rem;
-        border-radius: 16px;
+      .content p:last-child {
+        margin-bottom: 0;
       }
 
       .links {
         display: flex;
         justify-content: center;
-        gap: 1.5rem;
-        margin: 2rem 0;
+        gap: 1rem;
+        flex-wrap: wrap;
       }
 
       .links a {
@@ -166,37 +150,1402 @@
         fill: currentColor;
       }
 
-      @media (max-width: 600px) {
-        .container {
-          padding: 2rem;
+      .demo-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.6rem 1.2rem;
+        background: rgba(180, 190, 254, 0.05);
+        color: var(--subtext0);
+        border: 1px solid rgba(180, 190, 254, 0.1);
+        border-radius: 100px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .footer {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--subtext0);
+        border-top: 1px solid var(--surface0);
+        padding-top: 2rem;
+      }
+
+      /* === Explainer Widget === */
+
+      .v-player {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: var(--base);
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        font-family: var(--sans);
+        border: 1px solid var(--surface0);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+        outline: none;
+      }
+
+      .v-scene {
+        position: absolute;
+        inset: 0;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
+      .v-scene.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .v-scene-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 14px;
+        text-align: center;
+      }
+
+      .v-scene.active .v-fade {
+        animation: vFadeIn 0.65s ease both;
+      }
+      .v-d1 {
+        animation-delay: 0ms !important;
+      }
+      .v-d2 {
+        animation-delay: 250ms !important;
+      }
+      .v-d3 {
+        animation-delay: 500ms !important;
+      }
+      .v-d4 {
+        animation-delay: 900ms !important;
+      }
+      .v-d5 {
+        animation-delay: 1200ms !important;
+      }
+      .v-d6 {
+        animation-delay: 1500ms !important;
+      }
+      .v-d7 {
+        animation-delay: 1800ms !important;
+      }
+      .v-d8 {
+        animation-delay: 2500ms !important;
+      }
+
+      @keyframes vFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .v-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        font-family: var(--mono);
+      }
+      .v-heading {
+        font-size: 20px;
+        font-weight: 300;
+        color: var(--text);
+        max-width: 400px;
+        line-height: 1.5;
+        font-family: var(--serif);
+      }
+      .v-heading.lg {
+        font-size: 44px;
+        letter-spacing: -1.5px;
+        max-width: none;
+      }
+      .v-sub {
+        font-size: 10px;
+        font-family: var(--mono);
+        letter-spacing: 0.5px;
+      }
+      .v-caption {
+        font-size: 14px;
+        color: var(--subtext0);
+        max-width: 340px;
+        line-height: 1.6;
+        font-family: var(--sans);
+      }
+      .v-micro {
+        font-size: 9px;
+        font-family: var(--mono);
+        letter-spacing: 0.8px;
+        color: var(--subtext0);
+      }
+
+      .v-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .v-tag {
+        font-size: 9px;
+        color: var(--subtext0);
+        border: 1px solid var(--surface0);
+        border-radius: 12px;
+        padding: 2px 10px;
+        font-family: var(--mono);
+        letter-spacing: 0.6px;
+        line-height: 18px;
+        white-space: nowrap;
+      }
+
+      .v-phone-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .v-phone {
+        width: 160px;
+        height: 300px;
+        border-radius: 24px;
+        background: var(--mantle);
+        border: 1.5px solid var(--surface0);
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(203, 166, 247, 0.04);
+      }
+      .v-phone-notch {
+        width: 44px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--mantle);
+        margin: 3px auto 6px;
+      }
+      .v-phone-screen {
+        flex: 1;
+        border-radius: 18px;
+        background: var(--base);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .v-phone.sm {
+        transform: scale(0.68);
+      }
+      .v-phone.med {
+        transform: scale(0.72);
+      }
+      .v-phone.lg {
+        transform: scale(0.82);
+      }
+      .v-phone.tilt-l {
+        transform: scale(0.68) rotate(-2deg);
+      }
+      .v-phone.tilt-r {
+        transform: scale(0.68) rotate(2deg);
+      }
+
+      .v-contact {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        margin: 3px 8px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        transition: all 0.5s ease;
+      }
+      .v-contact.glow {
+        background: var(--accent-dim);
+        border-color: rgba(203, 166, 247, 0.2);
+      }
+      .v-contact-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: var(--surface0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--subtext0);
+      }
+      .v-contact.glow .v-contact-avatar {
+        background: linear-gradient(135deg, var(--accent), #9775d4);
+        color: #fff;
+      }
+      .v-contact-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: 0.2px;
+      }
+      .v-contact-detail {
+        font-size: 9px;
+        font-family: var(--mono);
+        transition: all 0.4s;
+      }
+      .v-contact-detail.strike {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
+      .v-contact-sub {
+        font-size: 8px;
+        font-family: var(--mono);
+        margin-top: 1px;
+      }
+
+      .v-qr {
+        display: inline-grid;
+        grid-template-columns: repeat(9, 7px);
+        gap: 1.5px;
+        padding: 10px;
+        border-radius: 12px;
+        background: rgba(30, 30, 46, 0.3);
+        border: 1px solid var(--surface0);
+        transition: all 0.6s ease;
+      }
+      .v-qr.active {
+        background: var(--accent-dim);
+        border-color: rgba(203, 166, 247, 0.25);
+      }
+      .v-qr-cell {
+        width: 7px;
+        height: 7px;
+        border-radius: 1.5px;
+        background: var(--surface0);
+        transition: all 0.3s ease;
+        opacity: 0.3;
+      }
+      .v-qr.active .v-qr-cell.filled {
+        background: var(--accent);
+        opacity: 1;
+      }
+      .v-qr-cell.empty {
+        background: transparent !important;
+      }
+
+      .v-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .v-row.wide {
+        gap: 32px;
+      }
+      .v-row.tight {
+        gap: 10px;
+      }
+      .v-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .v-arrow {
+        display: block;
+        transition: all 0.5s;
+      }
+
+      .v-priv-card {
+        background: var(--mantle);
+        border-radius: 14px;
+        padding: 10px 14px;
+        border: 1px solid var(--surface0);
+        min-width: 150px;
+      }
+      .v-priv-card .v-priv-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .v-priv-card .v-priv-line {
+        font-size: 9px;
+        font-family: var(--mono);
+        margin-top: 2px;
+      }
+
+      .v-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        transition: all 0.5s;
+      }
+      .v-icon-box.red {
+        background: rgba(243, 139, 168, 0.08);
+        border: 1px solid rgba(243, 139, 168, 0.2);
+      }
+      .v-icon-box.neutral {
+        background: rgba(30, 30, 46, 0.3);
+        border: 1px solid var(--surface0);
+      }
+      .v-icon-box.green {
+        background: rgba(166, 227, 161, 0.08);
+        border: 1px solid rgba(166, 227, 161, 0.2);
+      }
+      .v-trust-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: rgba(30, 30, 46, 0.5);
+        border: 1px solid var(--surface0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.4s ease;
+      }
+      .v-trust-dot.lit {
+        background: var(--accent-dim);
+        border-color: rgba(203, 166, 247, 0.3);
+      }
+
+      .v-pills {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .v-pill {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        color: var(--subtext0);
+        font-family: var(--mono);
+        background: var(--mantle);
+        border-radius: 10px;
+        padding: 5px 10px;
+        border: 1px solid var(--surface0);
+      }
+      .v-pill-icon {
+        font-size: 12px;
+      }
+
+      .v-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+      }
+      .v-link {
+        font-size: 11px;
+        border-radius: 16px;
+        padding: 6px 18px;
+        text-decoration: none;
+        font-family: var(--mono);
+        letter-spacing: 0.5px;
+        transition: opacity 0.3s;
+      }
+      .v-link:hover {
+        opacity: 0.8;
+      }
+      .v-link.primary {
+        color: var(--accent);
+        border: 1px solid rgba(203, 166, 247, 0.25);
+      }
+      .v-link.secondary {
+        color: var(--subtext0);
+        border: 1px solid var(--surface0);
+      }
+
+      .v-scan-target {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        border: 2px dashed var(--surface0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        transition: all 0.4s;
+      }
+      .v-scan-target.active {
+        border-color: var(--accent);
+      }
+
+      .v-pair-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1.5px solid var(--surface0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: var(--subtext0);
+        transition: all 0.5s ease;
+      }
+      .v-pair-circle.done {
+        border-color: var(--green);
+        background: rgba(166, 227, 161, 0.08);
+        color: var(--green);
+      }
+
+      .v-relay {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .v-relay-label {
+        font-size: 7px;
+        color: var(--subtext0);
+        font-family: var(--mono);
+        letter-spacing: 1px;
+      }
+
+      .v-status {
+        text-align: center;
+        padding: 4px 0;
+        font-size: 8px;
+        font-family: var(--mono);
+        letter-spacing: 0.5px;
+        transition: color 0.5s;
+      }
+
+      .v-logo-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: var(--accent-dim);
+        border: 1px solid rgba(203, 166, 247, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .v-controls {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        z-index: 10;
+        background: rgba(17, 17, 27, 0.85);
+        border-radius: 20px;
+        padding: 4px 12px;
+        border: 1px solid var(--surface0);
+        backdrop-filter: blur(8px);
+      }
+      .v-play-btn {
+        background: none;
+        border: none;
+        color: var(--subtext0);
+        font-size: 11px;
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-family: var(--mono);
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .v-play-btn:hover {
+        background: var(--surface0);
+        color: var(--accent);
+      }
+      .v-play-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .v-divider {
+        width: 1px;
+        height: 12px;
+        background: var(--surface0);
+      }
+      .v-dot-btn {
+        height: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+      }
+      .v-dot-btn:hover {
+        transform: scale(1.4);
+      }
+      .v-dot-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .v-progress-track {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--crust);
+      }
+      .v-progress-bar {
+        height: 100%;
+        border-radius: 0 1px 1px 0;
+        background: linear-gradient(90deg, var(--accent), #9775d4);
+        transition: width 0.1s linear;
+      }
+
+      .v-efooter {
+        font-size: 9px;
+        color: var(--surface1);
+        font-family: var(--mono);
+        letter-spacing: 1px;
+      }
+
+      .v-hidden {
+        opacity: 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
         h1 {
           font-size: 3rem;
+        }
+
+        .v-player {
+          aspect-ratio: 4 / 3;
+        }
+        .v-scene {
+          padding: 12px;
+        }
+        .v-phone {
+          width: 120px;
+          height: 220px;
+        }
+        .v-phone.sm {
+          transform: scale(0.58);
+        }
+        .v-phone.med {
+          transform: scale(0.6);
+        }
+        .v-phone.lg {
+          transform: scale(0.7);
+        }
+        .v-phone.tilt-l {
+          transform: scale(0.58) rotate(-2deg);
+        }
+        .v-phone.tilt-r {
+          transform: scale(0.58) rotate(2deg);
+        }
+        .v-heading {
+          font-size: 16px;
+        }
+        .v-heading.lg {
+          font-size: 30px;
+        }
+        .v-qr {
+          grid-template-columns: repeat(9, 5px);
+          gap: 1px;
+          padding: 6px;
+        }
+        .v-qr-cell {
+          width: 5px;
+          height: 5px;
+        }
+        .v-row.wide {
+          gap: 16px;
+        }
+        .v-priv-card {
+          min-width: 120px;
+          padding: 8px 10px;
+        }
+        .v-caption {
+          font-size: 12px;
+        }
+        .v-icon-box {
+          width: 36px;
+          height: 36px;
+          font-size: 16px;
+        }
+        .v-trust-dot {
+          width: 26px;
+          height: 26px;
+          font-size: 12px;
+        }
+        .v-pills {
+          gap: 6px;
+        }
+        .v-pill {
+          font-size: 8px;
+          padding: 4px 8px;
+        }
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .v-scene.active .v-fade {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+        .v-scene {
+          transition: none;
+        }
+        .v-contact,
+        .v-qr,
+        .v-scan-target,
+        .v-pair-circle,
+        .v-trust-dot,
+        .v-icon-box,
+        .v-arrow,
+        .v-progress-bar {
+          transition: none;
         }
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <img src="logo.png" alt="Vauchi logo" class="logo" />
-      <h1>Vauchi</h1>
-      <h2 class="tagline">The last time you'll ever exchange contact info.</h2>
+    <main class="page-wrapper">
+      <header class="hero">
+        <img src="logo.png" alt="Vauchi logo" class="logo" />
+        <h1>Vauchi</h1>
+        <h2 class="tagline">
+          The last time you'll ever exchange contact info.
+        </h2>
+      </header>
 
-      <p>
-        Your address book is a graveyard of dead numbers. Vauchi keeps it alive.
-        Exchange once; stay connected -- no matter what changes.
-      </p>
+      <!-- Explainer Widget -->
+      <div
+        class="v-player"
+        id="player"
+        role="region"
+        aria-label="How Vauchi works"
+        tabindex="0"
+      >
+        <!-- Scene 0: Intro -->
+        <div class="v-scene active" data-scene="0">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-logo-icon">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#cba6f7"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+              </svg>
+            </div>
+            <div class="v-fade v-d2 v-heading lg">vauchi</div>
+            <div class="v-fade v-d3 v-caption">
+              The last time you'll ever exchange contact info.
+            </div>
+            <div class="v-fade v-d4 v-tags">
+              <span class="v-tag">End-to-End Encrypted</span>
+              <span class="v-tag">No Accounts</span>
+              <span class="v-tag">Open Source</span>
+            </div>
+          </div>
+        </div>
 
-      <div class="features">
+        <!-- Scene 1: Problem -->
+        <div class="v-scene" data-scene="1">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--red)">
+              The Problem
+            </div>
+            <div class="v-fade v-d2 v-heading">
+              Your address book is a graveyard of dead numbers.
+            </div>
+            <div class="v-fade v-d3">
+              <div class="v-phone-wrap">
+                <div class="v-phone lg">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 6px 0">
+                    <div class="v-contact">
+                      <div class="v-contact-avatar">A</div>
+                      <div>
+                        <div class="v-contact-name">Alex Rivera</div>
+                        <div
+                          class="v-contact-detail strike"
+                          style="color: var(--red)"
+                        >
+                          +1 555-0147 (disconnected)
+                        </div>
+                      </div>
+                    </div>
+                    <div class="v-contact">
+                      <div class="v-contact-avatar">S</div>
+                      <div>
+                        <div class="v-contact-name">Sam Chen</div>
+                        <div
+                          class="v-contact-detail strike"
+                          style="color: var(--red)"
+                        >
+                          +44 7911 ████ (old number)
+                        </div>
+                      </div>
+                    </div>
+                    <div class="v-contact">
+                      <div class="v-contact-avatar">M</div>
+                      <div>
+                        <div class="v-contact-name">Maya Okafor</div>
+                        <div
+                          class="v-contact-detail strike"
+                          style="color: var(--red)"
+                        >
+                          maya@oldcompany.com
+                        </div>
+                      </div>
+                    </div>
+                    <div class="v-contact">
+                      <div class="v-contact-avatar">J</div>
+                      <div>
+                        <div class="v-contact-name">Jordan Petrov</div>
+                        <div
+                          class="v-contact-detail"
+                          style="color: var(--overlay0)"
+                        >
+                          (no number saved)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d5 v-sub"
+              style="color: rgba(243, 139, 168, 0.5)"
+            >
+              sound familiar?
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 2: Exchange -->
+        <div class="v-scene" data-scene="2">
+          <div class="v-scene-inner" style="gap: 18px">
+            <div class="v-fade v-d1 v-label" style="color: var(--accent)">
+              Contact Exchange
+            </div>
+            <div class="v-fade v-d2 v-heading">
+              Meet in person. Scan. Connected.
+            </div>
+            <div class="v-fade v-d3 v-row">
+              <div class="v-phone-wrap">
+                <div class="v-micro">YOU</div>
+                <div class="v-phone tilt-l">
+                  <div class="v-phone-notch"></div>
+                  <div
+                    class="v-phone-screen"
+                    style="
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 6px;
+                    "
+                  >
+                    <div class="v-micro">Show QR</div>
+                    <div class="v-qr" id="qr2">
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell empty"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                      <div class="v-qr-cell filled"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="v-col">
+                <div class="v-pair-circle" id="pair2">&#x27F7;</div>
+                <div class="v-micro" id="pair2-label">scanning</div>
+              </div>
+              <div class="v-phone-wrap">
+                <div class="v-micro">ALEX</div>
+                <div class="v-phone tilt-r">
+                  <div class="v-phone-notch"></div>
+                  <div
+                    class="v-phone-screen"
+                    style="
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 6px;
+                    "
+                  >
+                    <div class="v-micro">Scan</div>
+                    <div class="v-scan-target" id="scan2">&#x1F4F7;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d6 v-sub"
+              style="color: rgba(203, 166, 247, 0.5)"
+            >
+              No phone number or account needed
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3: Connected -->
+        <div class="v-scene" data-scene="3">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--green)">
+              &#x2713; Exchanged
+            </div>
+            <div class="v-fade v-d2 v-heading">
+              Both phones now hold each other's encrypted contact card.
+            </div>
+            <div class="v-fade v-d3 v-row wide">
+              <div class="v-phone-wrap">
+                <div class="v-micro">YOUR PHONE</div>
+                <div class="v-phone med">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 8px 0">
+                    <div class="v-contact glow">
+                      <div class="v-contact-avatar">A</div>
+                      <div>
+                        <div class="v-contact-name">Alex Rivera</div>
+                        <div
+                          class="v-contact-detail"
+                          style="color: var(--green)"
+                        >
+                          +1 555-8832
+                        </div>
+                        <div class="v-contact-sub" style="color: var(--green)">
+                          alex@company.io
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="v-phone-wrap">
+                <div class="v-micro">ALEX'S PHONE</div>
+                <div class="v-phone med">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 8px 0">
+                    <div class="v-contact glow">
+                      <div class="v-contact-avatar">Y</div>
+                      <div>
+                        <div class="v-contact-name">You</div>
+                        <div
+                          class="v-contact-detail"
+                          style="color: var(--green)"
+                        >
+                          +1 555-0123
+                        </div>
+                        <div class="v-contact-sub" style="color: var(--green)">
+                          you@email.com
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d4 v-sub"
+              style="color: rgba(166, 227, 161, 0.5)"
+            >
+              exchange once &#x2014; stay connected
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 4: Silent Updates -->
+        <div class="v-scene" data-scene="4">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--accent)">
+              Silent Updates
+            </div>
+            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
+              When your details change, your friends' phones update
+              automatically. No notifications, no noise.
+            </div>
+            <div class="v-fade v-d3 v-row tight">
+              <div class="v-phone-wrap">
+                <div class="v-micro">YOU UPDATE</div>
+                <div class="v-phone sm">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 6px 0">
+                    <div
+                      class="v-status"
+                      id="status4a"
+                      style="color: var(--subtext0)"
+                    >
+                      editing...
+                    </div>
+                    <div class="v-contact" id="card4a">
+                      <div class="v-contact-avatar">Y</div>
+                      <div>
+                        <div class="v-contact-name">You</div>
+                        <div
+                          class="v-contact-detail"
+                          id="detail4a"
+                          style="color: var(--subtext0)"
+                        >
+                          +1 555-0123
+                        </div>
+                        <div
+                          class="v-contact-sub"
+                          id="sub4a"
+                          style="color: var(--subtext0)"
+                        >
+                          you@email.com
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="v-fade v-d5 v-relay">
+                <div class="v-relay-label">E2EE</div>
+                <svg
+                  class="v-arrow"
+                  id="arrow4a"
+                  width="32"
+                  height="16"
+                  viewBox="0 0 32 16"
+                >
+                  <path
+                    d="M0 8 L24 8 M18 3 L25 8 L18 13"
+                    stroke="#a6adc8"
+                    fill="none"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <div class="v-relay-label">RELAY</div>
+                <svg
+                  class="v-arrow"
+                  id="arrow4b"
+                  width="32"
+                  height="16"
+                  viewBox="0 0 32 16"
+                >
+                  <path
+                    d="M0 8 L24 8 M18 3 L25 8 L18 13"
+                    stroke="#a6adc8"
+                    fill="none"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <div class="v-relay-label">E2EE</div>
+              </div>
+              <div class="v-phone-wrap">
+                <div class="v-micro">ALEX SEES</div>
+                <div class="v-phone sm">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 6px 0">
+                    <div
+                      class="v-status"
+                      id="status4b"
+                      style="color: var(--subtext0)"
+                    >
+                      waiting...
+                    </div>
+                    <div class="v-contact" id="card4b">
+                      <div class="v-contact-avatar">Y</div>
+                      <div>
+                        <div class="v-contact-name">You</div>
+                        <div
+                          class="v-contact-detail"
+                          id="detail4b"
+                          style="color: var(--subtext0)"
+                        >
+                          +1 555-0123
+                        </div>
+                        <div
+                          class="v-contact-sub"
+                          id="sub4b"
+                          style="color: var(--subtext0)"
+                        >
+                          you@email.com
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d8 v-sub"
+              style="color: rgba(166, 173, 200, 0.6)"
+            >
+              no matter what changes
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 5: Granular Privacy -->
+        <div class="v-scene" data-scene="5">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--yellow)">
+              Granular Privacy
+            </div>
+            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
+              Share work details with colleagues and home addresses with family
+              &#x2014; all from a single identity.
+            </div>
+            <div
+              class="v-fade v-d3 v-row"
+              style="gap: 20px; align-items: flex-start"
+            >
+              <div class="v-col" style="gap: 4px">
+                <div class="v-micro">Colleague sees</div>
+                <div class="v-priv-card">
+                  <div class="v-priv-name">You</div>
+                  <div
+                    class="v-priv-line"
+                    style="color: var(--green); margin-top: 4px"
+                  >
+                    +1 555-WORK
+                  </div>
+                  <div class="v-priv-line" style="color: var(--green)">
+                    you@company.io
+                  </div>
+                  <div
+                    class="v-priv-line"
+                    style="
+                      color: var(--overlay0);
+                      margin-top: 3px;
+                      font-style: italic;
+                    "
+                  >
+                    &#x1F512; address hidden
+                  </div>
+                </div>
+              </div>
+              <div class="v-col" style="gap: 4px">
+                <div class="v-micro">Family sees</div>
+                <div class="v-priv-card">
+                  <div class="v-priv-name">You</div>
+                  <div
+                    class="v-priv-line"
+                    style="color: var(--green); margin-top: 4px"
+                  >
+                    +1 555-HOME
+                  </div>
+                  <div class="v-priv-line" style="color: var(--green)">
+                    you@personal.me
+                  </div>
+                  <div class="v-priv-line" style="color: var(--green)">
+                    123 Home Street
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d5 v-sub"
+              style="color: rgba(166, 173, 200, 0.6)"
+            >
+              you control the visibility
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 6: Physical Recovery -->
+        <div class="v-scene" data-scene="6">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--sky)">
+              Physical Recovery
+            </div>
+            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
+              No master passwords to lose. Regain access through in-person
+              verification with your trusted inner circle.
+            </div>
+            <div class="v-fade v-d3 v-row">
+              <div class="v-col">
+                <div class="v-icon-box red">&#x1F4F1;</div>
+                <div class="v-micro" style="color: var(--red)">lost device</div>
+              </div>
+              <svg
+                class="v-arrow"
+                id="arrow6a"
+                width="32"
+                height="16"
+                viewBox="0 0 32 16"
+              >
+                <path
+                  d="M0 8 L24 8 M18 3 L25 8 L18 13"
+                  stroke="#a6adc8"
+                  fill="none"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <div class="v-col">
+                <div style="display: flex; gap: 4px">
+                  <div class="v-trust-dot" id="trust0">&#x1F464;</div>
+                  <div class="v-trust-dot" id="trust1">&#x1F464;</div>
+                  <div class="v-trust-dot" id="trust2">&#x1F464;</div>
+                </div>
+                <div class="v-micro" style="color: var(--accent)">
+                  trusted circle
+                </div>
+              </div>
+              <svg
+                class="v-arrow"
+                id="arrow6b"
+                width="32"
+                height="16"
+                viewBox="0 0 32 16"
+              >
+                <path
+                  d="M0 8 L24 8 M18 3 L25 8 L18 13"
+                  stroke="#a6adc8"
+                  fill="none"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <div class="v-col">
+                <div class="v-icon-box neutral" id="recovery-icon">
+                  &#x1F4F1;
+                </div>
+                <div
+                  class="v-micro"
+                  id="recovery-label"
+                  style="color: var(--subtext0)"
+                >
+                  new device
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d7 v-sub"
+              style="color: rgba(166, 173, 200, 0.6)"
+            >
+              in-person verification &#x2014; no cloud, no passwords
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 7: Zero Platform -->
+        <div class="v-scene" data-scene="7">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--green)">
+              Zero Platform
+            </div>
+            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
+              No feeds, no profiles, no social graphs.
+            </div>
+            <div class="v-fade v-d3 v-row" style="gap: 24px">
+              <div class="v-col" style="gap: 8px">
+                <div class="v-icon-box red">
+                  <span style="font-size: 18px">&#x1F4E1;</span>
+                </div>
+                <div
+                  class="v-micro"
+                  style="color: var(--red); text-decoration: line-through"
+                >
+                  feeds
+                </div>
+              </div>
+              <div class="v-col" style="gap: 8px">
+                <div class="v-icon-box red">
+                  <span style="font-size: 18px">&#x1F464;</span>
+                </div>
+                <div
+                  class="v-micro"
+                  style="color: var(--red); text-decoration: line-through"
+                >
+                  profiles
+                </div>
+              </div>
+              <div class="v-col" style="gap: 8px">
+                <div class="v-icon-box red">
+                  <span style="font-size: 18px">&#x1F578;&#xFE0F;</span>
+                </div>
+                <div
+                  class="v-micro"
+                  style="color: var(--red); text-decoration: line-through"
+                >
+                  social graph
+                </div>
+              </div>
+              <div class="v-col" style="gap: 8px">
+                <div class="v-icon-box green">
+                  <span style="font-size: 18px">&#x1F4D6;</span>
+                </div>
+                <div class="v-micro" style="color: var(--green)">
+                  open source
+                </div>
+              </div>
+            </div>
+            <div class="v-fade v-d5 v-caption">
+              Open-source infrastructure you own entirely.
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 8: Outro -->
+        <div class="v-scene" data-scene="8">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-heading lg">vauchi</div>
+            <div class="v-fade v-d2 v-caption">
+              Exchange once. Stay connected &#x2014; no matter what changes.
+            </div>
+            <div class="v-fade v-d3 v-pills">
+              <div class="v-pill">
+                <span class="v-pill-icon">&#x1F504;</span> Silent Updates
+              </div>
+              <div class="v-pill">
+                <span class="v-pill-icon">&#x1F6E1;</span> Granular Privacy
+              </div>
+              <div class="v-pill">
+                <span class="v-pill-icon">&#x1F91D;</span> Physical Recovery
+              </div>
+              <div class="v-pill">
+                <span class="v-pill-icon">&#x1F4D6;</span> Zero Platform
+              </div>
+            </div>
+            <div class="v-fade v-d4 v-links">
+              <a
+                href="https://vauchi.app"
+                target="_blank"
+                rel="noopener"
+                class="v-link primary"
+                >vauchi.app</a
+              >
+              <a
+                href="https://gitlab.com/vauchi"
+                target="_blank"
+                rel="noopener"
+                class="v-link secondary"
+                >GitLab</a
+              >
+            </div>
+            <div class="v-fade v-d6 v-efooter">
+              Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="v-controls" id="controls"></div>
+
+        <!-- Progress -->
+        <div class="v-progress-track">
+          <div class="v-progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <section class="content">
+        <p>
+          Your address book is a graveyard of dead numbers. Vauchi keeps it
+          alive. Exchange once; stay connected -- no matter what changes.
+        </p>
+
         <p>
           <strong>Silent Updates.</strong> When your details change, your
-          friends’ phones update automatically. No notifications, no noise.
+          friends' phones update automatically. No notifications, no noise.
         </p>
 
         <p>
           <strong>Granular Privacy.</strong> You control the visibility. Share
-          work details with colleagues and home addresses with family—all from a
-          single identity.
+          work details with colleagues and home addresses with family&#x2014;all
+          from a single identity.
         </p>
 
         <p>
@@ -207,9 +1556,9 @@
 
         <p>
           <strong>Zero Platform.</strong> No feeds, no profiles, and no social
-          graphs. It’s open-source infrastructure that you own entirely.
+          graphs. It's open-source infrastructure that you own entirely.
         </p>
-      </div>
+      </section>
 
       <div class="links">
         <a href="https://github.com/vauchi" target="_blank" rel="noopener">
@@ -228,18 +1577,7 @@
           </svg>
           GitLab
         </a>
-        <a
-          href="https://github.com/sponsors/vauchi"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
-          Sponsor
-        </a>
+        <span class="demo-link">Demo (coming soon)</span>
         <script src="https://liberapay.com/Vauchi/widgets/button.js"></script>
         <noscript
           ><a href="https://liberapay.com/Vauchi/donate"
@@ -249,9 +1587,330 @@
         ></noscript>
       </div>
 
-      <div class="footer">
-        Auditable · End-to-End Encrypted · No Accounts Required
-      </div>
-    </div>
+      <footer class="footer">
+        Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
+      </footer>
+    </main>
+
+    <script>
+      (function () {
+        var DURATIONS = [3800, 4200, 4500, 3200, 5000, 4500, 4200, 4000, 5500];
+        var TOTAL = DURATIONS.length;
+        var SCENE_NAMES = [
+          "Intro",
+          "The Problem",
+          "Contact Exchange",
+          "Exchanged",
+          "Silent Updates",
+          "Granular Privacy",
+          "Physical Recovery",
+          "Zero Platform",
+          "Outro",
+        ];
+
+        var current = 0;
+        var playing = true;
+        var progress = 0;
+        var timer = null;
+        var ticker = null;
+
+        var prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+        if (prefersReducedMotion) playing = false;
+
+        var player = document.getElementById("player");
+        var scenes = document.querySelectorAll(".v-scene");
+        var bar = document.getElementById("progressBar");
+        var controls = document.getElementById("controls");
+
+        // Build controls
+        var playBtn = document.createElement("button");
+        playBtn.className = "v-play-btn";
+        playBtn.textContent = playing ? "\u23F8" : "\u25B6";
+        playBtn.setAttribute(
+          "aria-label",
+          playing ? "Pause explainer" : "Play explainer"
+        );
+        playBtn.onclick = togglePlay;
+        controls.appendChild(playBtn);
+
+        var divider = document.createElement("div");
+        divider.className = "v-divider";
+        controls.appendChild(divider);
+
+        var dots = [];
+        for (var i = 0; i < TOTAL; i++) {
+          var dot = document.createElement("button");
+          dot.className = "v-dot-btn";
+          dot.setAttribute(
+            "aria-label",
+            "Go to scene " + (i + 1) + ": " + SCENE_NAMES[i]
+          );
+          dot.dataset.index = i;
+          dot.onclick = function () {
+            goTo(parseInt(this.dataset.index));
+          };
+          controls.appendChild(dot);
+          dots.push(dot);
+        }
+
+        function updateDots() {
+          for (var i = 0; i < dots.length; i++) {
+            dots[i].style.width = i === current ? "16px" : "5px";
+            dots[i].style.background =
+              i === current
+                ? "var(--accent)"
+                : i < current
+                ? "#45475a"
+                : "#181825";
+            dots[i].style.opacity = i === current ? "1" : "0.7";
+          }
+        }
+
+        function showScene(idx) {
+          for (var i = 0; i < scenes.length; i++) {
+            if (i === idx) scenes[i].classList.add("active");
+            else scenes[i].classList.remove("active");
+          }
+          updateDots();
+        }
+
+        function updateProgress() {
+          var total = ((current + progress) / TOTAL) * 100;
+          bar.style.width = total + "%";
+        }
+
+        function updateSceneState() {
+          if (current === 2) {
+            var qr = document.getElementById("qr2");
+            var pair = document.getElementById("pair2");
+            var pairLabel = document.getElementById("pair2-label");
+            var scan = document.getElementById("scan2");
+            if (progress > 0.25) {
+              if (qr) qr.classList.add("active");
+              if (scan) scan.classList.add("active");
+            } else {
+              if (qr) qr.classList.remove("active");
+              if (scan) scan.classList.remove("active");
+            }
+            if (progress > 0.55) {
+              if (pair) {
+                pair.classList.add("done");
+                pair.textContent = "\u2713";
+              }
+              if (pairLabel) {
+                pairLabel.textContent = "paired";
+                pairLabel.style.color = "var(--green)";
+              }
+            } else {
+              if (pair) {
+                pair.classList.remove("done");
+                pair.textContent = "\u27F7";
+              }
+              if (pairLabel) {
+                pairLabel.textContent = "scanning";
+                pairLabel.style.color = "var(--subtext0)";
+              }
+            }
+          }
+          if (current === 4) {
+            var s4a = document.getElementById("status4a");
+            var s4b = document.getElementById("status4b");
+            var d4a = document.getElementById("detail4a");
+            var d4b = document.getElementById("detail4b");
+            var sb4a = document.getElementById("sub4a");
+            var sb4b = document.getElementById("sub4b");
+            var c4a = document.getElementById("card4a");
+            var c4b = document.getElementById("card4b");
+            var a4a = document.getElementById("arrow4a");
+            var a4b = document.getElementById("arrow4b");
+
+            if (progress > 0.25) {
+              if (s4a) {
+                s4a.textContent = "\u2713 saved";
+                s4a.style.color = "var(--green)";
+              }
+              if (d4a) {
+                d4a.textContent = "+1 555-9999";
+                d4a.style.color = "var(--green)";
+              }
+              if (sb4a) {
+                sb4a.textContent = "you@newjob.com";
+                sb4a.style.color = "var(--green)";
+              }
+              if (c4a) c4a.classList.add("glow");
+            } else {
+              if (s4a) {
+                s4a.textContent = "editing...";
+                s4a.style.color = "var(--subtext0)";
+              }
+              if (d4a) {
+                d4a.textContent = "+1 555-0123";
+                d4a.style.color = "var(--subtext0)";
+              }
+              if (sb4a) {
+                sb4a.textContent = "you@email.com";
+                sb4a.style.color = "var(--subtext0)";
+              }
+              if (c4a) c4a.classList.remove("glow");
+            }
+            if (a4a)
+              a4a
+                .querySelector("path")
+                .setAttribute("stroke", progress > 0.5 ? "#cba6f7" : "#a6adc8");
+            if (a4b)
+              a4b
+                .querySelector("path")
+                .setAttribute(
+                  "stroke",
+                  progress > 0.65 ? "#cba6f7" : "#a6adc8"
+                );
+            if (progress > 0.65) {
+              if (s4b) {
+                s4b.textContent = "\u2713 auto-synced";
+                s4b.style.color = "var(--green)";
+              }
+              if (d4b) {
+                d4b.textContent = "+1 555-9999";
+                d4b.style.color = "var(--green)";
+              }
+              if (sb4b) {
+                sb4b.textContent = "you@newjob.com";
+                sb4b.style.color = "var(--green)";
+              }
+              if (c4b) c4b.classList.add("glow");
+            } else {
+              if (s4b) {
+                s4b.textContent = "waiting...";
+                s4b.style.color = "var(--subtext0)";
+              }
+              if (d4b) {
+                d4b.textContent = "+1 555-0123";
+                d4b.style.color = "var(--subtext0)";
+              }
+              if (sb4b) {
+                sb4b.textContent = "you@email.com";
+                sb4b.style.color = "var(--subtext0)";
+              }
+              if (c4b) c4b.classList.remove("glow");
+            }
+          }
+          if (current === 6) {
+            var a6a = document.getElementById("arrow6a");
+            var a6b = document.getElementById("arrow6b");
+            var ri = document.getElementById("recovery-icon");
+            var rl = document.getElementById("recovery-label");
+            if (a6a)
+              a6a
+                .querySelector("path")
+                .setAttribute("stroke", progress > 0.3 ? "#cba6f7" : "#a6adc8");
+            if (a6b)
+              a6b
+                .querySelector("path")
+                .setAttribute("stroke", progress > 0.7 ? "#a6e3a1" : "#a6adc8");
+            for (var ti = 0; ti < 3; ti++) {
+              var t = document.getElementById("trust" + ti);
+              if (t) {
+                if (progress > 0.4 + ti * 0.1) t.classList.add("lit");
+                else t.classList.remove("lit");
+              }
+            }
+            if (ri) {
+              if (progress > 0.7) {
+                ri.className = "v-icon-box green";
+                if (rl) {
+                  rl.textContent = "\u2713 restored";
+                  rl.style.color = "var(--green)";
+                }
+              } else {
+                ri.className = "v-icon-box neutral";
+                if (rl) {
+                  rl.textContent = "new device";
+                  rl.style.color = "var(--subtext0)";
+                }
+              }
+            }
+          }
+        }
+
+        function startScene() {
+          progress = 0;
+          showScene(current);
+          clearTimeout(timer);
+          clearInterval(ticker);
+          if (!playing) return;
+
+          var dur = DURATIONS[current];
+          var step = 40;
+
+          ticker = setInterval(function () {
+            progress = Math.min(progress + step / dur, 1);
+            updateProgress();
+            updateSceneState();
+          }, step);
+
+          timer = setTimeout(function () {
+            clearInterval(ticker);
+            if (current < TOTAL - 1) {
+              current++;
+              startScene();
+            } else {
+              playing = false;
+              playBtn.textContent = "\u25B6";
+              playBtn.setAttribute("aria-label", "Play explainer");
+            }
+          }, dur);
+        }
+
+        function togglePlay() {
+          if (!playing && current === TOTAL - 1) {
+            current = 0;
+            playing = true;
+            playBtn.textContent = "\u23F8";
+            playBtn.setAttribute("aria-label", "Pause explainer");
+            startScene();
+          } else {
+            playing = !playing;
+            playBtn.textContent = playing ? "\u23F8" : "\u25B6";
+            playBtn.setAttribute(
+              "aria-label",
+              playing ? "Pause explainer" : "Play explainer"
+            );
+            if (playing) startScene();
+            else {
+              clearTimeout(timer);
+              clearInterval(ticker);
+            }
+          }
+        }
+
+        function goTo(i) {
+          current = i;
+          playing = true;
+          playBtn.textContent = "\u23F8";
+          playBtn.setAttribute("aria-label", "Pause explainer");
+          startScene();
+        }
+
+        // Keyboard navigation
+        player.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+            e.preventDefault();
+            if (current < TOTAL - 1) goTo(current + 1);
+          } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+            e.preventDefault();
+            if (current > 0) goTo(current - 1);
+          } else if (e.key === " ") {
+            e.preventDefault();
+            togglePlay();
+          }
+        });
+
+        // Init
+        showScene(0);
+        startScene();
+      })();
+    </script>
   </body>
 </html>
