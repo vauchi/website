@@ -64,7 +64,7 @@ build:content:
         - app-files-src/**/*
         - scripts/**/*
 
-# Build docker image
+# Build docker image (MR validation — build only, no push)
 build:docker:
   stage: build
   image: docker:latest
@@ -74,4 +74,21 @@ build:docker:
     - docker build -t vauchi-website:test .
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# Build and push to GitLab Container Registry (main only)
+build:push:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_BUILDKIT: "1"
+    IMAGE_NAME: $CI_REGISTRY/vauchi/website/vauchi-landing
+  script:
+    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHA $IMAGE_NAME:latest
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $IMAGE_NAME:latest
+  rules:
     - if: $CI_COMMIT_BRANCH == "main"
