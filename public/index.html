@@ -58,63 +58,19 @@
           );
         color: var(--text);
         line-height: 1.6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         min-height: 100vh;
         padding: 20px;
       }
 
       .page-wrapper {
         max-width: 680px;
-        margin: 0 auto;
+        width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 2.5rem;
-        padding: 2rem 0;
-      }
-
-      .hero {
-        text-align: center;
-      }
-
-      .logo {
-        display: block;
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1.5rem;
-        border-radius: 16px;
-      }
-
-      h1 {
-        font-size: 4rem;
-        font-weight: 800;
-        letter-spacing: -0.04em;
-        margin-bottom: 1rem;
-        background: linear-gradient(
-          to bottom right,
-          var(--sapphire),
-          var(--mauve)
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-align: center;
-      }
-
-      .tagline {
-        font-size: 1.25rem;
-        font-weight: 500;
-        color: var(--lavender);
-        text-align: center;
-      }
-
-      .content p {
-        margin-bottom: 1.5rem;
-        font-size: 1.1rem;
-        color: var(--text);
-        opacity: 0.9;
-      }
-
-      .content p:last-child {
-        margin-bottom: 0;
+        gap: 1.5rem;
       }
 
       .links {
@@ -717,10 +673,6 @@
 
       /* Responsive */
       @media (max-width: 600px) {
-        h1 {
-          font-size: 3rem;
-        }
-
         .v-player {
           aspect-ratio: 4 / 3;
         }
@@ -788,6 +740,29 @@
           font-size: 8px;
           padding: 4px 8px;
         }
+        .page-wrapper {
+          gap: 1rem;
+        }
+        .links {
+          gap: 0.5rem;
+        }
+        .links a {
+          padding: 0.45rem 0.9rem;
+          font-size: 0.8rem;
+          gap: 0.35rem;
+        }
+        .links svg {
+          width: 14px;
+          height: 14px;
+        }
+        .demo-link {
+          padding: 0.45rem 0.9rem;
+          font-size: 0.8rem;
+        }
+        .footer {
+          font-size: 0.75rem;
+          padding-top: 1rem;
+        }
       }
 
       /* Reduced motion */
@@ -815,15 +790,6 @@
   </head>
   <body>
     <main class="page-wrapper">
-      <header class="hero">
-        <img src="logo.png" alt="Vauchi logo" class="logo" />
-        <h1>Vauchi</h1>
-        <h2 class="tagline">
-          The last time you'll ever exchange contact info.
-        </h2>
-      </header>
-
-      <!-- Explainer Widget -->
       <div
         class="v-player"
         id="player"
@@ -835,20 +801,13 @@
         <div class="v-scene active" data-scene="0">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-logo-icon">
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#cba6f7"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-              </svg>
+              <img
+                src="logo.png"
+                alt="Vauchi"
+                width="40"
+                height="40"
+                style="border-radius: 10px"
+              />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
             <div class="v-fade v-d3 v-caption">
@@ -1275,8 +1234,78 @@
           </div>
         </div>
 
-        <!-- Scene 5: Granular Privacy -->
+        <!-- Scene 5: Platform Freedom -->
         <div class="v-scene" data-scene="5">
+          <div class="v-scene-inner">
+            <div class="v-fade v-d1 v-label" style="color: var(--sapphire)">
+              Platform Freedom
+            </div>
+            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
+              Switch social networks? Change email providers? Your contacts stay
+              current.
+            </div>
+            <div class="v-fade v-d3 v-row wide">
+              <div class="v-phone-wrap">
+                <div class="v-micro">BEFORE</div>
+                <div class="v-phone med">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 8px 0">
+                    <div class="v-contact">
+                      <div class="v-contact-avatar">Y</div>
+                      <div>
+                        <div class="v-contact-name">You</div>
+                        <div
+                          class="v-contact-detail strike"
+                          style="color: var(--red)"
+                        >
+                          @old_handle
+                        </div>
+                        <div
+                          class="v-contact-sub strike"
+                          style="color: var(--red)"
+                        >
+                          you@oldmail.com
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="v-phone-wrap">
+                <div class="v-micro">AFTER</div>
+                <div class="v-phone med">
+                  <div class="v-phone-notch"></div>
+                  <div class="v-phone-screen" style="padding: 8px 0">
+                    <div class="v-contact glow">
+                      <div class="v-contact-avatar">Y</div>
+                      <div>
+                        <div class="v-contact-name">You</div>
+                        <div
+                          class="v-contact-detail"
+                          style="color: var(--green)"
+                        >
+                          @new_handle
+                        </div>
+                        <div class="v-contact-sub" style="color: var(--green)">
+                          you@newmail.com
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="v-fade v-d5 v-sub"
+              style="color: rgba(116, 199, 236, 0.5)"
+            >
+              update once &#x2014; everyone sees the change
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 6: Granular Privacy -->
+        <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--yellow)">
               Granular Privacy
@@ -1342,8 +1371,8 @@
           </div>
         </div>
 
-        <!-- Scene 6: Physical Recovery -->
-        <div class="v-scene" data-scene="6">
+        <!-- Scene 7: Physical Recovery -->
+        <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--sky)">
               Physical Recovery
@@ -1421,8 +1450,8 @@
           </div>
         </div>
 
-        <!-- Scene 7: Zero Platform -->
-        <div class="v-scene" data-scene="7">
+        <!-- Scene 8: Zero Platform -->
+        <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--green)">
               Zero Platform
@@ -1479,16 +1508,28 @@
           </div>
         </div>
 
-        <!-- Scene 8: Outro -->
-        <div class="v-scene" data-scene="8">
+        <!-- Scene 9: Outro -->
+        <div class="v-scene" data-scene="9">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-heading lg">vauchi</div>
-            <div class="v-fade v-d2 v-caption">
+            <div class="v-fade v-d1 v-logo-icon">
+              <img
+                src="logo.png"
+                alt="Vauchi"
+                width="40"
+                height="40"
+                style="border-radius: 10px"
+              />
+            </div>
+            <div class="v-fade v-d2 v-heading lg">vauchi</div>
+            <div class="v-fade v-d3 v-caption">
               Exchange once. Stay connected &#x2014; no matter what changes.
             </div>
-            <div class="v-fade v-d3 v-pills">
+            <div class="v-fade v-d4 v-pills">
               <div class="v-pill">
                 <span class="v-pill-icon">&#x1F504;</span> Silent Updates
+              </div>
+              <div class="v-pill">
+                <span class="v-pill-icon">&#x1F310;</span> Platform Freedom
               </div>
               <div class="v-pill">
                 <span class="v-pill-icon">&#x1F6E1;</span> Granular Privacy
@@ -1500,7 +1541,7 @@
                 <span class="v-pill-icon">&#x1F4D6;</span> Zero Platform
               </div>
             </div>
-            <div class="v-fade v-d4 v-links">
+            <div class="v-fade v-d5 v-links">
               <a
                 href="https://vauchi.app"
                 target="_blank"
@@ -1516,7 +1557,7 @@
                 >GitLab</a
               >
             </div>
-            <div class="v-fade v-d6 v-efooter">
+            <div class="v-fade v-d7 v-efooter">
               Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
             </div>
           </div>
@@ -1531,44 +1572,7 @@
         </div>
       </div>
 
-      <section class="content">
-        <p>
-          Your address book is a graveyard of dead contacts. Vauchi keeps it
-          alive. Exchange once; stay connected -- no matter what changes.
-        </p>
-
-        <p>
-          <strong>Silent Updates.</strong> When your details change, your
-          friends' phones update automatically. No notifications, no noise.
-        </p>
-
-        <p>
-          <strong>Granular Privacy.</strong> You control the visibility. Share
-          work details with colleagues and home addresses with family&#x2014;all
-          from a single identity.
-        </p>
-
-        <p>
-          <strong>Physical Recovery.</strong> No master passwords to lose. If
-          you lose your device, regain access through in-person verification
-          with your trusted inner circle.
-        </p>
-
-        <p>
-          <strong>Zero Platform.</strong> No feeds, no profiles, and no social
-          graphs. It's open-source infrastructure that you own entirely.
-        </p>
-      </section>
-
       <div class="links">
-        <a href="https://github.com/vauchi" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-            />
-          </svg>
-          GitHub
-        </a>
         <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -1577,14 +1581,27 @@
           </svg>
           GitLab
         </a>
+        <a href="https://github.com/vauchi" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+            />
+          </svg>
+          GitHub
+        </a>
         <span class="demo-link">Demo (coming soon)</span>
-        <script src="https://liberapay.com/Vauchi/widgets/button.js"></script>
-        <noscript
-          ><a href="https://liberapay.com/Vauchi/donate"
-            ><img
-              alt="Donate using Liberapay"
-              src="https://liberapay.com/assets/widgets/donate.svg" /></a
-        ></noscript>
+        <a
+          href="https://liberapay.com/Vauchi/donate"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+          Donate
+        </a>
       </div>
 
       <footer class="footer">
@@ -1594,7 +1611,9 @@
 
     <script>
       (function () {
-        var DURATIONS = [3800, 4200, 4500, 3200, 5000, 4500, 4200, 4000, 5500];
+        var DURATIONS = [
+          5000, 5500, 6000, 4500, 6500, 5500, 6000, 5500, 5500, 7000,
+        ];
         var TOTAL = DURATIONS.length;
         var SCENE_NAMES = [
           "Intro",
@@ -1602,6 +1621,7 @@
           "Contact Exchange",
           "Exchanged",
           "Silent Updates",
+          "Platform Freedom",
           "Granular Privacy",
           "Physical Recovery",
           "Zero Platform",
@@ -1796,7 +1816,7 @@
               if (c4b) c4b.classList.remove("glow");
             }
           }
-          if (current === 6) {
+          if (current === 7) {
             var a6a = document.getElementById("arrow6a");
             var a6b = document.getElementById("arrow6b");
             var ri = document.getElementById("recovery-icon");
