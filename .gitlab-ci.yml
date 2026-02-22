@@ -22,6 +22,7 @@ stages:
   - lint
   - test
   - build
+  - deploy
 
 # Lint HTML files
 lint:html:
@@ -82,31 +83,86 @@ build:content:
         - app-files-src/**/*
         - scripts/**/*
 
-# Build docker image (MR validation — build only, no push)
+# Build and push docker image
+#
+# On MRs: builds the image to validate the Dockerfile.
+# On main: builds and pushes to GitLab Container Registry.
 build:docker:
-  stage: build
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - docker build -t vauchi-website:test .
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-
-# Build and push to GitLab Container Registry (main only)
-build:push:
   stage: build
   image: docker:latest
   services:
     - docker:dind
   variables:
     DOCKER_BUILDKIT: "1"
-    IMAGE_NAME: $CI_REGISTRY/vauchi/website/vauchi-landing
   script:
-    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHA .
-    - docker tag $IMAGE_NAME:$CI_COMMIT_SHA $IMAGE_NAME:latest
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - docker push $IMAGE_NAME:$CI_COMMIT_SHA
-    - docker push $IMAGE_NAME:latest
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
+    - |
+      if [ -n "$CI_REGISTRY_PASSWORD" ]; then
+        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+        docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+        docker push $CI_REGISTRY_IMAGE:latest
+      fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# ============================================================
+# Deploy Stage (manual gate)
+# ============================================================
+#
+# Deploy website to production VPS via SSH + Docker.
+# Replaces the Kamal accessory container with the CI-built image.
+# Brief downtime (~2s) is acceptable for a static landing page.
+#
+# Required CI/CD variables (group or project level):
+#   DEPLOY_SSH_PRIVATE_KEY  — Ed25519 private key for ssh vauchi@<host>
+#   DEPLOY_HOST             — VPS hostname (e.g. bold-hopper-vps)
+#   KAMAL_REGISTRY_PASSWORD — GitLab container registry token
+
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  needs:
+    - job: build:docker
+  variables:
+    GIT_STRATEGY: none
+    WEBSITE_CONTAINER: "vauchi-relay-landing"
+  before_script:
+    - apk add --no-cache openssh-client curl
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+  script:
+    - |
+      IMAGE="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+      SSH_TARGET="${DEPLOY_USER:-vauchi}@${DEPLOY_HOST}"
+      echo "Deploying website: $IMAGE"
+
+      # Pull new image on server
+      ssh "$SSH_TARGET" \
+        "echo '${KAMAL_REGISTRY_PASSWORD}' | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY} && docker pull ${IMAGE}"
+
+      # Replace website container (stop old → start new on same port)
+      ssh "$SSH_TARGET" "\
+        docker stop ${WEBSITE_CONTAINER} 2>/dev/null || true && \
+        docker rm ${WEBSITE_CONTAINER} 2>/dev/null || true && \
+        docker run -d --name ${WEBSITE_CONTAINER} -p 3080:80 ${IMAGE}"
+
+      # Verify externally
+      sleep 3
+      STATUS=$(curl -sf -o /dev/null -w '%{http_code}' --max-time 10 "https://vauchi.app/" || echo "000")
+      if [ "$STATUS" = "200" ]; then
+        echo "Deployment verified — website healthy"
+      else
+        echo "WARNING: Health check returned $STATUS"
+        exit 1
+      fi
+  environment:
+    name: production
+    url: https://vauchi.app
+  when: manual
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
