@@ -75,8 +75,8 @@ def build_manifest(
                 "files": files,
             }
 
-    # Process themes
-    themes_src = src_dir / "themes" / "themes.json"
+    # Process themes (sourced from sibling themes/ repo)
+    themes_src = src_dir.parent.parent / "themes" / "themes.json"
     if themes_src.exists():
         themes_dest_dir = output_dir / "themes"
         themes_dest_dir.mkdir(exist_ok=True)
@@ -88,6 +88,8 @@ def build_manifest(
             "checksum": compute_checksum(themes_dest),
             "min_app_version": "0.1.0",
         }
+    else:
+        print(f"  WARNING: Themes repo not found at {themes_src}, skipping themes")
 
     # Process help (if exists)
     help_src = src_dir / "help"

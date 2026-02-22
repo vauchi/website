@@ -43,11 +43,9 @@ website/
 ├── app-files-src/             # Source content (before build)
 │   ├── networks.json          # Network definitions
 │   ├── locales/               # Language files (en.json, etc.)
-│   ├── themes/themes.json     # Theme definitions
 │   └── schemas/               # JSON validation schemas
 │       ├── networks.schema.json
 │       ├── locales.schema.json
-│       ├── themes.schema.json
 │       └── manifest.schema.json
 │
 ├── scripts/                   # Build and validation scripts
@@ -97,7 +95,6 @@ python scripts/validate-content.py [--src app-files-src]
 
 # Validates:
 # - networks.json vs networks.schema.json
-# - themes/themes.json vs themes.schema.json
 # - locales/*.json vs locales.schema.json
 ```
 
@@ -156,8 +153,8 @@ The `.gitlab-ci.yml` pipeline:
 
 ### New Theme
 
-1. Edit `app-files-src/themes/themes.json`
-2. Validate and build as above
+Themes are managed in the [vauchi/themes](https://gitlab.com/vauchi/themes) repo.
+See the themes repo README for contributing instructions.
 
 ### New Network
 

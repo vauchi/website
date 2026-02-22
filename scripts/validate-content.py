@@ -71,7 +71,6 @@ def main():
 
     validations = [
         ("networks.json", "networks.schema.json"),
-        ("themes/themes.json", "themes.schema.json"),
     ]
 
     # Add all locale files
