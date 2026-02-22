@@ -19,7 +19,7 @@ include:
     file: '/ci-templates/reuse.yml'
 
 variables:
-  CS_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  CS_IMAGE: "${CI_REGISTRY_IMAGE:-vauchi-website}:$CI_COMMIT_SHA"
 
 stages:
   - lint
@@ -89,8 +89,11 @@ build:content:
 
 # Build and push docker image
 #
-# On MRs: builds the image to validate the Dockerfile.
+# On MRs: builds the image to validate the Dockerfile (local tag only).
 # On main: builds and pushes to GitLab Container Registry.
+#
+# Note: CI_REGISTRY_IMAGE may be empty if the project container registry
+# is not enabled, so we fall back to a local tag for validation builds.
 build:docker:
   stage: build
   image: docker:latest
@@ -99,13 +102,14 @@ build:docker:
   variables:
     DOCKER_BUILDKIT: "1"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
+    - IMAGE="${CI_REGISTRY_IMAGE:-vauchi-website}"
+    - docker build -t $IMAGE:$CI_COMMIT_SHA .
+    - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
     - |
-      if [ -n "$CI_REGISTRY_PASSWORD" ]; then
+      if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
         echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-        docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-        docker push $CI_REGISTRY_IMAGE:latest
+        docker push $IMAGE:$CI_COMMIT_SHA
+        docker push $IMAGE:latest
       fi
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
