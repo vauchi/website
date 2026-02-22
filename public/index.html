@@ -9,26 +9,21 @@
     <title>Vauchi - Privacy-First Contact Exchange</title>
     <style>
       :root {
-        /* Catppuccin Mocha */
-        --base: #1e1e2e;
-        --mantle: #181825;
-        --crust: #11111b;
-        --surface0: #313244;
-        --surface1: #45475a;
-        --surface2: #585b70;
-        --overlay0: #6c7086;
-        --text: #cdd6f4;
-        --subtext0: #a6adc8;
-        --lavender: #b4befe;
-        --mauve: #cba6f7;
-        --sapphire: #74c7ec;
-        --green: #a6e3a1;
-        --red: #f38ba8;
-        --yellow: #f9e2af;
-        --sky: #89dceb;
-        /* Explainer aliases */
-        --accent: #cba6f7;
-        --accent-dim: rgba(203, 166, 247, 0.15);
+        /* Core theme tokens — default: Catppuccin Mocha */
+        --bg-primary: #1e1e2e;
+        --bg-secondary: #181825;
+        --bg-tertiary: #313244;
+        --text-primary: #cdd6f4;
+        --text-secondary: #a6adc8;
+        --accent: #89b4fa;
+        --accent-dark: #74c7ec;
+        --success: #a6e3a1;
+        --error: #f38ba8;
+        --warning: #fab387;
+        --border: #45475a;
+        /* Derived alpha variants (auto-update with color-mix) */
+        --accent-dim: color-mix(in srgb, var(--accent) 15%, transparent);
+        /* Fonts */
         --mono: "SF Mono", "Fira Code", Consolas, monospace;
         --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
           sans-serif;
@@ -45,18 +40,18 @@
 
       body {
         font-family: var(--sans);
-        background-color: var(--base);
+        background-color: var(--bg-primary);
         background-image: radial-gradient(
             circle at 0% 0%,
-            rgba(203, 166, 247, 0.05) 0%,
+            color-mix(in srgb, var(--accent) 5%, transparent) 0%,
             transparent 50%
           ),
           radial-gradient(
             circle at 100% 100%,
-            rgba(116, 199, 236, 0.05) 0%,
+            color-mix(in srgb, var(--accent-dark) 5%, transparent) 0%,
             transparent 50%
           );
-        color: var(--text);
+        color: var(--text-primary);
         line-height: 1.6;
         display: flex;
         align-items: center;
@@ -85,9 +80,9 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.6rem 1.2rem;
-        background: rgba(180, 190, 254, 0.1);
-        color: var(--lavender);
-        border: 1px solid rgba(180, 190, 254, 0.2);
+        background: color-mix(in srgb, var(--accent) 10%, transparent);
+        color: var(--accent);
+        border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
         border-radius: 100px;
         text-decoration: none;
         font-size: 0.9rem;
@@ -96,8 +91,8 @@
       }
 
       .links a:hover {
-        background: rgba(180, 190, 254, 0.2);
-        border-color: rgba(180, 190, 254, 0.4);
+        background: color-mix(in srgb, var(--accent) 20%, transparent);
+        border-color: color-mix(in srgb, var(--accent) 40%, transparent);
       }
 
       .links svg {
@@ -110,9 +105,9 @@
         display: inline-flex;
         align-items: center;
         padding: 0.6rem 1.2rem;
-        background: rgba(180, 190, 254, 0.05);
-        color: var(--subtext0);
-        border: 1px solid rgba(180, 190, 254, 0.1);
+        background: color-mix(in srgb, var(--accent) 5%, transparent);
+        color: var(--text-secondary);
+        border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
         border-radius: 100px;
         font-size: 0.9rem;
         font-weight: 500;
@@ -121,10 +116,14 @@
       }
 
       .footer {
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
         font-size: 0.9rem;
-        color: var(--subtext0);
-        border-top: 1px solid var(--surface0);
+        color: var(--text-secondary);
+        border-top: 1px solid var(--bg-tertiary);
         padding-top: 2rem;
       }
 
@@ -133,12 +132,12 @@
       .v-player {
         width: 100%;
         aspect-ratio: 16 / 9;
-        background: var(--base);
+        background: var(--bg-primary);
         border-radius: 14px;
         overflow: hidden;
         position: relative;
         font-family: var(--sans);
-        border: 1px solid var(--surface0);
+        border: 1px solid var(--bg-tertiary);
         box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
         outline: none;
       }
@@ -218,7 +217,7 @@
       .v-heading {
         font-size: 20px;
         font-weight: 300;
-        color: var(--text);
+        color: var(--text-primary);
         max-width: 400px;
         line-height: 1.5;
         font-family: var(--serif);
@@ -235,7 +234,7 @@
       }
       .v-caption {
         font-size: 14px;
-        color: var(--subtext0);
+        color: var(--text-secondary);
         max-width: 340px;
         line-height: 1.6;
         font-family: var(--sans);
@@ -244,7 +243,7 @@
         font-size: 9px;
         font-family: var(--mono);
         letter-spacing: 0.8px;
-        color: var(--subtext0);
+        color: var(--text-secondary);
       }
 
       .v-tags {
@@ -255,8 +254,8 @@
       }
       .v-tag {
         font-size: 9px;
-        color: var(--subtext0);
-        border: 1px solid var(--surface0);
+        color: var(--text-secondary);
+        border: 1px solid var(--bg-tertiary);
         border-radius: 12px;
         padding: 2px 10px;
         font-family: var(--mono);
@@ -275,25 +274,25 @@
         width: 160px;
         height: 300px;
         border-radius: 24px;
-        background: var(--mantle);
-        border: 1.5px solid var(--surface0);
+        background: var(--bg-secondary);
+        border: 1.5px solid var(--bg-tertiary);
         padding: 6px;
         display: flex;
         flex-direction: column;
         box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5),
-          0 0 0 1px rgba(203, 166, 247, 0.04);
+          0 0 0 1px color-mix(in srgb, var(--accent) 4%, transparent);
       }
       .v-phone-notch {
         width: 44px;
         height: 4px;
         border-radius: 2px;
-        background: var(--mantle);
+        background: var(--bg-secondary);
         margin: 3px auto 6px;
       }
       .v-phone-screen {
         flex: 1;
         border-radius: 18px;
-        background: var(--base);
+        background: var(--bg-primary);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -326,29 +325,29 @@
       }
       .v-contact.glow {
         background: var(--accent-dim);
-        border-color: rgba(203, 166, 247, 0.2);
+        border-color: color-mix(in srgb, var(--accent) 20%, transparent);
       }
       .v-contact-avatar {
         width: 28px;
         height: 28px;
         border-radius: 50%;
         flex-shrink: 0;
-        background: var(--surface0);
+        background: var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 11px;
         font-weight: 700;
-        color: var(--subtext0);
+        color: var(--text-secondary);
       }
       .v-contact.glow .v-contact-avatar {
-        background: linear-gradient(135deg, var(--accent), #9775d4);
-        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        color: var(--bg-primary);
       }
       .v-contact-name {
         font-size: 11px;
         font-weight: 600;
-        color: var(--text);
+        color: var(--text-primary);
         letter-spacing: 0.2px;
       }
       .v-contact-detail {
@@ -372,19 +371,19 @@
         gap: 1.5px;
         padding: 10px;
         border-radius: 12px;
-        background: rgba(30, 30, 46, 0.3);
-        border: 1px solid var(--surface0);
+        background: color-mix(in srgb, var(--bg-primary) 30%, transparent);
+        border: 1px solid var(--bg-tertiary);
         transition: all 0.6s ease;
       }
       .v-qr.active {
         background: var(--accent-dim);
-        border-color: rgba(203, 166, 247, 0.25);
+        border-color: color-mix(in srgb, var(--accent) 25%, transparent);
       }
       .v-qr-cell {
         width: 7px;
         height: 7px;
         border-radius: 1.5px;
-        background: var(--surface0);
+        background: var(--bg-tertiary);
         transition: all 0.3s ease;
         opacity: 0.3;
       }
@@ -416,20 +415,21 @@
 
       .v-arrow {
         display: block;
+        color: var(--text-secondary);
         transition: all 0.5s;
       }
 
       .v-priv-card {
-        background: var(--mantle);
+        background: var(--bg-secondary);
         border-radius: 14px;
         padding: 10px 14px;
-        border: 1px solid var(--surface0);
+        border: 1px solid var(--bg-tertiary);
         min-width: 150px;
       }
       .v-priv-card .v-priv-name {
         font-size: 11px;
         font-weight: 600;
-        color: var(--text);
+        color: var(--text-primary);
       }
       .v-priv-card .v-priv-line {
         font-size: 9px;
@@ -448,23 +448,23 @@
         transition: all 0.5s;
       }
       .v-icon-box.red {
-        background: rgba(243, 139, 168, 0.08);
-        border: 1px solid rgba(243, 139, 168, 0.2);
+        background: color-mix(in srgb, var(--error) 8%, transparent);
+        border: 1px solid color-mix(in srgb, var(--error) 20%, transparent);
       }
       .v-icon-box.neutral {
-        background: rgba(30, 30, 46, 0.3);
-        border: 1px solid var(--surface0);
+        background: color-mix(in srgb, var(--bg-primary) 30%, transparent);
+        border: 1px solid var(--bg-tertiary);
       }
       .v-icon-box.green {
-        background: rgba(166, 227, 161, 0.08);
-        border: 1px solid rgba(166, 227, 161, 0.2);
+        background: color-mix(in srgb, var(--success) 8%, transparent);
+        border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
       }
       .v-trust-dot {
         width: 32px;
         height: 32px;
         border-radius: 10px;
-        background: rgba(30, 30, 46, 0.5);
-        border: 1px solid var(--surface0);
+        background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
+        border: 1px solid var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -473,7 +473,7 @@
       }
       .v-trust-dot.lit {
         background: var(--accent-dim);
-        border-color: rgba(203, 166, 247, 0.3);
+        border-color: color-mix(in srgb, var(--accent) 30%, transparent);
       }
 
       .v-pills {
@@ -487,12 +487,12 @@
         align-items: center;
         gap: 5px;
         font-size: 10px;
-        color: var(--subtext0);
+        color: var(--text-secondary);
         font-family: var(--mono);
-        background: var(--mantle);
+        background: var(--bg-secondary);
         border-radius: 10px;
         padding: 5px 10px;
-        border: 1px solid var(--surface0);
+        border: 1px solid var(--bg-tertiary);
       }
       .v-pill-icon {
         font-size: 12px;
@@ -517,18 +517,18 @@
       }
       .v-link.primary {
         color: var(--accent);
-        border: 1px solid rgba(203, 166, 247, 0.25);
+        border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
       }
       .v-link.secondary {
-        color: var(--subtext0);
-        border: 1px solid var(--surface0);
+        color: var(--text-secondary);
+        border: 1px solid var(--bg-tertiary);
       }
 
       .v-scan-target {
         width: 52px;
         height: 52px;
         border-radius: 12px;
-        border: 2px dashed var(--surface0);
+        border: 2px dashed var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -543,18 +543,18 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        border: 1.5px solid var(--surface0);
+        border: 1.5px solid var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 16px;
-        color: var(--subtext0);
+        color: var(--text-secondary);
         transition: all 0.5s ease;
       }
       .v-pair-circle.done {
-        border-color: var(--green);
-        background: rgba(166, 227, 161, 0.08);
-        color: var(--green);
+        border-color: var(--success);
+        background: color-mix(in srgb, var(--success) 8%, transparent);
+        color: var(--success);
       }
 
       .v-relay {
@@ -565,7 +565,7 @@
       }
       .v-relay-label {
         font-size: 7px;
-        color: var(--subtext0);
+        color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
       }
@@ -584,7 +584,7 @@
         height: 56px;
         border-radius: 16px;
         background: var(--accent-dim);
-        border: 1px solid rgba(203, 166, 247, 0.2);
+        border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -599,16 +599,16 @@
         align-items: center;
         gap: 6px;
         z-index: 10;
-        background: rgba(17, 17, 27, 0.85);
+        background: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
         border-radius: 20px;
         padding: 4px 12px;
-        border: 1px solid var(--surface0);
+        border: 1px solid var(--bg-tertiary);
         backdrop-filter: blur(8px);
       }
       .v-play-btn {
         background: none;
         border: none;
-        color: var(--subtext0);
+        color: var(--text-secondary);
         font-size: 11px;
         padding: 2px 6px;
         border-radius: 6px;
@@ -617,7 +617,7 @@
         transition: all 0.25s;
       }
       .v-play-btn:hover {
-        background: var(--surface0);
+        background: var(--bg-tertiary);
         color: var(--accent);
       }
       .v-play-btn:focus-visible {
@@ -627,7 +627,7 @@
       .v-divider {
         width: 1px;
         height: 12px;
-        background: var(--surface0);
+        background: var(--bg-tertiary);
       }
       .v-dot-btn {
         height: 5px;
@@ -651,18 +651,18 @@
         left: 0;
         right: 0;
         height: 2px;
-        background: var(--crust);
+        background: var(--bg-secondary);
       }
       .v-progress-bar {
         height: 100%;
         border-radius: 0 1px 1px 0;
-        background: linear-gradient(90deg, var(--accent), #9775d4);
+        background: linear-gradient(90deg, var(--accent), var(--accent-dark));
         transition: width 0.1s linear;
       }
 
       .v-efooter {
         font-size: 9px;
-        color: var(--surface1);
+        color: var(--border);
         font-family: var(--mono);
         letter-spacing: 1px;
       }
@@ -824,7 +824,7 @@
         <!-- Scene 1: Problem -->
         <div class="v-scene" data-scene="1">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--red)">
+            <div class="v-fade v-d1 v-label" style="color: var(--error)">
               The Problem
             </div>
             <div class="v-fade v-d2 v-heading">
@@ -841,7 +841,7 @@
                         <div class="v-contact-name">Alex Rivera</div>
                         <div
                           class="v-contact-detail strike"
-                          style="color: var(--red)"
+                          style="color: var(--error)"
                         >
                           +1 555-0147 (disconnected)
                         </div>
@@ -853,7 +853,7 @@
                         <div class="v-contact-name">Sam Chen</div>
                         <div
                           class="v-contact-detail strike"
-                          style="color: var(--red)"
+                          style="color: var(--error)"
                         >
                           +44 7911 ████ (old number)
                         </div>
@@ -865,7 +865,7 @@
                         <div class="v-contact-name">Maya Okafor</div>
                         <div
                           class="v-contact-detail strike"
-                          style="color: var(--red)"
+                          style="color: var(--error)"
                         >
                           maya@oldcompany.com
                         </div>
@@ -877,7 +877,7 @@
                         <div class="v-contact-name">Jordan Petrov</div>
                         <div
                           class="v-contact-detail strike"
-                          style="color: var(--red)"
+                          style="color: var(--error)"
                         >
                           @jordan.p (deleted)
                         </div>
@@ -889,7 +889,7 @@
             </div>
             <div
               class="v-fade v-d5 v-sub"
-              style="color: rgba(243, 139, 168, 0.5)"
+              style="color: color-mix(in srgb, var(--error) 50%, transparent)"
             >
               sound familiar?
             </div>
@@ -1033,7 +1033,7 @@
             </div>
             <div
               class="v-fade v-d6 v-sub"
-              style="color: rgba(203, 166, 247, 0.5)"
+              style="color: color-mix(in srgb, var(--accent) 50%, transparent)"
             >
               No phone number or account needed
             </div>
@@ -1043,7 +1043,7 @@
         <!-- Scene 3: Connected -->
         <div class="v-scene" data-scene="3">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--green)">
+            <div class="v-fade v-d1 v-label" style="color: var(--success)">
               &#x2713; Exchanged
             </div>
             <div class="v-fade v-d2 v-heading">
@@ -1061,11 +1061,14 @@
                         <div class="v-contact-name">Alex Rivera</div>
                         <div
                           class="v-contact-detail"
-                          style="color: var(--green)"
+                          style="color: var(--success)"
                         >
                           +1 555-8832 · alex@company.io
                         </div>
-                        <div class="v-contact-sub" style="color: var(--green)">
+                        <div
+                          class="v-contact-sub"
+                          style="color: var(--success)"
+                        >
                           @alex.r
                         </div>
                       </div>
@@ -1084,11 +1087,14 @@
                         <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail"
-                          style="color: var(--green)"
+                          style="color: var(--success)"
                         >
                           +1 555-0123 · you@email.com
                         </div>
-                        <div class="v-contact-sub" style="color: var(--green)">
+                        <div
+                          class="v-contact-sub"
+                          style="color: var(--success)"
+                        >
                           @yourhandle
                         </div>
                       </div>
@@ -1099,7 +1105,7 @@
             </div>
             <div
               class="v-fade v-d4 v-sub"
-              style="color: rgba(166, 227, 161, 0.5)"
+              style="color: color-mix(in srgb, var(--success) 50%, transparent)"
             >
               exchange once &#x2014; stay connected
             </div>
@@ -1125,7 +1131,7 @@
                     <div
                       class="v-status"
                       id="status4a"
-                      style="color: var(--subtext0)"
+                      style="color: var(--text-secondary)"
                     >
                       editing...
                     </div>
@@ -1136,14 +1142,14 @@
                         <div
                           class="v-contact-detail"
                           id="detail4a"
-                          style="color: var(--subtext0)"
+                          style="color: var(--text-secondary)"
                         >
                           +1 555-0123
                         </div>
                         <div
                           class="v-contact-sub"
                           id="sub4a"
-                          style="color: var(--subtext0)"
+                          style="color: var(--text-secondary)"
                         >
                           you@email.com
                         </div>
@@ -1163,7 +1169,7 @@
                 >
                   <path
                     d="M0 8 L24 8 M18 3 L25 8 L18 13"
-                    stroke="#a6adc8"
+                    stroke="currentColor"
                     fill="none"
                     stroke-width="1.5"
                     stroke-linecap="round"
@@ -1180,7 +1186,7 @@
                 >
                   <path
                     d="M0 8 L24 8 M18 3 L25 8 L18 13"
-                    stroke="#a6adc8"
+                    stroke="currentColor"
                     fill="none"
                     stroke-width="1.5"
                     stroke-linecap="round"
@@ -1197,7 +1203,7 @@
                     <div
                       class="v-status"
                       id="status4b"
-                      style="color: var(--subtext0)"
+                      style="color: var(--text-secondary)"
                     >
                       waiting...
                     </div>
@@ -1208,14 +1214,14 @@
                         <div
                           class="v-contact-detail"
                           id="detail4b"
-                          style="color: var(--subtext0)"
+                          style="color: var(--text-secondary)"
                         >
                           +1 555-0123
                         </div>
                         <div
                           class="v-contact-sub"
                           id="sub4b"
-                          style="color: var(--subtext0)"
+                          style="color: var(--text-secondary)"
                         >
                           you@email.com
                         </div>
@@ -1227,7 +1233,13 @@
             </div>
             <div
               class="v-fade v-d8 v-sub"
-              style="color: rgba(166, 173, 200, 0.6)"
+              style="
+                color: color-mix(
+                  in srgb,
+                  var(--text-secondary) 60%,
+                  transparent
+                );
+              "
             >
               no matter what changes
             </div>
@@ -1237,7 +1249,7 @@
         <!-- Scene 5: Platform Freedom -->
         <div class="v-scene" data-scene="5">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--sapphire)">
+            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
               Platform Freedom
             </div>
             <div class="v-fade v-d2 v-heading" style="font-size: 17px">
@@ -1256,13 +1268,13 @@
                         <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail strike"
-                          style="color: var(--red)"
+                          style="color: var(--error)"
                         >
                           @old_handle
                         </div>
                         <div
                           class="v-contact-sub strike"
-                          style="color: var(--red)"
+                          style="color: var(--error)"
                         >
                           you@oldmail.com
                         </div>
@@ -1282,11 +1294,14 @@
                         <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail"
-                          style="color: var(--green)"
+                          style="color: var(--success)"
                         >
                           @new_handle
                         </div>
-                        <div class="v-contact-sub" style="color: var(--green)">
+                        <div
+                          class="v-contact-sub"
+                          style="color: var(--success)"
+                        >
                           you@newmail.com
                         </div>
                       </div>
@@ -1297,7 +1312,9 @@
             </div>
             <div
               class="v-fade v-d5 v-sub"
-              style="color: rgba(116, 199, 236, 0.5)"
+              style="
+                color: color-mix(in srgb, var(--accent-dark) 50%, transparent);
+              "
             >
               update once &#x2014; everyone sees the change
             </div>
@@ -1307,7 +1324,7 @@
         <!-- Scene 6: Granular Privacy -->
         <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--yellow)">
+            <div class="v-fade v-d1 v-label" style="color: var(--warning)">
               Granular Privacy
             </div>
             <div class="v-fade v-d2 v-heading" style="font-size: 17px">
@@ -1324,17 +1341,17 @@
                   <div class="v-priv-name">You</div>
                   <div
                     class="v-priv-line"
-                    style="color: var(--green); margin-top: 4px"
+                    style="color: var(--success); margin-top: 4px"
                   >
                     +1 555-WORK
                   </div>
-                  <div class="v-priv-line" style="color: var(--green)">
+                  <div class="v-priv-line" style="color: var(--success)">
                     you@company.io · @you_work
                   </div>
                   <div
                     class="v-priv-line"
                     style="
-                      color: var(--overlay0);
+                      color: var(--text-secondary);
                       margin-top: 3px;
                       font-style: italic;
                     "
@@ -1349,14 +1366,14 @@
                   <div class="v-priv-name">You</div>
                   <div
                     class="v-priv-line"
-                    style="color: var(--green); margin-top: 4px"
+                    style="color: var(--success); margin-top: 4px"
                   >
                     +1 555-HOME
                   </div>
-                  <div class="v-priv-line" style="color: var(--green)">
+                  <div class="v-priv-line" style="color: var(--success)">
                     you@personal.me · @you_personal
                   </div>
-                  <div class="v-priv-line" style="color: var(--green)">
+                  <div class="v-priv-line" style="color: var(--success)">
                     123 Home Street
                   </div>
                 </div>
@@ -1364,7 +1381,13 @@
             </div>
             <div
               class="v-fade v-d5 v-sub"
-              style="color: rgba(166, 173, 200, 0.6)"
+              style="
+                color: color-mix(
+                  in srgb,
+                  var(--text-secondary) 60%,
+                  transparent
+                );
+              "
             >
               you control the visibility
             </div>
@@ -1374,7 +1397,7 @@
         <!-- Scene 7: Physical Recovery -->
         <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--sky)">
+            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
               Physical Recovery
             </div>
             <div class="v-fade v-d2 v-heading" style="font-size: 17px">
@@ -1384,7 +1407,9 @@
             <div class="v-fade v-d3 v-row">
               <div class="v-col">
                 <div class="v-icon-box red">&#x1F4F1;</div>
-                <div class="v-micro" style="color: var(--red)">lost device</div>
+                <div class="v-micro" style="color: var(--error)">
+                  lost device
+                </div>
               </div>
               <svg
                 class="v-arrow"
@@ -1395,7 +1420,7 @@
               >
                 <path
                   d="M0 8 L24 8 M18 3 L25 8 L18 13"
-                  stroke="#a6adc8"
+                  stroke="currentColor"
                   fill="none"
                   stroke-width="1.5"
                   stroke-linecap="round"
@@ -1421,7 +1446,7 @@
               >
                 <path
                   d="M0 8 L24 8 M18 3 L25 8 L18 13"
-                  stroke="#a6adc8"
+                  stroke="currentColor"
                   fill="none"
                   stroke-width="1.5"
                   stroke-linecap="round"
@@ -1435,7 +1460,7 @@
                 <div
                   class="v-micro"
                   id="recovery-label"
-                  style="color: var(--subtext0)"
+                  style="color: var(--text-secondary)"
                 >
                   new device
                 </div>
@@ -1443,7 +1468,13 @@
             </div>
             <div
               class="v-fade v-d7 v-sub"
-              style="color: rgba(166, 173, 200, 0.6)"
+              style="
+                color: color-mix(
+                  in srgb,
+                  var(--text-secondary) 60%,
+                  transparent
+                );
+              "
             >
               in-person verification &#x2014; no cloud, no passwords
             </div>
@@ -1453,7 +1484,7 @@
         <!-- Scene 8: Zero Platform -->
         <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--green)">
+            <div class="v-fade v-d1 v-label" style="color: var(--success)">
               Zero Platform
             </div>
             <div class="v-fade v-d2 v-heading" style="font-size: 17px">
@@ -1466,7 +1497,7 @@
                 </div>
                 <div
                   class="v-micro"
-                  style="color: var(--red); text-decoration: line-through"
+                  style="color: var(--error); text-decoration: line-through"
                 >
                   feeds
                 </div>
@@ -1477,7 +1508,7 @@
                 </div>
                 <div
                   class="v-micro"
-                  style="color: var(--red); text-decoration: line-through"
+                  style="color: var(--error); text-decoration: line-through"
                 >
                   profiles
                 </div>
@@ -1488,7 +1519,7 @@
                 </div>
                 <div
                   class="v-micro"
-                  style="color: var(--red); text-decoration: line-through"
+                  style="color: var(--error); text-decoration: line-through"
                 >
                   social graph
                 </div>
@@ -1497,7 +1528,7 @@
                 <div class="v-icon-box green">
                   <span style="font-size: 18px">&#x1F4D6;</span>
                 </div>
-                <div class="v-micro" style="color: var(--green)">
+                <div class="v-micro" style="color: var(--success)">
                   open source
                 </div>
               </div>
@@ -1605,12 +1636,40 @@
       </div>
 
       <footer class="footer">
-        Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
+        <span
+          >Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts
+          Required</span
+        >
+        <button
+          id="theme-toggle"
+          aria-label="Toggle light/dark theme"
+          title="Toggle theme"
+          style="
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            margin-left: 12px;
+            transition: color 0.2s, border-color 0.2s;
+          "
+        >
+          &#x1F319;
+        </button>
       </footer>
     </main>
 
     <script>
       (function () {
+        // Read current theme color from CSS variable
+        function themeColor(name) {
+          return getComputedStyle(document.documentElement)
+            .getPropertyValue(name)
+            .trim();
+        }
+
         var DURATIONS = [
           5000, 5500, 6000, 4500, 6500, 5500, 6000, 5500, 5500, 7000,
         ];
@@ -1682,8 +1741,8 @@
               i === current
                 ? "var(--accent)"
                 : i < current
-                ? "#45475a"
-                : "#181825";
+                ? themeColor("--border")
+                : themeColor("--bg-secondary");
             dots[i].style.opacity = i === current ? "1" : "0.7";
           }
         }
@@ -1721,7 +1780,7 @@
               }
               if (pairLabel) {
                 pairLabel.textContent = "paired";
-                pairLabel.style.color = "var(--green)";
+                pairLabel.style.color = "var(--success)";
               }
             } else {
               if (pair) {
@@ -1730,7 +1789,7 @@
               }
               if (pairLabel) {
                 pairLabel.textContent = "scanning";
-                pairLabel.style.color = "var(--subtext0)";
+                pairLabel.style.color = "var(--text-secondary)";
               }
             }
           }
@@ -1749,69 +1808,76 @@
             if (progress > 0.25) {
               if (s4a) {
                 s4a.textContent = "\u2713 saved";
-                s4a.style.color = "var(--green)";
+                s4a.style.color = "var(--success)";
               }
               if (d4a) {
                 d4a.textContent = "+1 555-9999";
-                d4a.style.color = "var(--green)";
+                d4a.style.color = "var(--success)";
               }
               if (sb4a) {
                 sb4a.textContent = "you@newjob.com";
-                sb4a.style.color = "var(--green)";
+                sb4a.style.color = "var(--success)";
               }
               if (c4a) c4a.classList.add("glow");
             } else {
               if (s4a) {
                 s4a.textContent = "editing...";
-                s4a.style.color = "var(--subtext0)";
+                s4a.style.color = "var(--text-secondary)";
               }
               if (d4a) {
                 d4a.textContent = "+1 555-0123";
-                d4a.style.color = "var(--subtext0)";
+                d4a.style.color = "var(--text-secondary)";
               }
               if (sb4a) {
                 sb4a.textContent = "you@email.com";
-                sb4a.style.color = "var(--subtext0)";
+                sb4a.style.color = "var(--text-secondary)";
               }
               if (c4a) c4a.classList.remove("glow");
             }
             if (a4a)
               a4a
                 .querySelector("path")
-                .setAttribute("stroke", progress > 0.5 ? "#cba6f7" : "#a6adc8");
+                .setAttribute(
+                  "stroke",
+                  progress > 0.5
+                    ? themeColor("--accent")
+                    : themeColor("--text-secondary")
+                );
             if (a4b)
               a4b
                 .querySelector("path")
                 .setAttribute(
                   "stroke",
-                  progress > 0.65 ? "#cba6f7" : "#a6adc8"
+                  progress > 0.65
+                    ? themeColor("--accent")
+                    : themeColor("--text-secondary")
                 );
             if (progress > 0.65) {
               if (s4b) {
                 s4b.textContent = "\u2713 auto-synced";
-                s4b.style.color = "var(--green)";
+                s4b.style.color = "var(--success)";
               }
               if (d4b) {
                 d4b.textContent = "+1 555-9999";
-                d4b.style.color = "var(--green)";
+                d4b.style.color = "var(--success)";
               }
               if (sb4b) {
                 sb4b.textContent = "you@newjob.com";
-                sb4b.style.color = "var(--green)";
+                sb4b.style.color = "var(--success)";
               }
               if (c4b) c4b.classList.add("glow");
             } else {
               if (s4b) {
                 s4b.textContent = "waiting...";
-                s4b.style.color = "var(--subtext0)";
+                s4b.style.color = "var(--text-secondary)";
               }
               if (d4b) {
                 d4b.textContent = "+1 555-0123";
-                d4b.style.color = "var(--subtext0)";
+                d4b.style.color = "var(--text-secondary)";
               }
               if (sb4b) {
                 sb4b.textContent = "you@email.com";
-                sb4b.style.color = "var(--subtext0)";
+                sb4b.style.color = "var(--text-secondary)";
               }
               if (c4b) c4b.classList.remove("glow");
             }
@@ -1824,11 +1890,21 @@
             if (a6a)
               a6a
                 .querySelector("path")
-                .setAttribute("stroke", progress > 0.3 ? "#cba6f7" : "#a6adc8");
+                .setAttribute(
+                  "stroke",
+                  progress > 0.3
+                    ? themeColor("--accent")
+                    : themeColor("--text-secondary")
+                );
             if (a6b)
               a6b
                 .querySelector("path")
-                .setAttribute("stroke", progress > 0.7 ? "#a6e3a1" : "#a6adc8");
+                .setAttribute(
+                  "stroke",
+                  progress > 0.7
+                    ? themeColor("--success")
+                    : themeColor("--text-secondary")
+                );
             for (var ti = 0; ti < 3; ti++) {
               var t = document.getElementById("trust" + ti);
               if (t) {
@@ -1841,13 +1917,13 @@
                 ri.className = "v-icon-box green";
                 if (rl) {
                   rl.textContent = "\u2713 restored";
-                  rl.style.color = "var(--green)";
+                  rl.style.color = "var(--success)";
                 }
               } else {
                 ri.className = "v-icon-box neutral";
                 if (rl) {
                   rl.textContent = "new device";
-                  rl.style.color = "var(--subtext0)";
+                  rl.style.color = "var(--text-secondary)";
                 }
               }
             }
@@ -1930,6 +2006,139 @@
         // Init
         showScene(0);
         startScene();
+      })();
+    </script>
+
+    <script>
+      // Theme loader — fetches themes.json and applies CSS custom properties
+      (function () {
+        var THEME_KEY = "vauchi-theme";
+        var THEMES_URL = "/app-files/themes/themes.json";
+        var ROOT = document.documentElement;
+        var toggleBtn = document.getElementById("theme-toggle");
+        var themes = [];
+        var currentIdx = -1;
+
+        var TOKEN_NAMES = [
+          "bg-primary",
+          "bg-secondary",
+          "bg-tertiary",
+          "text-primary",
+          "text-secondary",
+          "accent",
+          "accent-dark",
+          "success",
+          "error",
+          "warning",
+          "border",
+        ];
+
+        function applyTheme(theme) {
+          for (var i = 0; i < TOKEN_NAMES.length; i++) {
+            var token = TOKEN_NAMES[i];
+            var value = theme.colors[token];
+            if (value) {
+              ROOT.style.setProperty("--" + token, value);
+            }
+          }
+          if (toggleBtn) {
+            toggleBtn.innerHTML =
+              theme.mode === "dark" ? "&#x1F319;" : "&#x2600;&#xFE0F;";
+          }
+        }
+
+        function savePreference(themeId) {
+          try {
+            localStorage.setItem(THEME_KEY, themeId);
+          } catch (e) {
+            // localStorage unavailable
+          }
+        }
+
+        function getSavedPreference() {
+          try {
+            return localStorage.getItem(THEME_KEY);
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function prefersDark() {
+          return (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+          );
+        }
+
+        function findThemeById(id) {
+          for (var i = 0; i < themes.length; i++) {
+            if (themes[i].id === id) return i;
+          }
+          return -1;
+        }
+
+        function findDefaultTheme() {
+          var wantDark = prefersDark();
+          var mode = wantDark ? "dark" : "light";
+          // Prefer default-dark/default-light, then first matching mode
+          var defaultId = "default-" + mode;
+          var idx = findThemeById(defaultId);
+          if (idx >= 0) return idx;
+          for (var i = 0; i < themes.length; i++) {
+            if (themes[i].mode === mode) return i;
+          }
+          return 0;
+        }
+
+        function cycleTo(direction) {
+          if (themes.length === 0) return;
+          currentIdx = (currentIdx + direction + themes.length) % themes.length;
+          var theme = themes[currentIdx];
+          applyTheme(theme);
+          savePreference(theme.id);
+        }
+
+        if (toggleBtn) {
+          toggleBtn.addEventListener("click", function () {
+            cycleTo(1);
+          });
+        }
+
+        // Listen for system theme changes
+        if (window.matchMedia) {
+          window
+            .matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", function () {
+              if (!getSavedPreference()) {
+                currentIdx = findDefaultTheme();
+                if (currentIdx >= 0) applyTheme(themes[currentIdx]);
+              }
+            });
+        }
+
+        // Fetch themes and apply
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", THEMES_URL, true);
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            try {
+              themes = JSON.parse(xhr.responseText);
+            } catch (e) {
+              return;
+            }
+            var saved = getSavedPreference();
+            if (saved) {
+              currentIdx = findThemeById(saved);
+            }
+            if (currentIdx < 0) {
+              currentIdx = findDefaultTheme();
+            }
+            if (currentIdx >= 0) {
+              applyTheme(themes[currentIdx]);
+            }
+          }
+        };
+        xhr.send();
       })();
     </script>
   </body>
