@@ -1640,24 +1640,75 @@
           >Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts
           Required</span
         >
-        <button
-          id="theme-toggle"
-          aria-label="Toggle light/dark theme"
-          title="Toggle theme"
-          style="
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 0.85rem;
-            padding: 4px 10px;
-            margin-left: 12px;
-            transition: color 0.2s, border-color 0.2s;
-          "
+        <div
+          id="theme-picker"
+          style="position: relative; display: inline-block; margin-left: 12px"
         >
-          &#x1F319;
-        </button>
+          <button
+            id="theme-toggle"
+            aria-label="Choose theme"
+            title="Choose theme"
+            style="
+              background: none;
+              border: 1px solid var(--border);
+              border-radius: 6px;
+              color: var(--text-secondary);
+              cursor: pointer;
+              font-size: 0.85rem;
+              padding: 4px 10px;
+              transition: color 0.2s, border-color 0.2s;
+            "
+          >
+            &#x1F319;
+          </button>
+          <div
+            id="theme-menu"
+            style="
+              display: none;
+              position: absolute;
+              bottom: calc(100% + 8px);
+              right: 0;
+              background: var(--bg-secondary);
+              border: 1px solid var(--border);
+              border-radius: 8px;
+              padding: 8px 0;
+              min-width: 200px;
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+              z-index: 100;
+              max-height: 70vh;
+              overflow-y: auto;
+            "
+          >
+            <div
+              style="
+                padding: 4px 12px 6px;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--text-secondary);
+                opacity: 0.7;
+              "
+            >
+              Dark
+            </div>
+            <div id="theme-menu-dark"></div>
+            <div
+              style="
+                padding: 8px 12px 6px;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--text-secondary);
+                opacity: 0.7;
+                border-top: 1px solid var(--border);
+                margin-top: 4px;
+              "
+            >
+              Light
+            </div>
+            <div id="theme-menu-light"></div>
+          </div>
+        </div>
       </footer>
     </main>
 
@@ -2010,12 +2061,15 @@
     </script>
 
     <script>
-      // Theme loader — fetches themes.json and applies CSS custom properties
+      // Theme picker — fetches themes.json, renders picker, applies CSS vars
       (function () {
         var THEME_KEY = "vauchi-theme";
         var THEMES_URL = "/app-files/themes/themes.json";
         var ROOT = document.documentElement;
         var toggleBtn = document.getElementById("theme-toggle");
+        var menu = document.getElementById("theme-menu");
+        var darkList = document.getElementById("theme-menu-dark");
+        var lightList = document.getElementById("theme-menu-light");
         var themes = [];
         var currentIdx = -1;
 
@@ -2035,24 +2089,34 @@
 
         function applyTheme(theme) {
           for (var i = 0; i < TOKEN_NAMES.length; i++) {
-            var token = TOKEN_NAMES[i];
-            var value = theme.colors[token];
-            if (value) {
-              ROOT.style.setProperty("--" + token, value);
-            }
+            var value = theme.colors[TOKEN_NAMES[i]];
+            if (value) ROOT.style.setProperty("--" + TOKEN_NAMES[i], value);
           }
           if (toggleBtn) {
             toggleBtn.innerHTML =
-              theme.mode === "dark" ? "&#x1F319;" : "&#x2600;&#xFE0F;";
+              theme.mode === "dark" ? "\u{1F319}" : "\u2600\uFE0F";
+          }
+          updateActiveItem();
+        }
+
+        function updateActiveItem() {
+          if (!menu) return;
+          var items = menu.querySelectorAll("[data-theme-id]");
+          for (var i = 0; i < items.length; i++) {
+            var isActive =
+              themes[currentIdx] &&
+              items[i].getAttribute("data-theme-id") === themes[currentIdx].id;
+            items[i].style.fontWeight = isActive ? "600" : "normal";
+            items[i].style.background = isActive
+              ? "var(--bg-tertiary)"
+              : "transparent";
           }
         }
 
-        function savePreference(themeId) {
+        function savePreference(id) {
           try {
-            localStorage.setItem(THEME_KEY, themeId);
-          } catch (e) {
-            // localStorage unavailable
-          }
+            localStorage.setItem(THEME_KEY, id);
+          } catch (e) {}
         }
 
         function getSavedPreference() {
@@ -2078,10 +2142,9 @@
         }
 
         function findDefaultTheme() {
-          var wantDark = prefersDark();
-          var mode = wantDark ? "dark" : "light";
-          // Prefer default-dark/default-light, then first matching mode
-          var defaultId = "default-" + mode;
+          var mode = prefersDark() ? "dark" : "light";
+          var defaultId =
+            mode === "dark" ? "catppuccin-mocha" : "catppuccin-latte";
           var idx = findThemeById(defaultId);
           if (idx >= 0) return idx;
           for (var i = 0; i < themes.length; i++) {
@@ -2090,21 +2153,70 @@
           return 0;
         }
 
-        function cycleTo(direction) {
-          if (themes.length === 0) return;
-          currentIdx = (currentIdx + direction + themes.length) % themes.length;
-          var theme = themes[currentIdx];
-          applyTheme(theme);
-          savePreference(theme.id);
+        function createItem(theme, idx) {
+          var btn = document.createElement("button");
+          btn.setAttribute("data-theme-id", theme.id);
+          btn.style.cssText =
+            "display:flex;align-items:center;gap:8px;width:100%;padding:6px 12px;border:none;background:transparent;color:var(--text-primary);cursor:pointer;font-size:0.8rem;text-align:left;font-family:inherit";
+          var swatch = document.createElement("span");
+          swatch.style.cssText =
+            "width:14px;height:14px;border-radius:50%;flex-shrink:0;border:1px solid var(--border)";
+          swatch.style.background = theme.colors.accent;
+          btn.appendChild(swatch);
+          btn.appendChild(document.createTextNode(theme.name));
+          btn.addEventListener("click", function () {
+            currentIdx = idx;
+            applyTheme(theme);
+            savePreference(theme.id);
+            toggleMenu(false);
+          });
+          btn.addEventListener("mouseenter", function () {
+            if (themes[currentIdx] && theme.id !== themes[currentIdx].id) {
+              btn.style.background = "var(--bg-tertiary)";
+            }
+          });
+          btn.addEventListener("mouseleave", function () {
+            var isActive =
+              themes[currentIdx] && theme.id === themes[currentIdx].id;
+            btn.style.background = isActive
+              ? "var(--bg-tertiary)"
+              : "transparent";
+          });
+          return btn;
+        }
+
+        function populateMenu() {
+          if (!darkList || !lightList) return;
+          for (var i = 0; i < themes.length; i++) {
+            var item = createItem(themes[i], i);
+            if (themes[i].mode === "dark") {
+              darkList.appendChild(item);
+            } else {
+              lightList.appendChild(item);
+            }
+          }
+        }
+
+        var menuOpen = false;
+        function toggleMenu(forceState) {
+          menuOpen = typeof forceState === "boolean" ? forceState : !menuOpen;
+          if (menu) menu.style.display = menuOpen ? "block" : "none";
         }
 
         if (toggleBtn) {
-          toggleBtn.addEventListener("click", function () {
-            cycleTo(1);
+          toggleBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            toggleMenu();
           });
         }
 
-        // Listen for system theme changes
+        document.addEventListener("click", function (e) {
+          if (menuOpen && menu && !menu.contains(e.target)) {
+            toggleMenu(false);
+          }
+        });
+
+        // System theme change listener
         if (window.matchMedia) {
           window
             .matchMedia("(prefers-color-scheme: dark)")
@@ -2126,16 +2238,11 @@
             } catch (e) {
               return;
             }
+            populateMenu();
             var saved = getSavedPreference();
-            if (saved) {
-              currentIdx = findThemeById(saved);
-            }
-            if (currentIdx < 0) {
-              currentIdx = findDefaultTheme();
-            }
-            if (currentIdx >= 0) {
-              applyTheme(themes[currentIdx]);
-            }
+            if (saved) currentIdx = findThemeById(saved);
+            if (currentIdx < 0) currentIdx = findDefaultTheme();
+            if (currentIdx >= 0) applyTheme(themes[currentIdx]);
           }
         };
         xhr.send();
