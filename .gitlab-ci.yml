@@ -19,7 +19,7 @@ include:
     file: '/ci-templates/reuse.yml'
 
 variables:
-  CS_IMAGE: "${CI_REGISTRY_IMAGE:-vauchi-website}:$CI_COMMIT_SHA"
+  CS_IMAGE: "registry.gitlab.com/vauchi/website:$CI_COMMIT_SHA"
 
 stages:
   - lint
