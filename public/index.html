@@ -606,8 +606,13 @@
         line-height: 1;
       }
       @keyframes vBounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(4px); }
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(4px);
+        }
       }
       .v-controls {
         display: flex;
@@ -656,7 +661,7 @@
         position: relative;
       }
       .v-dot-btn::before {
-        content: '';
+        content: "";
         position: absolute;
         inset: -20px -2px;
       }
@@ -1846,7 +1851,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Controls (outside player) -->
@@ -1876,18 +1880,18 @@
           GitHub
         </a>
         <span class="demo-link">Demo (coming soon)</span>
-          <a
-            href="https://github.com/sponsors/vauchi"
-            target="_blank"
-            rel="noopener"
-          >
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-              />
-            </svg>
-            Sponsor
-          </a>
+        <a
+          href="https://github.com/sponsors/vauchi"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+          Sponsor
+        </a>
         <a
           href="https://liberapay.com/Vauchi/donate"
           target="_blank"
@@ -1908,13 +1912,18 @@
           Required</span
         >
         <div
-          id="theme-picker"
-          style="position: relative; display: inline-block; margin-left: 12px"
+          style="
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 12px;
+          "
         >
           <button
-            id="theme-toggle"
-            aria-label="Choose theme"
-            title="Choose theme"
+            id="mode-toggle"
+            aria-label="Toggle dark/light mode"
+            title="Toggle dark/light mode"
             style="
               background: none;
               border: 1px solid var(--border);
@@ -1927,6 +1936,25 @@
             "
           >
             &#x1F319;
+          </button>
+          <button
+            id="theme-menu-toggle"
+            aria-label="Choose theme"
+            aria-haspopup="true"
+            aria-expanded="false"
+            title="Choose theme"
+            style="
+              background: none;
+              border: 1px solid var(--border);
+              border-radius: 6px;
+              color: var(--text-secondary);
+              cursor: pointer;
+              font-size: 0.85rem;
+              padding: 4px 10px;
+              transition: color 0.2s, border-color 0.2s;
+            "
+          >
+            &#x1F3A8;
           </button>
           <div
             id="theme-menu"
@@ -2363,7 +2391,8 @@
         var THEME_KEY = "vauchi-theme";
         var THEMES_URL = "/app-files/themes/themes.json";
         var ROOT = document.documentElement;
-        var toggleBtn = document.getElementById("theme-toggle");
+        var modeToggleBtn = document.getElementById("mode-toggle");
+        var menuToggleBtn = document.getElementById("theme-menu-toggle");
         var menu = document.getElementById("theme-menu");
         var darkList = document.getElementById("theme-menu-dark");
         var lightList = document.getElementById("theme-menu-light");
@@ -2384,13 +2413,28 @@
           "border",
         ];
 
+        var THEME_PAIRS = {
+          "default-dark": "default-light",
+          "default-light": "default-dark",
+          "catppuccin-mocha": "catppuccin-latte",
+          "catppuccin-frappe": "catppuccin-latte",
+          "catppuccin-macchiato": "catppuccin-latte",
+          "catppuccin-latte": "catppuccin-mocha",
+          "solarized-dark": "solarized-light",
+          "solarized-light": "solarized-dark",
+          "gruvbox-dark": "gruvbox-light",
+          "gruvbox-light": "gruvbox-dark",
+          dracula: "default-light",
+          nord: "default-light",
+        };
+
         function applyTheme(theme) {
           for (var i = 0; i < TOKEN_NAMES.length; i++) {
             var value = theme.colors[TOKEN_NAMES[i]];
             if (value) ROOT.style.setProperty("--" + TOKEN_NAMES[i], value);
           }
-          if (toggleBtn) {
-            toggleBtn.innerHTML =
+          if (modeToggleBtn) {
+            modeToggleBtn.innerHTML =
               theme.mode === "dark" ? "\u{1F319}" : "\u2600\uFE0F";
           }
           updateActiveItem();
@@ -2450,6 +2494,24 @@
           return 0;
         }
 
+        function toggleDarkLight() {
+          var current = themes[currentIdx];
+          var pairedId;
+          if (current && THEME_PAIRS[current.id]) {
+            pairedId = THEME_PAIRS[current.id];
+          } else if (current && current.mode === "dark") {
+            pairedId = "default-light";
+          } else {
+            pairedId = "default-dark";
+          }
+          var idx = findThemeById(pairedId);
+          if (idx >= 0) {
+            currentIdx = idx;
+            applyTheme(themes[idx]);
+            savePreference(themes[idx].id);
+          }
+        }
+
         function createItem(theme, idx) {
           var btn = document.createElement("button");
           btn.setAttribute("data-theme-id", theme.id);
@@ -2498,17 +2560,32 @@
         function toggleMenu(forceState) {
           menuOpen = typeof forceState === "boolean" ? forceState : !menuOpen;
           if (menu) menu.style.display = menuOpen ? "block" : "none";
+          if (menuToggleBtn)
+            menuToggleBtn.setAttribute("aria-expanded", String(menuOpen));
         }
 
-        if (toggleBtn) {
-          toggleBtn.addEventListener("click", function (e) {
+        if (modeToggleBtn) {
+          modeToggleBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            toggleDarkLight();
+          });
+        }
+
+        if (menuToggleBtn) {
+          menuToggleBtn.addEventListener("click", function (e) {
             e.stopPropagation();
             toggleMenu();
           });
         }
 
         document.addEventListener("click", function (e) {
-          if (menuOpen && menu && !menu.contains(e.target)) {
+          if (
+            menuOpen &&
+            menu &&
+            !menu.contains(e.target) &&
+            e.target !== modeToggleBtn &&
+            e.target !== menuToggleBtn
+          ) {
             toggleMenu(false);
           }
         });
