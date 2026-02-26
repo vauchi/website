@@ -151,7 +151,7 @@
         justify-content: center;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.5s ease;
+        transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .v-scene.active {
         opacity: 1;
@@ -215,15 +215,15 @@
         font-family: var(--mono);
       }
       .v-heading {
-        font-size: 20px;
-        font-weight: 300;
+        font-size: clamp(16px, 0.89vw + 0.82rem, 20px);
+        font-weight: 400;
         color: var(--text-primary);
         max-width: 400px;
         line-height: 1.5;
         font-family: var(--serif);
       }
       .v-heading.lg {
-        font-size: 44px;
+        font-size: clamp(26px, 1.96vw + 1.19rem, 44px);
         letter-spacing: -1.5px;
         max-width: none;
       }
@@ -233,7 +233,7 @@
         letter-spacing: 0.5px;
       }
       .v-caption {
-        font-size: 14px;
+        font-size: clamp(12px, 0.45vw + 0.66rem, 14px);
         color: var(--text-secondary);
         max-width: 340px;
         line-height: 1.6;
@@ -253,11 +253,11 @@
         justify-content: center;
       }
       .v-tag {
-        font-size: 9px;
+        font-size: 11px;
         color: var(--text-secondary);
         border: 1px solid var(--bg-tertiary);
         border-radius: 12px;
-        padding: 2px 10px;
+        padding: 3px 12px;
         font-family: var(--mono);
         letter-spacing: 0.6px;
         line-height: 18px;
@@ -325,7 +325,7 @@
       }
       .v-contact.glow {
         background: var(--accent-dim);
-        border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+        border-color: color-mix(in srgb, var(--accent) 30%, transparent);
       }
       .v-contact-avatar {
         width: 28px;
@@ -564,7 +564,7 @@
         gap: 4px;
       }
       .v-relay-label {
-        font-size: 7px;
+        font-size: 8px;
         color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
@@ -597,6 +597,18 @@
         gap: 0;
         margin-top: -1px;
       }
+      .v-scroll-hint {
+        margin-top: 12px;
+        opacity: 0.3;
+        animation: vBounce 2s ease infinite;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1;
+      }
+      @keyframes vBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(4px); }
+      }
       .v-controls {
         display: flex;
         align-items: center;
@@ -613,6 +625,8 @@
         border: none;
         color: var(--text-secondary);
         font-size: 11px;
+        min-height: 44px;
+        min-width: 44px;
         padding: 2px 6px;
         border-radius: 6px;
         font-family: var(--mono);
@@ -639,6 +653,12 @@
         transition: all 0.3s ease;
         border: none;
         padding: 0;
+        position: relative;
+      }
+      .v-dot-btn::before {
+        content: '';
+        position: absolute;
+        inset: -20px -2px;
       }
       .v-dot-btn:hover {
         transform: scale(1.4);
@@ -662,7 +682,7 @@
 
       .v-efooter {
         font-size: 9px;
-        color: var(--border);
+        color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
       }
@@ -682,12 +702,6 @@
         }
         .v-scene {
           padding: 16px 12px;
-        }
-        .v-heading {
-          font-size: 18px;
-        }
-        .v-heading.lg {
-          font-size: 34px;
         }
         .v-phone {
           width: 140px;
@@ -774,14 +788,9 @@
           padding: 2px 0;
         }
         .v-heading {
-          font-size: 16px;
           max-width: 340px;
         }
-        .v-heading.lg {
-          font-size: 28px;
-        }
         .v-caption {
-          font-size: 12px;
           max-width: 320px;
         }
         .v-qr {
@@ -894,14 +903,9 @@
           gap: 8px;
         }
         .v-heading {
-          font-size: 15px;
           max-width: 300px;
         }
-        .v-heading.lg {
-          font-size: 26px;
-        }
         .v-caption {
-          font-size: 12px;
           max-width: 280px;
         }
         .v-contact {
@@ -1017,6 +1021,9 @@
           animation: none;
           opacity: 1;
           transform: none;
+        }
+        .v-scroll-hint {
+          animation: none;
         }
         .v-scene {
           transition: none;
@@ -1848,6 +1855,7 @@
           <div class="v-progress-bar" id="progressBar" style="width: 0%"></div>
         </div>
         <div class="v-controls" id="controls"></div>
+        <div class="v-scroll-hint" aria-hidden="true">&#x25BE;</div>
       </div>
 
       <div class="links">
@@ -2310,6 +2318,36 @@
           } else if (e.key === " ") {
             e.preventDefault();
             togglePlay();
+          }
+        });
+
+        // Pause on hover/focus (WCAG 2.2.2)
+        var hoverPaused = false;
+        player.addEventListener("mouseenter", function () {
+          if (playing) {
+            hoverPaused = true;
+            clearTimeout(timer);
+            clearInterval(ticker);
+          }
+        });
+        player.addEventListener("mouseleave", function () {
+          if (hoverPaused && playing) {
+            hoverPaused = false;
+            startScene();
+          }
+          hoverPaused = false;
+        });
+        player.addEventListener("focusin", function () {
+          if (playing) {
+            hoverPaused = true;
+            clearTimeout(timer);
+            clearInterval(ticker);
+          }
+        });
+        player.addEventListener("focusout", function (e) {
+          if (hoverPaused && playing && !player.contains(e.relatedTarget)) {
+            hoverPaused = false;
+            startScene();
           }
         });
 
