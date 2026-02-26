@@ -169,7 +169,7 @@
       }
 
       .v-scene.active .v-fade {
-        animation: vFadeIn 0.65s ease both;
+        animation: vFadeIn 0.8s ease both;
       }
       .v-d1 {
         animation-delay: 0ms !important;
@@ -671,38 +671,81 @@
         opacity: 0;
       }
 
-      /* Responsive */
-      @media (max-width: 600px) {
+      /* Responsive — Tablet */
+      @media (max-width: 768px) {
         .v-player {
           aspect-ratio: 4 / 3;
         }
         .v-scene {
-          padding: 12px;
+          padding: 16px 16px 44px;
+        }
+        .v-heading {
+          font-size: 18px;
+        }
+        .v-heading.lg {
+          font-size: 34px;
+        }
+        .v-phone {
+          width: 140px;
+          height: 260px;
+        }
+        .v-phone.sm {
+          transform: scale(0.62);
+        }
+        .v-phone.med {
+          transform: scale(0.66);
+        }
+        .v-phone.lg {
+          transform: scale(0.76);
+        }
+        .v-phone.tilt-l {
+          transform: scale(0.62) rotate(-2deg);
+        }
+        .v-phone.tilt-r {
+          transform: scale(0.62) rotate(2deg);
+        }
+      }
+
+      /* Responsive — Mobile */
+      @media (max-width: 600px) {
+        .v-player {
+          aspect-ratio: 3 / 4;
+        }
+        .v-scene {
+          padding: 14px 12px 44px;
+        }
+        .v-scene-inner {
+          gap: 10px;
         }
         .v-phone {
           width: 120px;
           height: 220px;
         }
         .v-phone.sm {
-          transform: scale(0.58);
+          transform: scale(0.55);
         }
         .v-phone.med {
-          transform: scale(0.6);
+          transform: scale(0.58);
         }
         .v-phone.lg {
-          transform: scale(0.7);
+          transform: scale(0.68);
         }
         .v-phone.tilt-l {
-          transform: scale(0.58) rotate(-2deg);
+          transform: scale(0.55) rotate(-2deg);
         }
         .v-phone.tilt-r {
-          transform: scale(0.58) rotate(2deg);
+          transform: scale(0.55) rotate(2deg);
         }
         .v-heading {
           font-size: 16px;
+          max-width: 280px;
         }
         .v-heading.lg {
-          font-size: 30px;
+          font-size: 28px;
+        }
+        .v-caption {
+          font-size: 12px;
+          max-width: 260px;
         }
         .v-qr {
           grid-template-columns: repeat(9, 5px);
@@ -714,14 +757,27 @@
           height: 5px;
         }
         .v-row.wide {
-          gap: 16px;
+          gap: 14px;
+        }
+        .v-row.tight {
+          gap: 6px;
+        }
+        .v-relay {
+          gap: 2px;
+        }
+        .v-relay-label {
+          font-size: 6px;
+        }
+        .v-arrow svg {
+          width: 20px;
+          height: 20px;
         }
         .v-priv-card {
-          min-width: 120px;
+          min-width: 110px;
           padding: 8px 10px;
         }
-        .v-caption {
-          font-size: 12px;
+        .v-priv-card .v-priv-line {
+          font-size: 8px;
         }
         .v-icon-box {
           width: 36px;
@@ -739,6 +795,23 @@
         .v-pill {
           font-size: 8px;
           padding: 4px 8px;
+        }
+        .v-label {
+          font-size: 10px;
+          letter-spacing: 2px;
+        }
+        .v-sub {
+          font-size: 9px;
+        }
+        .v-micro {
+          font-size: 8px;
+        }
+        .v-tags {
+          gap: 5px;
+        }
+        .v-tag {
+          font-size: 8px;
+          padding: 2px 8px;
         }
         .page-wrapper {
           gap: 1rem;
@@ -762,6 +835,113 @@
         .footer {
           font-size: 0.75rem;
           padding-top: 1rem;
+        }
+      }
+
+      /* Responsive — Small Mobile (≤ 360px) */
+      @media (max-width: 360px) {
+        .v-player {
+          aspect-ratio: 9 / 14;
+        }
+        .v-scene {
+          padding: 10px 8px 44px;
+        }
+        .v-scene-inner {
+          gap: 8px;
+        }
+        .v-heading {
+          font-size: 14px;
+          max-width: 240px;
+        }
+        .v-heading.lg {
+          font-size: 24px;
+        }
+        .v-caption {
+          font-size: 11px;
+          max-width: 220px;
+        }
+        .v-phone {
+          width: 100px;
+          height: 190px;
+        }
+        .v-phone.sm {
+          transform: scale(0.5);
+        }
+        .v-phone.med {
+          transform: scale(0.52);
+        }
+        .v-phone.lg {
+          transform: scale(0.62);
+        }
+        .v-phone.tilt-l {
+          transform: scale(0.5) rotate(-2deg);
+        }
+        .v-phone.tilt-r {
+          transform: scale(0.5) rotate(2deg);
+        }
+        .v-row.wide {
+          gap: 10px;
+        }
+        .v-priv-card {
+          min-width: 100px;
+          padding: 6px 8px;
+        }
+        .v-priv-card .v-priv-name {
+          font-size: 10px;
+        }
+        .v-priv-card .v-priv-line {
+          font-size: 7px;
+        }
+        .v-label {
+          font-size: 9px;
+          letter-spacing: 1.5px;
+        }
+        .v-icon-box {
+          width: 32px;
+          height: 32px;
+          font-size: 14px;
+        }
+        .v-trust-dot {
+          width: 22px;
+          height: 22px;
+          font-size: 11px;
+        }
+        .v-pair-circle {
+          width: 28px;
+          height: 28px;
+          font-size: 13px;
+        }
+        .v-scan-target {
+          width: 40px;
+          height: 40px;
+          font-size: 18px;
+        }
+        .v-pill {
+          font-size: 7px;
+          padding: 3px 6px;
+          gap: 3px;
+        }
+        .v-pill-icon {
+          font-size: 10px;
+        }
+        .v-logo-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+        }
+        .v-links {
+          gap: 8px;
+        }
+        .v-link {
+          font-size: 10px;
+          padding: 5px 14px;
+        }
+        .v-efooter {
+          font-size: 8px;
+        }
+        .links a {
+          padding: 0.4rem 0.75rem;
+          font-size: 0.75rem;
         }
       }
 
@@ -1734,7 +1914,7 @@
         }
 
         var DURATIONS = [
-          5000, 5500, 6000, 4500, 6500, 5500, 6000, 5500, 5500, 7000,
+          7000, 8000, 8500, 7000, 9000, 8000, 8500, 8000, 8000, 9500,
         ];
         var TOTAL = DURATIONS.length;
         var SCENE_NAMES = [
