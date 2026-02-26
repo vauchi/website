@@ -1925,7 +1925,42 @@
             margin-left: 12px;
           "
         >
-                    <div style="display:flex;gap:6px;margin-left:12px;font-size:0.8rem"><a href="/" style="color:var(--accent);text-decoration:none;font-weight:600">EN</a> <span style="color:var(--border)">·</span> <a href="/fr/" style="color:var(--text-secondary);text-decoration:none">FR</a> <span style="color:var(--border)">·</span> <a href="/de/" style="color:var(--text-secondary);text-decoration:none">DE</a> <span style="color:var(--border)">·</span> <a href="/it/" style="color:var(--text-secondary);text-decoration:none">IT</a></div>
+          <div
+            style="
+              display: flex;
+              gap: 6px;
+              margin-left: 12px;
+              font-size: 0.8rem;
+            "
+          >
+            <a
+              href="/"
+              style="
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 600;
+              "
+              >EN</a
+            >
+            <span style="color: var(--border)">·</span>
+            <a
+              href="/fr/"
+              style="color: var(--text-secondary); text-decoration: none"
+              >FR</a
+            >
+            <span style="color: var(--border)">·</span>
+            <a
+              href="/de/"
+              style="color: var(--text-secondary); text-decoration: none"
+              >DE</a
+            >
+            <span style="color: var(--border)">·</span>
+            <a
+              href="/it/"
+              style="color: var(--text-secondary); text-decoration: none"
+              >IT</a
+            >
+          </div>
           <button
             id="mode-toggle"
             aria-label="Toggle dark/light mode"
@@ -2023,7 +2058,7 @@
         }
 
         var DURATIONS = [
-          7000, 8000, 8500, 7000, 9000, 8000, 8500, 8000, 8000, 9500,
+          4500, 8000, 8500, 7000, 9000, 8000, 8500, 8000, 8000, 9500,
         ];
         var TOTAL = DURATIONS.length;
         var SCENE_NAMES = [
@@ -2355,6 +2390,34 @@
           }
         });
 
+        function resumeScene() {
+          clearTimeout(timer);
+          clearInterval(ticker);
+          if (!playing) return;
+
+          var dur = DURATIONS[current];
+          var remaining = dur * (1 - progress);
+          var step = 40;
+
+          ticker = setInterval(function () {
+            progress = Math.min(progress + step / dur, 1);
+            updateProgress();
+            updateSceneState();
+          }, step);
+
+          timer = setTimeout(function () {
+            clearInterval(ticker);
+            if (current < TOTAL - 1) {
+              current++;
+              startScene();
+            } else {
+              playing = false;
+              playBtn.textContent = "\u25B6";
+              playBtn.setAttribute("aria-label", "Play explainer");
+            }
+          }, remaining);
+        }
+
         // Pause on hover/focus (WCAG 2.2.2)
         var hoverPaused = false;
         player.addEventListener("mouseenter", function () {
@@ -2367,7 +2430,7 @@
         player.addEventListener("mouseleave", function () {
           if (hoverPaused && playing) {
             hoverPaused = false;
-            startScene();
+            resumeScene();
           }
           hoverPaused = false;
         });
@@ -2381,7 +2444,7 @@
         player.addEventListener("focusout", function (e) {
           if (hoverPaused && playing && !player.contains(e.relatedTarget)) {
             hoverPaused = false;
-            startScene();
+            resumeScene();
           }
         });
 
