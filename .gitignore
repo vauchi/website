@@ -11,3 +11,6 @@ venv/
 .idea/
 .vscode/
 *.swp
+
+# CI local testing
+.gitlab-ci-local/
