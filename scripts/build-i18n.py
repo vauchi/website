@@ -124,7 +124,7 @@ FR = {
             "Switch social networks? Change email providers? Your contacts stay",
             "Vous changez de r\u00e9seau social\u202f? De fournisseur e-mail\u202f? Vos contacts restent",
         ),
-        ("current.", "\u00e0 jour."),
+        ("              current.\n", "              \u00e0 jour.\n"),
         (">BEFORE<", ">AVANT<"),
         (">AFTER<", ">APR\u00c8S<"),
         ("update once", "mettez \u00e0 jour une fois"),
@@ -269,7 +269,7 @@ DE = {
             "Switch social networks? Change email providers? Your contacts stay",
             "Soziale Netzwerke wechseln? E-Mail-Anbieter \u00e4ndern? Ihre Kontakte bleiben",
         ),
-        ("current.", "aktuell."),
+        ("              current.\n", "              aktuell.\n"),
         (">BEFORE<", ">VORHER<"),
         (">AFTER<", ">NACHHER<"),
         ("update once", "einmal aktualisieren"),
@@ -417,7 +417,7 @@ IT = {
             "Switch social networks? Change email providers? Your contacts stay",
             "Cambi social network? Cambi provider e-mail? I tuoi contatti restano",
         ),
-        ("current.", "aggiornati."),
+        ("              current.\n", "              aggiornati.\n"),
         (">BEFORE<", ">PRIMA<"),
         (">AFTER<", ">DOPO<"),
         ("update once", "aggiorna una volta"),
@@ -537,6 +537,40 @@ def translate(html, lang_data):
     return result
 
 
+def swap_lang_picker_active(html, target_lang):
+    """Swap active language in the picker from EN to target_lang.
+
+    Uses regex to handle both single-line and multi-line (formatter-expanded)
+    style attributes in the picker links.
+    """
+    inactive_style = "color: var(--text-secondary); text-decoration: none"
+    active_style = (
+        "color: var(--accent); text-decoration: none; font-weight: 600"
+    )
+
+    # Deactivate EN link (the one with font-weight in its style)
+    html = re.sub(
+        r'(<a\s+href="/"\s+style=")[^"]*font-weight[^"]*("\s*>EN</a)',
+        r"\g<1>" + inactive_style + r"\g<2>",
+        html,
+    )
+
+    # Activate target language link
+    target_href = re.escape(f"/{target_lang}/")
+    target_label = re.escape(LANG_LABELS[target_lang])
+    html = re.sub(
+        r"(<a\s+href=\""
+        + target_href
+        + r"\"\s+style=\")[^\"]*(\"\s*>"
+        + target_label
+        + r"</a)",
+        r"\g<1>" + active_style + r"\g<2>",
+        html,
+    )
+
+    return html
+
+
 def fix_asset_paths(html):
     """Fix relative asset paths for subdirectory pages."""
     return html.replace('src="logo.png"', 'src="/logo.png"')
@@ -552,7 +586,7 @@ def main():
 
     # Check if hreflang is already present
     has_hreflang = 'hreflang="en"' in base_html
-    has_picker = "lang-picker" in base_html or ("/fr/" in base_html and "/de/" in base_html)
+    has_picker = "font-weight: 600" in base_html or "font-weight:600" in base_html
 
     # Patch English version with hreflang + language picker
     en_html = base_html
@@ -580,9 +614,7 @@ def main():
         html = translate(html, data)
         html = fix_asset_paths(html)
         # Update language picker to highlight current language
-        html = html.replace(
-            lang_picker_html("en"), lang_picker_html(lang)
-        )
+        html = swap_lang_picker_active(html, lang)
 
         with open(out_file, "w", encoding="utf-8") as f:
             f.write(html)

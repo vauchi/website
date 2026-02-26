@@ -1934,11 +1934,7 @@
           >
             <a
               href="/"
-              style="
-                color: var(--accent);
-                text-decoration: none;
-                font-weight: 600;
-              "
+              style="color: var(--text-secondary); text-decoration: none"
               >EN</a
             >
             <span style="color: var(--border)">·</span>
@@ -1950,7 +1946,7 @@
             <span style="color: var(--border)">·</span>
             <a
               href="/de/"
-              style="color: var(--text-secondary); text-decoration: none"
+              style="color: var(--accent); text-decoration: none; font-weight: 600"
               >DE</a
             >
             <span style="color: var(--border)">·</span>
@@ -2565,9 +2561,9 @@
         function toggleDarkLight() {
           var current = themes[currentIdx];
           var pairedId;
-          if (current && THEME_PAIRS[aktuell.id]) {
-            pairedId = THEME_PAIRS[aktuell.id];
-          } else if (current && aktuell.mode === "dark") {
+          if (current && THEME_PAIRS[current.id]) {
+            pairedId = THEME_PAIRS[current.id];
+          } else if (current && current.mode === "dark") {
             pairedId = "default-light";
           } else {
             pairedId = "default-dark";
