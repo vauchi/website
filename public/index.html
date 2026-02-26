@@ -590,20 +590,23 @@
         justify-content: center;
       }
 
+      .v-controls-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        margin-top: -1px;
+      }
       .v-controls {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 6px;
-        z-index: 10;
-        background: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
-        border-radius: 20px;
-        padding: 4px 12px;
+        background: var(--bg-secondary);
+        border-radius: 0 0 14px 14px;
+        padding: 6px 16px;
         border: 1px solid var(--bg-tertiary);
-        backdrop-filter: blur(8px);
+        border-top: none;
       }
       .v-play-btn {
         background: none;
@@ -646,10 +649,7 @@
       }
 
       .v-progress-track {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        width: 100%;
         height: 2px;
         background: var(--bg-secondary);
       }
@@ -677,7 +677,7 @@
           aspect-ratio: 4 / 3;
         }
         .v-scene {
-          padding: 16px 16px 44px;
+          padding: 16px;
         }
         .v-heading {
           font-size: 18px;
@@ -712,7 +712,7 @@
           aspect-ratio: 3 / 4;
         }
         .v-scene {
-          padding: 14px 12px 44px;
+          padding: 14px 12px;
         }
         .v-scene-inner {
           gap: 10px;
@@ -735,6 +735,32 @@
         }
         .v-phone.tilt-r {
           transform: scale(0.55) rotate(2deg);
+        }
+        .v-phone-screen {
+          border-radius: 14px;
+        }
+        .v-contact {
+          gap: 5px;
+          padding: 5px 6px;
+          margin: 2px 4px;
+        }
+        .v-contact-avatar {
+          width: 20px;
+          height: 20px;
+          font-size: 9px;
+        }
+        .v-contact-name {
+          font-size: 9px;
+        }
+        .v-contact-detail {
+          font-size: 7px;
+        }
+        .v-contact-sub {
+          font-size: 6px;
+        }
+        .v-status {
+          font-size: 7px;
+          padding: 2px 0;
         }
         .v-heading {
           font-size: 16px;
@@ -844,7 +870,7 @@
           aspect-ratio: 9 / 14;
         }
         .v-scene {
-          padding: 10px 8px 44px;
+          padding: 10px 8px;
         }
         .v-scene-inner {
           gap: 8px;
@@ -859,6 +885,25 @@
         .v-caption {
           font-size: 11px;
           max-width: 220px;
+        }
+        .v-contact {
+          gap: 4px;
+          padding: 4px 5px;
+          margin: 1px 3px;
+        }
+        .v-contact-avatar {
+          width: 16px;
+          height: 16px;
+          font-size: 7px;
+        }
+        .v-contact-name {
+          font-size: 8px;
+        }
+        .v-contact-detail {
+          font-size: 6px;
+        }
+        .v-contact-sub {
+          font-size: 5px;
         }
         .v-phone {
           width: 100px;
@@ -1774,13 +1819,14 @@
           </div>
         </div>
 
-        <!-- Controls -->
-        <div class="v-controls" id="controls"></div>
+      </div>
 
-        <!-- Progress -->
+      <!-- Controls (outside player) -->
+      <div class="v-controls-wrap">
         <div class="v-progress-track">
           <div class="v-progress-bar" id="progressBar" style="width: 0%"></div>
         </div>
+        <div class="v-controls" id="controls"></div>
       </div>
 
       <div class="links">
