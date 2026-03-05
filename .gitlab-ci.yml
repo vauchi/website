@@ -26,6 +26,7 @@ stages:
   - test
   - build
   - scan
+  - deploy
 
 # Lint HTML files
 lint:html:
@@ -132,6 +133,68 @@ container_scanning:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
-# Deployment is handled by Kamal (accessory in deploy.combined.yml).
-# After merge to main, the image is available at registry.gitlab.com/vauchi/website:latest.
-# Deploy with: kamal accessory reboot landing -c config/deploy.combined.yml
+# Deploy website to production
+#
+# Replaces the running landing container on the deployment host.
+# The kamal-proxy routes vauchi.app traffic to port 3080.
+#
+# Manual gate — click "play" on main after verifying the build is good.
+deploy:production:
+  stage: deploy
+  tags: [docker]
+  image: alpine:latest
+  needs:
+    - job: build:docker
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - apk add --no-cache openssh-client curl
+    - mkdir -p ~/.ssh
+    - echo "$DEPLOY_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+  script:
+    - |
+      IMAGE="${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
+      CONTAINER="vauchi-landing-${CI_COMMIT_SHORT_SHA}"
+      SSH_TARGET="${DEPLOY_USER:-vauchi}@${DEPLOY_HOST}"
+      echo "Deploying website: $IMAGE"
+
+      # Pull new image on server
+      ssh "$SSH_TARGET" \
+        "echo '${KAMAL_REGISTRY_PASSWORD}' | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY} && docker pull ${IMAGE}"
+
+      # Stop any container bound to port 3080
+      ssh "$SSH_TARGET" "\
+        docker ps --filter 'publish=3080' -q | xargs -r docker stop | xargs -r docker rm || true"
+
+      # Start new container
+      ssh "$SSH_TARGET" "\
+        docker run -d --name ${CONTAINER} \
+          --restart unless-stopped \
+          -p 3080:80 \
+          ${IMAGE}"
+
+      # Health check via SSH
+      ssh "$SSH_TARGET" "\
+        for i in \$(seq 1 15); do \
+          curl -sf http://localhost:3080/health > /dev/null 2>&1 && break; \
+          sleep 1; \
+        done && \
+        curl -sf http://localhost:3080/health || \
+          { echo 'Health check failed'; docker rm -f ${CONTAINER}; exit 1; }"
+
+      # Verify externally
+      sleep 3
+      STATUS=$(curl -sf -o /dev/null -w '%{http_code}' --max-time 10 "https://vauchi.app/build-info.json" || echo "000")
+      if [ "$STATUS" = "200" ]; then
+        echo "Deployment verified — build-info.json accessible"
+      else
+        echo "WARNING: External check returned $STATUS (may be DNS/proxy delay)"
+      fi
+  environment:
+    name: production
+    url: https://vauchi.app
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
