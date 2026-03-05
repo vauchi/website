@@ -134,20 +134,18 @@ container_scanning:
     - if: $CI_COMMIT_BRANCH == "main"
 
 # Deploy website to production via _private pipeline
-deploy:production:
+# Auto-triggers the centralized deploy pipeline in _private.
+# The _private pipeline has manual gate jobs — click "play" there.
+
+deploy:trigger:
   stage: deploy
   needs:
     - job: build:docker
   trigger:
     project: vauchi/_private
     branch: main
-    strategy: depend
   variables:
     DEPLOY_SERVICE: landing
     DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
-  environment:
-    name: production
-    url: https://vauchi.app
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
