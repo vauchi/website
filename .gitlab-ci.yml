@@ -106,6 +106,12 @@ build:docker:
     DOCKER_BUILDKIT: "1"
   script:
     - IMAGE="${CI_REGISTRY_IMAGE:-vauchi-website}"
+    - >-
+      printf '{"sha":"%s","short_sha":"%s","ref":"%s","built":"%s","pipeline":"%s"}\n'
+      "$CI_COMMIT_SHA" "$CI_COMMIT_SHORT_SHA" "$CI_COMMIT_REF_NAME"
+      "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$CI_PIPELINE_URL"
+      > public/build-info.json
+    - cat public/build-info.json
     - docker build -t $IMAGE:$CI_COMMIT_SHA .
     - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
     - |
