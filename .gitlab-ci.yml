@@ -85,9 +85,8 @@ test:e2e:
   before_script:
     - npm ci
     - mkdir -p public/app-files/themes
-    - 'curl -fsSL --header "JOB-TOKEN: $CI_JOB_TOKEN"
-      "${CI_API_V4_URL}/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
-      -o public/app-files/themes/themes.json'
+    - curl -fsSL "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
+      -o public/app-files/themes/themes.json
   script:
     - npx playwright test
   artifacts:
