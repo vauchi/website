@@ -14,3 +14,8 @@ venv/
 
 # CI local testing
 .gitlab-ci-local/
+
+# Node / Playwright
+node_modules/
+test-results/
+playwright-report/

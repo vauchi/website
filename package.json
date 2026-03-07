@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "vauchi-website",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "pretest": "node scripts/setup-test-assets.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "serve": "^14.2.0"
+  }
+}
