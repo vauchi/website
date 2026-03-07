@@ -75,19 +75,19 @@ lint:content:
 # E2E tests — theme toggle & language switching
 test:e2e:
   stage: build
-  tags:
-    - self-hosted
-    - node
+  tags: [docker]
+  image: mcr.microsoft.com/playwright:v1.52.0-noble
   needs: ["build:content"]
   before_script:
     - npm ci
-    - npx playwright install --with-deps chromium
   script:
     - npx playwright test
   artifacts:
-    when: on_failure
+    when: always
     paths:
-      - playwright-report/
+      - test-results/
+    reports:
+      junit: test-results/results.xml
     expire_in: 3 days
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -161,20 +161,20 @@ container_scanning:
 # Smoke test against deployed site
 test:e2e:deployed:
   stage: deploy
-  tags:
-    - self-hosted
-    - node
+  tags: [docker]
+  image: mcr.microsoft.com/playwright:v1.52.0-noble
   needs: []
   when: manual
   before_script:
     - npm ci
-    - npx playwright install --with-deps chromium
   script:
     - BASE_URL=https://vauchi.app npx playwright test
   artifacts:
-    when: on_failure
+    when: always
     paths:
-      - playwright-report/
+      - test-results/
+    reports:
+      junit: test-results/results.xml
     expire_in: 3 days
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

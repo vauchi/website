@@ -10,6 +10,9 @@ export default defineConfig({
   testDir: "./tests",
   timeout: 15_000,
   retries: isExternal ? 1 : 0,
+  reporter: process.env.CI
+    ? [["junit", { outputFile: "test-results/results.xml" }], ["list"]]
+    : [["list"]],
   use: {
     baseURL: BASE_URL,
     headless: true,
