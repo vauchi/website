@@ -76,7 +76,7 @@ lint:content:
 test:e2e:
   stage: build
   tags: [docker]
-  image: mcr.microsoft.com/playwright:v1.52.0-noble
+  image: mcr.microsoft.com/playwright:v1.58.2-noble
   needs: ["build:content"]
   before_script:
     - npm ci
@@ -162,7 +162,7 @@ container_scanning:
 test:e2e:deployed:
   stage: deploy
   tags: [docker]
-  image: mcr.microsoft.com/playwright:v1.52.0-noble
+  image: mcr.microsoft.com/playwright:v1.58.2-noble
   needs: []
   when: manual
   before_script:
