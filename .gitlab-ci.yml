@@ -9,11 +9,15 @@
 # GitLab Ultimate Features:
 #   - Secret Detection: Prevent credential leaks
 #   - Container Scanning: Docker image vulnerability scanning
+#   - SAST: Static code analysis (JS security)
+#   - Dependency Scanning: npm vulnerability detection
 
 # GitLab Ultimate Templates
 include:
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
   - project: 'vauchi/scripts'
     ref: main
     file: '/ci-templates/reuse.yml'
@@ -74,12 +78,16 @@ lint:content:
 
 # E2E tests — theme toggle & language switching
 test:e2e:
-  stage: build
+  stage: test
   tags: [docker]
   image: mcr.microsoft.com/playwright:v1.58.2-noble
-  needs: ["build:content"]
+  needs: []
   before_script:
     - npm ci
+    - mkdir -p public/app-files/themes
+    - 'curl -fsSL --header "JOB-TOKEN: $CI_JOB_TOKEN"
+      "${CI_API_V4_URL}/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
+      -o public/app-files/themes/themes.json'
   script:
     - npx playwright test
   artifacts:
