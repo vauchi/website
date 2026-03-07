@@ -72,6 +72,31 @@ lint:content:
         - app-files-src/**/*
         - scripts/**/*
 
+# E2E tests — theme toggle & language switching
+test:e2e:
+  stage: build
+  tags:
+    - self-hosted
+    - node
+  needs: ["build:content"]
+  before_script:
+    - npm ci
+    - npx playwright install --with-deps chromium
+  script:
+    - npx playwright test
+  artifacts:
+    when: on_failure
+    paths:
+      - playwright-report/
+    expire_in: 3 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - "public/**/*"
+        - "tests/**/*"
+        - "playwright.config.js"
+    - if: $CI_COMMIT_BRANCH == "main"
+
 # Build app-files manifest and output
 build:content:
   stage: build
@@ -132,6 +157,28 @@ container_scanning:
   needs: ["build:docker"]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+
+# Smoke test against deployed site
+test:e2e:deployed:
+  stage: deploy
+  tags:
+    - self-hosted
+    - node
+  needs: []
+  when: manual
+  before_script:
+    - npm ci
+    - npx playwright install --with-deps chromium
+  script:
+    - BASE_URL=https://vauchi.app npx playwright test
+  artifacts:
+    when: on_failure
+    paths:
+      - playwright-report/
+    expire_in: 3 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  allow_failure: true
 
 # Deploy website to production via _private pipeline
 # Auto-triggers the centralized deploy pipeline in _private.
