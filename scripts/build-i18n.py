@@ -184,18 +184,19 @@ FR = {
         ('"How Vauchi works"', '"Comment fonctionne Vauchi"'),
         ('"Toggle dark/light mode"', '"Basculer mode sombre/clair"'),
         ('"Choose theme"', '"Choisir le th\u00e8me"'),
-        # --- JS: SCENE_NAMES ---
+        # --- i18n JSON: scene names ---
         ('"Intro"', '"Introduction"'),
         ('"Exchanged"', '"\u00c9chang\u00e9"'),
         ('"Outro"', '"Conclusion"'),
-        # --- JS: dynamic text ---
-        ('"scanning"', '"scan en cours"'),
-        ('"paired"', '"jumel\u00e9"'),
-        ('"editing..."', '"modification..."'),
-        (r'"\u2713 saved"', r'"\u2713 enregistr\u00e9"'),
-        (r'"\u2713 auto-synced"', r'"\u2713 synchronis\u00e9"'),
-        ('"waiting..."', '"en attente..."'),
-        (r'"\u2713 restored"', r'"\u2713 restaur\u00e9"'),
+        # --- i18n JSON: dynamic text ---
+        ('"txt_scanning": "scanning"', '"txt_scanning": "scan en cours"'),
+        ('"txt_paired": "paired"', '"txt_paired": "jumel\u00e9"'),
+        ('"txt_editing": "editing..."', '"txt_editing": "modification..."'),
+        ('"txt_saved": "\\u2713 saved"', '"txt_saved": "\\u2713 enregistr\u00e9"'),
+        ('"txt_auto_synced": "\\u2713 auto-synced"', '"txt_auto_synced": "\\u2713 synchronis\u00e9"'),
+        ('"txt_waiting": "waiting..."', '"txt_waiting": "en attente..."'),
+        ('"txt_restored": "\\u2713 restored"', '"txt_restored": "\\u2713 restaur\u00e9"'),
+        ('"txt_new_device": "new device"', '"txt_new_device": "nouvel appareil"'),
         # --- Contact name ---
         ('class="v-contact-name">You<', 'class="v-contact-name">Vous<'),
         ('class="v-priv-name">You<', 'class="v-priv-name">Vous<'),
@@ -332,18 +333,19 @@ DE = {
         ('"How Vauchi works"', '"Wie Vauchi funktioniert"'),
         ('"Toggle dark/light mode"', '"Hell-/Dunkelmodus umschalten"'),
         ('"Choose theme"', '"Thema w\u00e4hlen"'),
-        # --- JS: SCENE_NAMES ---
+        # --- i18n JSON: scene names ---
         ('"Intro"', '"Einleitung"'),
         ('"Exchanged"', '"Ausgetauscht"'),
         ('"Outro"', '"Schluss"'),
-        # --- JS: dynamic text ---
-        ('"scanning"', '"scannt"'),
-        ('"paired"', '"gekoppelt"'),
-        ('"editing..."', '"Bearbeitung..."'),
-        (r'"\u2713 saved"', r'"\u2713 gespeichert"'),
-        (r'"\u2713 auto-synced"', r'"\u2713 synchronisiert"'),
-        ('"waiting..."', '"wartet..."'),
-        (r'"\u2713 restored"', r'"\u2713 wiederhergestellt"'),
+        # --- i18n JSON: dynamic text ---
+        ('"txt_scanning": "scanning"', '"txt_scanning": "scannt"'),
+        ('"txt_paired": "paired"', '"txt_paired": "gekoppelt"'),
+        ('"txt_editing": "editing..."', '"txt_editing": "Bearbeitung..."'),
+        ('"txt_saved": "\\u2713 saved"', '"txt_saved": "\\u2713 gespeichert"'),
+        ('"txt_auto_synced": "\\u2713 auto-synced"', '"txt_auto_synced": "\\u2713 synchronisiert"'),
+        ('"txt_waiting": "waiting..."', '"txt_waiting": "wartet..."'),
+        ('"txt_restored": "\\u2713 restored"', '"txt_restored": "\\u2713 wiederhergestellt"'),
+        ('"txt_new_device": "new device"', '"txt_new_device": "neues Ger\u00e4t"'),
         # --- Contact name ---
         ('class="v-contact-name">You<', 'class="v-contact-name">Sie<'),
         ('class="v-priv-name">You<', 'class="v-priv-name">Sie<'),
@@ -480,18 +482,19 @@ IT = {
         ('"How Vauchi works"', '"Come funziona Vauchi"'),
         ('"Toggle dark/light mode"', '"Alterna modalit\u00e0 scuro/chiaro"'),
         ('"Choose theme"', '"Scegli tema"'),
-        # --- JS: SCENE_NAMES ---
+        # --- i18n JSON: scene names ---
         ('"Intro"', '"Introduzione"'),
         ('"Exchanged"', '"Scambiato"'),
         ('"Outro"', '"Conclusione"'),
-        # --- JS: dynamic text ---
-        ('"scanning"', '"scansione"'),
-        ('"paired"', '"collegato"'),
-        ('"editing..."', '"modifica..."'),
-        (r'"\u2713 saved"', r'"\u2713 salvato"'),
-        (r'"\u2713 auto-synced"', r'"\u2713 sincronizzato"'),
-        ('"waiting..."', '"in attesa..."'),
-        (r'"\u2713 restored"', r'"\u2713 ripristinato"'),
+        # --- i18n JSON: dynamic text ---
+        ('"txt_scanning": "scanning"', '"txt_scanning": "scansione"'),
+        ('"txt_paired": "paired"', '"txt_paired": "collegato"'),
+        ('"txt_editing": "editing..."', '"txt_editing": "modifica..."'),
+        ('"txt_saved": "\\u2713 saved"', '"txt_saved": "\\u2713 salvato"'),
+        ('"txt_auto_synced": "\\u2713 auto-synced"', '"txt_auto_synced": "\\u2713 sincronizzato"'),
+        ('"txt_waiting": "waiting..."', '"txt_waiting": "in attesa..."'),
+        ('"txt_restored": "\\u2713 restored"', '"txt_restored": "\\u2713 ripristinato"'),
+        ('"txt_new_device": "new device"', '"txt_new_device": "nuovo dispositivo"'),
         # --- Contact name ---
         ('class="v-contact-name">You<', 'class="v-contact-name">Tu<'),
         ('class="v-priv-name">You<', 'class="v-priv-name">Tu<'),
