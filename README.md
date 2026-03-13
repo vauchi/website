@@ -1,6 +1,8 @@
 <!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
+[![REUSE](https://api.reuse.software/badge/gitlab.com/vauchi/website)](https://api.reuse.software/info/gitlab.com/vauchi/website)
+
 # Vauchi Website
 
 Landing page for Vauchi at [vauchi.app](https://vauchi.app).
