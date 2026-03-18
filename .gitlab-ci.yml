@@ -113,6 +113,7 @@ build:content:
   image: python:3.11-slim
   script:
     - python scripts/build-manifest.py --version "${CONTENT_VERSION:-1.0.0}"
+      --base-url "https://cdn.vauchi.app/v1/"
   artifacts:
     paths:
       - public/app-files/
@@ -123,6 +124,31 @@ build:content:
     - changes:
         - app-files-src/**/*
         - scripts/**/*
+
+# Sign content manifest with Ed25519 (main only)
+sign:content:
+  stage: build
+  tags: [docker]
+  image: python:3.11-slim
+  needs: ["build:content"]
+  before_script:
+    - pip install --quiet PyNaCl
+  script:
+    - |
+      if [ -z "${CONTENT_SIGNING_KEY:-}" ]; then
+        echo "CONTENT_SIGNING_KEY not set — skipping signing"
+        exit 0
+      fi
+    - echo "$CONTENT_SIGNING_KEY" > /tmp/signing.key
+    - python scripts/sign-manifest.py --manifest public/app-files/manifest.json
+      --private-key /tmp/signing.key
+    - rm -f /tmp/signing.key
+  artifacts:
+    paths:
+      - public/app-files/
+    expire_in: 1 week
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
 
 # Build and push docker image
 #
@@ -205,6 +231,22 @@ deploy:trigger:
     DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Deploy signed content to cdn.vauchi.app via rsync
+deploy:cdn:
+  stage: deploy
+  tags:
+    - self-hosted
+  needs:
+    - job: sign:content
+      optional: true
+    - job: build:content
+  script:
+    - scripts/deploy-cdn.sh public/app-files
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+      allow_failure: true
 
 # ============================================================
 # Deploy Stage — Badge Pages

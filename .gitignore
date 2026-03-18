@@ -15,6 +15,9 @@ venv/
 # CI local testing
 .gitlab-ci-local/
 
+# Signing keys — NEVER commit
+keys/
+
 # Node / Playwright
 node_modules/
 test-results/
