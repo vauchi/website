@@ -52,8 +52,9 @@ def build_manifest(
             "min_app_version": "0.1.0",
         }
 
-    # Process locales
-    locales_src = src_dir / "locales"
+    # Process locales (prefer sibling locales/ repo, fall back to app-files-src/locales/)
+    locales_sibling = src_dir.parent.parent / "locales"
+    locales_src = locales_sibling if locales_sibling.is_dir() else src_dir / "locales"
     if locales_src.exists() and locales_src.is_dir():
         locales_dest = output_dir / "locales"
         locales_dest.mkdir(exist_ok=True)
