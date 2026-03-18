@@ -48,6 +48,7 @@ def build_manifest(
             "version": version,
             "path": "networks.json",
             "checksum": compute_checksum(networks_dest),
+            "size_bytes": networks_dest.stat().st_size,
             "min_app_version": "0.1.0",
         }
 
@@ -65,6 +66,7 @@ def build_manifest(
             files[lang] = {
                 "path": locale_file.name,
                 "checksum": compute_checksum(dest_file),
+                "size_bytes": dest_file.stat().st_size,
             }
 
         if files:
@@ -86,6 +88,7 @@ def build_manifest(
             "version": version,
             "path": "themes/themes.json",
             "checksum": compute_checksum(themes_dest),
+            "size_bytes": themes_dest.stat().st_size,
             "min_app_version": "0.1.0",
         }
     else:

@@ -37,12 +37,17 @@
           "$ref": "#/$defs/contentEntry"
         }
       }
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$",
+      "description": "Hex-encoded Ed25519 signature (64 bytes = 128 hex chars) over canonical manifest JSON without signature field"
     }
   },
   "$defs": {
     "contentEntry": {
       "type": "object",
-      "required": ["version", "path", "checksum", "min_app_version"],
+      "required": ["version", "path", "checksum", "size_bytes", "min_app_version"],
       "properties": {
         "version": {
           "type": "string",
@@ -57,6 +62,11 @@
           "type": "string",
           "pattern": "^sha256:[a-f0-9]{64}$",
           "description": "SHA-256 checksum with prefix"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "File size in bytes"
         },
         "min_app_version": {
           "type": "string",
@@ -84,12 +94,16 @@
           "type": "object",
           "additionalProperties": {
             "type": "object",
-            "required": ["path", "checksum"],
+            "required": ["path", "checksum", "size_bytes"],
             "properties": {
               "path": { "type": "string" },
               "checksum": {
                 "type": "string",
                 "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "size_bytes": {
+                "type": "integer",
+                "minimum": 0
               }
             }
           }
