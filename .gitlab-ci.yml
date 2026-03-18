@@ -232,21 +232,45 @@ deploy:trigger:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-# Deploy signed content to cdn.vauchi.app via rsync
-deploy:cdn:
-  stage: deploy
-  tags:
-    - self-hosted
+# Build and push CDN Docker image (content baked in)
+build:cdn-docker:
+  stage: build
+  tags: [docker]
+  image: docker:latest
+  services:
+    - docker:dind
   needs:
     - job: sign:content
       optional: true
     - job: build:content
+  variables:
+    DOCKER_BUILDKIT: "1"
   script:
-    - scripts/deploy-cdn.sh public/app-files
+    - CDN_IMAGE="${CI_REGISTRY_IMAGE}/cdn"
+    - docker build -f cdn/Dockerfile -t $CDN_IMAGE:$CI_COMMIT_SHA .
+    - docker tag $CDN_IMAGE:$CI_COMMIT_SHA $CDN_IMAGE:latest
+    - |
+      if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
+        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+        docker push $CDN_IMAGE:$CI_COMMIT_SHA
+        docker push $CDN_IMAGE:latest
+      fi
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# Deploy CDN to production via _private pipeline (same as landing)
+deploy:cdn:
+  stage: deploy
+  needs:
+    - job: build:cdn-docker
+  trigger:
+    project: vauchi/private
+    branch: main
+  variables:
+    DEPLOY_SERVICE: cdn
+    DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE/cdn:$CI_COMMIT_SHA"
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
-      allow_failure: true
 
 # ============================================================
 # Deploy Stage — Badge Pages

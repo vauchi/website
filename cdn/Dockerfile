@@ -4,14 +4,15 @@
 
 # CDN container for cdn.vauchi.app
 # Serves signed content bundles (locales, themes, networks)
+# Deployed behind kamal-proxy (TLS via wildcard *.vauchi.app cert)
 
 FROM nginx:alpine
 
-# Copy Nginx CDN config
+# Privacy-hardened Nginx config (listen :80, kamal-proxy handles TLS)
 COPY cdn/nginx-cdn.conf /etc/nginx/conf.d/default.conf
 
-# Content is mounted as a volume, not baked in — CI deploys content
-# separately via rsync to /var/www/cdn.vauchi.app on the host.
-# This container only provides the Nginx config.
+# Bake content into image at /usr/share/nginx/html/v1/
+# Built by CI: build-manifest.py → sign-manifest.py → docker build
+COPY public/app-files/ /usr/share/nginx/html/v1/
 
 EXPOSE 80
