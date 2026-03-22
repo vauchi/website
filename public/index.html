@@ -183,11 +183,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: safe center;
         width: 100%;
         height: 100%;
-        gap: 20px;
+        gap: 16px;
         text-align: center;
+        padding: 24px 0 48px; /* top breathing room + bottom for dot nav */
+        overflow-y: auto; /* safety — scroll rather than clip */
+        overflow-x: hidden;
       }
 
       .v-scene.active .v-fade {
@@ -343,8 +346,9 @@
         gap: 6px;
       }
       .v-phone {
-        width: 290px;
-        height: 530px;
+        width: min(290px, 35vw);
+        height: min(530px, 55vh);
+        aspect-ratio: 290 / 530;
         border-radius: 34px;
         background: var(--bg-secondary);
         border: 1.5px solid var(--bg-tertiary);
@@ -370,19 +374,19 @@
         flex-direction: column;
       }
       .v-phone.sm {
-        transform: scale(0.68);
+        transform: scale(0.78);
       }
       .v-phone.med {
-        transform: scale(0.72);
-      }
-      .v-phone.lg {
         transform: scale(0.82);
       }
+      .v-phone.lg {
+        transform: scale(0.92);
+      }
       .v-phone.tilt-l {
-        transform: scale(0.68) rotate(-2deg);
+        transform: scale(0.78) rotate(-2deg);
       }
       .v-phone.tilt-r {
-        transform: scale(0.68) rotate(2deg);
+        transform: scale(0.78) rotate(2deg);
       }
 
       .v-contact {
@@ -452,9 +456,8 @@
         border-color: color-mix(in srgb, var(--accent) 25%, transparent);
       }
       .v-qr-cell {
-        width: 7px;
-        height: 7px;
-        border-radius: 1.5px;
+        aspect-ratio: 1;
+        border-radius: 2px;
         background: var(--bg-tertiary);
         transition: all 0.3s ease;
         opacity: 0.3;
@@ -597,14 +600,14 @@
       }
 
       .v-scan-target {
-        width: 52px;
-        height: 52px;
-        border-radius: 12px;
+        width: 72px;
+        height: 72px;
+        border-radius: 14px;
         border: 2px dashed var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
+        font-size: 28px;
         transition: all 0.4s;
       }
       .v-scan-target.active {
@@ -612,14 +615,14 @@
       }
 
       .v-pair-circle {
-        width: 36px;
-        height: 36px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
-        border: 1.5px solid var(--bg-tertiary);
+        border: 2px solid var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 20px;
         color: var(--text-secondary);
         transition: all 0.5s ease;
       }
@@ -730,23 +733,23 @@
           padding: 16px 12px;
         }
         .v-phone {
-          width: 210px;
-          height: 400px;
+          width: min(210px, 30vw);
+          height: min(400px, 50vh);
         }
         .v-phone.sm {
-          transform: scale(0.62);
+          transform: scale(0.72);
         }
         .v-phone.med {
-          transform: scale(0.66);
-        }
-        .v-phone.lg {
           transform: scale(0.76);
         }
+        .v-phone.lg {
+          transform: scale(0.85);
+        }
         .v-phone.tilt-l {
-          transform: scale(0.62) rotate(-2deg);
+          transform: scale(0.72) rotate(-2deg);
         }
         .v-phone.tilt-r {
-          transform: scale(0.62) rotate(2deg);
+          transform: scale(0.72) rotate(2deg);
         }
       }
 
@@ -766,23 +769,23 @@
           gap: 10px;
         }
         .v-phone {
-          width: 175px;
-          height: 330px;
+          width: min(175px, 38vw);
+          height: min(330px, 45vh);
         }
         .v-phone.sm {
-          transform: scale(0.62);
+          transform: scale(0.72);
         }
         .v-phone.med {
-          transform: scale(0.66);
-        }
-        .v-phone.lg {
           transform: scale(0.76);
         }
+        .v-phone.lg {
+          transform: scale(0.85);
+        }
         .v-phone.tilt-l {
-          transform: scale(0.62) rotate(-2deg);
+          transform: scale(0.72) rotate(-2deg);
         }
         .v-phone.tilt-r {
-          transform: scale(0.62) rotate(2deg);
+          transform: scale(0.72) rotate(2deg);
         }
         .v-phone-screen {
           border-radius: 16px;
@@ -1099,7 +1102,7 @@
       >
         <!-- Scene 0: Intro -->
         <div class="v-scene active" data-scene="0">
-          <div class="v-scene-inner" style="justify-content: center; gap: 28px; padding: 40px 0;">
+          <div class="v-scene-inner" style="gap: 28px;">
             <div class="v-fade v-d1 v-hero-logo-row">
               <div class="v-logo-icon">
                 <img
@@ -1196,7 +1199,7 @@
 
         <!-- Scene 2: Exchange -->
         <div class="v-scene" data-scene="2">
-          <div class="v-scene-inner" style="gap: 18px">
+          <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent)">
               Contact Exchange
             </div>
@@ -1205,7 +1208,6 @@
             </div>
             <div class="v-fade v-d3 v-row">
               <div class="v-phone-wrap">
-                <div class="v-micro">YOU</div>
                 <div class="v-phone tilt-l">
                   <div class="v-phone-notch"></div>
                   <div
@@ -1215,10 +1217,10 @@
                       flex-direction: column;
                       align-items: center;
                       justify-content: center;
-                      gap: 6px;
+                      gap: 8px;
                     "
                   >
-                    <div class="v-micro">Show QR</div>
+                    <div class="v-sub">Show QR</div>
                     <div class="v-qr" id="qr2">
                       <div class="v-qr-cell filled"></div>
                       <div class="v-qr-cell filled"></div>
@@ -1304,13 +1306,13 @@
                     </div>
                   </div>
                 </div>
+                <div class="v-sub" style="margin-top: 6px;">YOU</div>
               </div>
               <div class="v-col">
                 <div class="v-pair-circle" id="pair2">&#x27F7;</div>
-                <div class="v-micro" id="pair2-label">scanning</div>
+                <div class="v-sub" id="pair2-label">scanning</div>
               </div>
               <div class="v-phone-wrap">
-                <div class="v-micro">ALEX</div>
                 <div class="v-phone tilt-r">
                   <div class="v-phone-notch"></div>
                   <div
@@ -1320,13 +1322,14 @@
                       flex-direction: column;
                       align-items: center;
                       justify-content: center;
-                      gap: 6px;
+                      gap: 8px;
                     "
                   >
-                    <div class="v-micro">Scan</div>
+                    <div class="v-sub">Scan</div>
                     <div class="v-scan-target" id="scan2">&#x1F4F7;</div>
                   </div>
                 </div>
+                <div class="v-sub" style="margin-top: 6px;">ALEX</div>
               </div>
             </div>
             <div
