@@ -62,6 +62,7 @@
       playing = false;
       clearTimeout(timer);
       clearInterval(ticker);
+      showDots();
       startScene();
     };
     controls.appendChild(dot);
@@ -323,6 +324,7 @@
     current = i;
     hasPlayedOnce = true;
     playing = true;
+    showDots();
     startScene();
   }
 
@@ -336,6 +338,7 @@
       if (current > 0) goTo(current - 1);
     } else if (e.key === " ") {
       e.preventDefault();
+      showDots();
       togglePlay();
     }
   });
@@ -362,8 +365,6 @@
         startScene();
       } else {
         playing = false;
-        playBtn.textContent = "\u25B6";
-        playBtn.setAttribute("aria-label", "Play explainer");
       }
     }, remaining);
   }

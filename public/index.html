@@ -336,7 +336,7 @@
       .v-hero-cta:hover {
         background: color-mix(in srgb, var(--accent) 25%, transparent);
         border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-        transform: scale(1.03);
+        transform: translateX(-50%) scale(1.03);
       }
 
       .v-phone-wrap {
@@ -707,7 +707,6 @@
         outline: 2px solid var(--accent);
         outline-offset: 2px;
       }
-
 
       .v-efooter {
         font-size: 14px;
@@ -1102,7 +1101,7 @@
       >
         <!-- Scene 0: Intro -->
         <div class="v-scene active" data-scene="0">
-          <div class="v-scene-inner" style="gap: 28px;">
+          <div class="v-scene-inner" style="gap: 28px">
             <div class="v-fade v-d1 v-hero-logo-row">
               <div class="v-logo-icon">
                 <img
@@ -1306,7 +1305,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="v-sub" style="margin-top: 6px;">YOU</div>
+                <div class="v-sub" style="margin-top: 6px">YOU</div>
               </div>
               <div class="v-col">
                 <div class="v-pair-circle" id="pair2">&#x27F7;</div>
@@ -1329,7 +1328,7 @@
                     <div class="v-scan-target" id="scan2">&#x1F4F7;</div>
                   </div>
                 </div>
-                <div class="v-sub" style="margin-top: 6px;">ALEX</div>
+                <div class="v-sub" style="margin-top: 6px">ALEX</div>
               </div>
             </div>
             <div
@@ -1889,8 +1888,24 @@
                 >GitLab</a
               >
             </div>
-            <div class="v-fade v-d6" style="margin-top: 8px; font-size: 18px; color: var(--text-secondary)">
-              Have ideas? <a href="mailto:hello@vauchi.app" style="color: var(--accent); text-decoration: none; font-weight: 500">hello@vauchi.app</a>
+            <div
+              class="v-fade v-d6"
+              style="
+                margin-top: 8px;
+                font-size: 18px;
+                color: var(--text-secondary);
+              "
+            >
+              Have ideas?
+              <a
+                href="mailto:hello@vauchi.app"
+                style="
+                  color: var(--accent);
+                  text-decoration: none;
+                  font-weight: 500;
+                "
+                >hello@vauchi.app</a
+              >
             </div>
             <div class="v-fade v-d7 v-efooter">
               Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
@@ -1898,48 +1913,69 @@
           </div>
         </div>
         <!-- CTA button (shown on intro, replaced by dots on play) -->
-        <button
-          class="v-hero-cta"
-          id="hero-play"
-          aria-label="Play explainer"
-        >
+        <button class="v-hero-cta" id="hero-play" aria-label="Play explainer">
           &#x25B6;&#xFE0E;&ensp;Find out how it works
         </button>
         <!-- Dot navigation (hidden until play, then replaces CTA) -->
-        <div class="v-dots-nav" id="controls" style="display: none;"></div>
+        <div class="v-dots-nav" id="controls" style="display: none"></div>
       </div>
 
-      <footer class="footer" style="flex-direction: column; gap: 14px;">
+      <footer class="footer" style="flex-direction: column; gap: 14px">
         <div style="font-size: 1.15rem; color: var(--text-secondary)">
-          Have ideas? <a href="mailto:hello@vauchi.app" style="color: var(--accent); text-decoration: none; font-weight: 500">hello@vauchi.app</a>
+          Have ideas?
+          <a
+            href="mailto:hello@vauchi.app"
+            style="
+              color: var(--accent);
+              text-decoration: none;
+              font-weight: 500;
+            "
+            >hello@vauchi.app</a
+          >
         </div>
-        <span style="font-size: 1.05rem; opacity: 0.8;"
-          >Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts
-          Required &#xB7; No Cookies &#xB7; No Tracking</span
+        <span style="font-size: 1.05rem; opacity: 0.8"
+          >Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
+          &#xB7; No Cookies &#xB7; No Tracking</span
         >
-        <div class="links" style="margin: 0;">
+        <div class="links" style="margin: 0">
           <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="m23.6 9.593-0.033-0.086L20.3 1.01a0.851 0.851 0 0 0-0.336-0.405 0.877 0.877 0 0 0-0.994 0.03 0.882 0.882 0 0 0-0.29 0.44l-2.204 6.748H7.538L5.334 1.075a0.857 0.857 0 0 0-0.29-0.441 0.877 0.877 0 0 0-0.994-0.03 0.86 0.86 0 0 0-0.336 0.405L0.433 9.502l-0.032 0.086a6.066 6.066 0 0 0 2.012 7.01l0.012 0.009 0.03 0.022 4.982 3.73 2.464 1.865 1.5 1.134a1.01 1.01 0 0 0 1.22 0l1.5-1.134 2.465-1.865 5.012-3.752 0.013-0.01a6.072 6.072 0 0 0 2.009-7.004"/>
+              <path
+                d="m23.6 9.593-0.033-0.086L20.3 1.01a0.851 0.851 0 0 0-0.336-0.405 0.877 0.877 0 0 0-0.994 0.03 0.882 0.882 0 0 0-0.29 0.44l-2.204 6.748H7.538L5.334 1.075a0.857 0.857 0 0 0-0.29-0.441 0.877 0.877 0 0 0-0.994-0.03 0.86 0.86 0 0 0-0.336 0.405L0.433 9.502l-0.032 0.086a6.066 6.066 0 0 0 2.012 7.01l0.012 0.009 0.03 0.022 4.982 3.73 2.464 1.865 1.5 1.134a1.01 1.01 0 0 0 1.22 0l1.5-1.134 2.465-1.865 5.012-3.752 0.013-0.01a6.072 6.072 0 0 0 2.009-7.004"
+              />
             </svg>
             GitLab
           </a>
           <a href="https://github.com/vauchi" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
             </svg>
             GitHub
           </a>
           <span class="demo-link">Demo (coming soon)</span>
-          <a href="https://github.com/sponsors/vauchi" target="_blank" rel="noopener">
+          <a
+            href="https://github.com/sponsors/vauchi"
+            target="_blank"
+            rel="noopener"
+          >
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
             </svg>
             Sponsor
           </a>
-          <a href="https://liberapay.com/Vauchi/donate" target="_blank" rel="noopener">
+          <a
+            href="https://liberapay.com/Vauchi/donate"
+            target="_blank"
+            rel="noopener"
+          >
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
             </svg>
             Donate
           </a>
@@ -1954,13 +1990,7 @@
             flex-wrap: wrap;
           "
         >
-          <div
-            style="
-              display: flex;
-              gap: 8px;
-              font-size: 0.9rem;
-            "
-          >
+          <div style="display: flex; gap: 8px; font-size: 0.9rem">
             <a
               href="/"
               style="
@@ -2078,7 +2108,18 @@
 
     <script id="player-i18n" type="application/json">
       {
-        "scene_names": ["Intro", "The Problem", "Contact Exchange", "Exchanged", "Silent Updates", "Platform Freedom", "Granular Privacy", "Physical Recovery", "Zero Platform", "Outro"],
+        "scene_names": [
+          "Intro",
+          "The Problem",
+          "Contact Exchange",
+          "Exchanged",
+          "Silent Updates",
+          "Platform Freedom",
+          "Granular Privacy",
+          "Physical Recovery",
+          "Zero Platform",
+          "Outro"
+        ],
         "txt_scanning": "scanning",
         "txt_paired": "paired",
         "txt_editing": "editing...",
