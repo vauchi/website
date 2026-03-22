@@ -44,9 +44,23 @@
     nord: "default-light",
   };
 
+  // Resolve a semantic token value like "{base}" against primitives
+  function resolveColor(theme, token) {
+    // v1 format: theme.colors["bg-primary"] = "#1a1a2e"
+    if (theme.colors) return theme.colors[token];
+    // v2 format: theme.semantic["bg-primary"] = "{base}", theme.primitives["base"] = "#1a1a2e"
+    if (theme.semantic && theme.primitives) {
+      var ref = theme.semantic[token];
+      if (!ref) return null;
+      var match = ref.match(/^\{(.+)\}$/);
+      return match ? theme.primitives[match[1]] : ref;
+    }
+    return null;
+  }
+
   function applyTheme(theme) {
     for (var i = 0; i < TOKEN_NAMES.length; i++) {
-      var value = theme.colors[TOKEN_NAMES[i]];
+      var value = resolveColor(theme, TOKEN_NAMES[i]);
       if (value) ROOT.style.setProperty("--" + TOKEN_NAMES[i], value);
     }
     if (modeToggleBtn) {
@@ -136,7 +150,7 @@
     var swatch = document.createElement("span");
     swatch.style.cssText =
       "width:14px;height:14px;border-radius:50%;flex-shrink:0;border:1px solid var(--border)";
-    swatch.style.background = theme.colors.accent;
+    swatch.style.background = resolveColor(theme, "accent") || "var(--accent)";
     btn.appendChild(swatch);
     btn.appendChild(document.createTextNode(theme.name));
     btn.addEventListener("click", function () {
