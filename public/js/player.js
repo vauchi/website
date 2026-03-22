@@ -31,36 +31,21 @@
   ];
 
   var current = 0;
-  var playing = true;
+  var playing = false;
   var progress = 0;
   var timer = null;
   var ticker = null;
+  var hasPlayedOnce = false;
 
   var prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
-  if (prefersReducedMotion) playing = false;
 
   var player = document.getElementById("player");
   var scenes = document.querySelectorAll(".v-scene");
-  var bar = document.getElementById("progressBar");
   var controls = document.getElementById("controls");
 
-  // Build controls
-  var playBtn = document.createElement("button");
-  playBtn.className = "v-play-btn";
-  playBtn.textContent = playing ? "\u23F8" : "\u25B6";
-  playBtn.setAttribute(
-    "aria-label",
-    playing ? "Pause explainer" : "Play explainer"
-  );
-  playBtn.onclick = togglePlay;
-  controls.appendChild(playBtn);
-
-  var divider = document.createElement("div");
-  divider.className = "v-divider";
-  controls.appendChild(divider);
-
+  // Build dot navigation (no play button, no progress bar)
   var dots = [];
   for (var i = 0; i < TOTAL; i++) {
     var dot = document.createElement("button");
@@ -71,7 +56,13 @@
     );
     dot.dataset.index = i;
     dot.onclick = function () {
-      goTo(parseInt(this.dataset.index));
+      var idx = parseInt(this.dataset.index);
+      current = idx;
+      hasPlayedOnce = true;
+      playing = false;
+      clearTimeout(timer);
+      clearInterval(ticker);
+      startScene();
     };
     controls.appendChild(dot);
     dots.push(dot);
@@ -79,14 +70,22 @@
 
   function updateDots() {
     for (var i = 0; i < dots.length; i++) {
-      dots[i].style.width = i === current ? "16px" : "5px";
-      dots[i].style.background =
-        i === current
-          ? "var(--accent)"
-          : i < current
-          ? themeColor("--border")
-          : themeColor("--bg-secondary");
-      dots[i].style.opacity = i === current ? "1" : "0.7";
+      if (i === current) {
+        dots[i].style.width = "24px";
+        dots[i].style.background = "var(--accent)";
+        dots[i].style.borderColor = "var(--accent)";
+        dots[i].style.opacity = "1";
+      } else if (i < current) {
+        dots[i].style.width = "10px";
+        dots[i].style.background = "color-mix(in srgb, var(--accent) 40%, transparent)";
+        dots[i].style.borderColor = "var(--accent)";
+        dots[i].style.opacity = "0.7";
+      } else {
+        dots[i].style.width = "10px";
+        dots[i].style.background = "transparent";
+        dots[i].style.borderColor = "var(--border)";
+        dots[i].style.opacity = "0.7";
+      }
     }
   }
 
@@ -99,8 +98,7 @@
   }
 
   function updateProgress() {
-    var total = ((current + progress) / TOTAL) * 100;
-    bar.style.width = total + "%";
+    // Progress is now shown via dot highlight only
   }
 
   function updateSceneState() {
@@ -296,8 +294,6 @@
         startScene();
       } else {
         playing = false;
-        playBtn.textContent = "\u25B6";
-        playBtn.setAttribute("aria-label", "Play explainer");
       }
     }, dur);
   }
@@ -305,17 +301,16 @@
   function togglePlay() {
     if (!playing && current === TOTAL - 1) {
       current = 0;
+      hasPlayedOnce = true;
       playing = true;
-      playBtn.textContent = "\u23F8";
-      playBtn.setAttribute("aria-label", "Pause explainer");
+      startScene();
+    } else if (!playing && !hasPlayedOnce && current === 0) {
+      hasPlayedOnce = true;
+      playing = true;
+      current = 1;
       startScene();
     } else {
       playing = !playing;
-      playBtn.textContent = playing ? "\u23F8" : "\u25B6";
-      playBtn.setAttribute(
-        "aria-label",
-        playing ? "Pause explainer" : "Play explainer"
-      );
       if (playing) startScene();
       else {
         clearTimeout(timer);
@@ -326,9 +321,8 @@
 
   function goTo(i) {
     current = i;
+    hasPlayedOnce = true;
     playing = true;
-    playBtn.textContent = "\u23F8";
-    playBtn.setAttribute("aria-label", "Pause explainer");
     startScene();
   }
 
@@ -404,7 +398,54 @@
     }
   });
 
-  // Init
+  // Click on slide → pause and flash a pause indicator
+  var pauseOverlay = document.createElement("div");
+  pauseOverlay.style.cssText =
+    "position:absolute;inset:0;display:flex;align-items:center;justify-content:center;" +
+    "pointer-events:none;opacity:0;transition:opacity 0.3s;z-index:50;";
+  var pauseIcon = document.createElement("div");
+  pauseIcon.style.cssText =
+    "background:rgba(0,0,0,0.5);border-radius:50%;width:80px;height:80px;" +
+    "display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;";
+  pauseIcon.textContent = "\u23F8\uFE0E";
+  pauseOverlay.appendChild(pauseIcon);
+  player.appendChild(pauseOverlay);
+
+  player.addEventListener("click", function (e) {
+    // Don't pause if clicking a button, link, or the hero CTA
+    if (e.target.closest("button, a, .v-hero-cta, .v-controls")) return;
+    if (!playing) return;
+
+    // Pause
+    playing = false;
+    hasPlayedOnce = true;
+    clearTimeout(timer);
+    clearInterval(ticker);
+
+    // Flash the pause indicator
+    pauseOverlay.style.opacity = "1";
+    setTimeout(function () {
+      pauseOverlay.style.opacity = "0";
+    }, 800);
+  });
+
+  // Hero CTA — "Find out how it works" replaces dots on intro
+  var heroCta = document.getElementById("hero-play");
+  if (heroCta) {
+    heroCta.onclick = function () {
+      heroCta.style.display = "none";
+      controls.style.display = "flex";
+      togglePlay();
+    };
+  }
+
+  // Also show dots (hide CTA) when navigating via dot click or keyboard
+  function showDots() {
+    if (heroCta) heroCta.style.display = "none";
+    controls.style.display = "flex";
+  }
+
+  // Init — show intro scene statically (no autoplay)
   showScene(0);
-  startScene();
+  updateProgress();
 })();

@@ -12,6 +12,23 @@
     <link rel="alternate" hreflang="it" href="https://vauchi.app/it/" />
     <link rel="alternate" hreflang="x-default" href="https://vauchi.app/" />
     <title>Vauchi - Privacy-First Contact Exchange</title>
+    <script>
+      // Auto-redirect to user's preferred language (no cookies, no tracking).
+      // Only fires on the root English page. If the user navigated to /fr/ etc
+      // directly (or via the language switcher), this does nothing.
+      (function () {
+        if (window.location.pathname !== "/") return;
+        try {
+          if (sessionStorage.getItem("vauchi-lang-checked")) return;
+          sessionStorage.setItem("vauchi-lang-checked", "1");
+        } catch (e) {
+          return;
+        }
+        var lang = (navigator.language || "").toLowerCase().split("-")[0];
+        var supported = { fr: "/fr/", de: "/de/", it: "/it/" };
+        if (supported[lang]) window.location.replace(supported[lang]);
+      })();
+    </script>
     <style>
       :root {
         /* Core theme tokens — default: Catppuccin Mocha */
@@ -136,7 +153,7 @@
 
       .v-player {
         width: 100%;
-        min-height: calc(100dvh - 90px);
+        min-height: calc(100dvh - 50px);
         background: var(--bg-primary);
         border-radius: 14px;
         overflow: hidden;
@@ -169,7 +186,7 @@
         justify-content: center;
         width: 100%;
         height: 100%;
-        gap: 14px;
+        gap: 20px;
         text-align: center;
       }
 
@@ -213,39 +230,39 @@
       }
 
       .v-label {
-        font-size: 13px;
+        font-size: 20px;
         font-weight: 600;
         letter-spacing: 2.5px;
         text-transform: uppercase;
         font-family: var(--mono);
       }
       .v-heading {
-        font-size: clamp(18px, 1.1vw + 0.9rem, 24px);
+        font-size: clamp(26px, 2vw + 1.3rem, 38px);
         font-weight: 400;
         color: var(--text-primary);
-        max-width: 480px;
+        max-width: 580px;
         line-height: 1.5;
         font-family: var(--serif);
       }
       .v-heading.lg {
-        font-size: clamp(32px, 2.5vw + 1.3rem, 52px);
+        font-size: clamp(48px, 4.5vw + 2rem, 84px);
         letter-spacing: -1.5px;
         max-width: none;
       }
       .v-sub {
-        font-size: 12px;
+        font-size: 18px;
         font-family: var(--mono);
         letter-spacing: 0.5px;
       }
       .v-caption {
-        font-size: clamp(14px, 0.5vw + 0.75rem, 17px);
+        font-size: clamp(22px, 1vw + 1.15rem, 28px);
         color: var(--text-secondary);
-        max-width: 420px;
+        max-width: 580px;
         line-height: 1.6;
         font-family: var(--sans);
       }
       .v-micro {
-        font-size: 11px;
+        font-size: 17px;
         font-family: var(--mono);
         letter-spacing: 0.8px;
         color: var(--text-secondary);
@@ -258,15 +275,65 @@
         justify-content: center;
       }
       .v-tag {
-        font-size: 13px;
+        font-size: 17px;
         color: var(--text-secondary);
         border: 1px solid var(--bg-tertiary);
-        border-radius: 14px;
-        padding: 4px 14px;
+        border-radius: 16px;
+        padding: 5px 16px;
         font-family: var(--mono);
         letter-spacing: 0.6px;
         line-height: 20px;
         white-space: nowrap;
+      }
+
+      .v-hero-logo-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .v-hero-points {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .v-hero-point {
+        font-size: clamp(22px, 1.4vw + 1.1rem, 32px);
+        color: var(--text-secondary);
+        font-family: var(--serif);
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      .v-hero-cta {
+        position: absolute;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 11;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 14px 32px;
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        color: var(--accent);
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+        border-radius: 100px;
+        font-size: 20px;
+        font-weight: 600;
+        font-family: var(--sans);
+        cursor: pointer;
+        transition: all 0.25s;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+      }
+      .v-hero-cta:hover {
+        background: color-mix(in srgb, var(--accent) 25%, transparent);
+        border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+        transform: scale(1.03);
       }
 
       .v-phone-wrap {
@@ -276,9 +343,9 @@
         gap: 6px;
       }
       .v-phone {
-        width: 200px;
-        height: 380px;
-        border-radius: 28px;
+        width: 290px;
+        height: 530px;
+        border-radius: 34px;
         background: var(--bg-secondary);
         border: 1.5px solid var(--bg-tertiary);
         padding: 6px;
@@ -333,15 +400,15 @@
         border-color: color-mix(in srgb, var(--accent) 30%, transparent);
       }
       .v-contact-avatar {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         flex-shrink: 0;
         background: var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 700;
         color: var(--text-secondary);
       }
@@ -350,13 +417,13 @@
         color: var(--bg-primary);
       }
       .v-contact-name {
-        font-size: 13px;
+        font-size: 17px;
         font-weight: 600;
         color: var(--text-primary);
         letter-spacing: 0.2px;
       }
       .v-contact-detail {
-        font-size: 10px;
+        font-size: 15px;
         font-family: var(--mono);
         transition: all 0.4s;
       }
@@ -365,16 +432,16 @@
         opacity: 0.5;
       }
       .v-contact-sub {
-        font-size: 10px;
+        font-size: 14px;
         font-family: var(--mono);
         margin-top: 1px;
       }
 
       .v-qr {
         display: inline-grid;
-        grid-template-columns: repeat(9, 9px);
-        gap: 2px;
-        padding: 12px;
+        grid-template-columns: repeat(9, 12px);
+        gap: 3px;
+        padding: 16px;
         border-radius: 12px;
         background: color-mix(in srgb, var(--bg-primary) 30%, transparent);
         border: 1px solid var(--bg-tertiary);
@@ -432,12 +499,12 @@
         min-width: 150px;
       }
       .v-priv-card .v-priv-name {
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 600;
         color: var(--text-primary);
       }
       .v-priv-card .v-priv-line {
-        font-size: 12px;
+        font-size: 14px;
         font-family: var(--mono);
         margin-top: 2px;
       }
@@ -595,20 +662,16 @@
         justify-content: center;
       }
 
-      .v-controls-wrap {
+      .v-dots-nav {
+        position: absolute;
+        bottom: 16px;
+        left: 0;
+        right: 0;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: 0;
-        margin-top: -1px;
-      }
-      .v-scroll-hint {
-        margin-top: 12px;
-        opacity: 0.3;
-        animation: vBounce 2s ease infinite;
-        color: var(--text-secondary);
-        font-size: 14px;
-        line-height: 1;
+        justify-content: center;
+        gap: 10px;
+        z-index: 10;
       }
       @keyframes vBounce {
         0%,
@@ -619,49 +682,13 @@
           transform: translateY(4px);
         }
       }
-      .v-controls {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        background: var(--bg-secondary);
-        border-radius: 0 0 14px 14px;
-        padding: 6px 16px;
-        border: 1px solid var(--bg-tertiary);
-        border-top: none;
-      }
-      .v-play-btn {
-        background: none;
-        border: none;
-        color: var(--text-secondary);
-        font-size: 11px;
-        min-height: 44px;
-        min-width: 44px;
-        padding: 2px 6px;
-        border-radius: 6px;
-        font-family: var(--mono);
-        cursor: pointer;
-        transition: all 0.25s;
-      }
-      .v-play-btn:hover {
-        background: var(--bg-tertiary);
-        color: var(--accent);
-      }
-      .v-play-btn:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-      }
-      .v-divider {
-        width: 1px;
-        height: 12px;
-        background: var(--bg-tertiary);
-      }
       .v-dot-btn {
-        height: 5px;
-        border-radius: 3px;
+        height: 10px;
+        border-radius: 5px;
         cursor: pointer;
         transition: all 0.3s ease;
-        border: none;
+        border: 1.5px solid var(--border);
+        background: transparent;
         padding: 0;
         position: relative;
       }
@@ -678,17 +705,6 @@
         outline-offset: 2px;
       }
 
-      .v-progress-track {
-        width: 100%;
-        height: 2px;
-        background: var(--bg-secondary);
-      }
-      .v-progress-bar {
-        height: 100%;
-        border-radius: 0 1px 1px 0;
-        background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-        transition: width 0.1s linear;
-      }
 
       .v-efooter {
         font-size: 11px;
@@ -707,15 +723,15 @@
           padding: 14px;
         }
         .v-player {
-          min-height: calc(100dvh - 70px);
+          min-height: calc(100dvh - 50px);
           border-radius: 12px;
         }
         .v-scene {
           padding: 16px 12px;
         }
         .v-phone {
-          width: 170px;
-          height: 320px;
+          width: 210px;
+          height: 400px;
         }
         .v-phone.sm {
           transform: scale(0.62);
@@ -732,9 +748,6 @@
         .v-phone.tilt-r {
           transform: scale(0.62) rotate(2deg);
         }
-        .v-controls {
-          border-radius: 0 0 12px 12px;
-        }
       }
 
       /* Responsive — Mobile */
@@ -743,7 +756,7 @@
           padding: 10px 8px;
         }
         .v-player {
-          min-height: calc(100dvh - 56px);
+          min-height: calc(100dvh - 44px);
           border-radius: 10px;
         }
         .v-scene {
@@ -753,8 +766,8 @@
           gap: 10px;
         }
         .v-phone {
-          width: 150px;
-          height: 280px;
+          width: 175px;
+          height: 330px;
         }
         .v-phone.sm {
           transform: scale(0.62);
@@ -888,9 +901,6 @@
           padding: 0.45rem 0.9rem;
           font-size: 0.8rem;
         }
-        .v-controls {
-          border-radius: 0 0 10px 10px;
-        }
         .footer {
           font-size: 0.75rem;
           padding-top: 1rem;
@@ -1016,9 +1026,6 @@
         .v-efooter {
           font-size: 10px;
         }
-        .v-controls {
-          border-radius: 0 0 8px 8px;
-        }
         .links a {
           padding: 0.4rem 0.75rem;
           font-size: 0.75rem;
@@ -1032,9 +1039,6 @@
           opacity: 1;
           transform: none;
         }
-        .v-scroll-hint {
-          animation: none;
-        }
         .v-scene {
           transition: none;
         }
@@ -1044,9 +1048,42 @@
         .v-pair-circle,
         .v-trust-dot,
         .v-icon-box,
-        .v-arrow,
-        .v-progress-bar {
+        .v-arrow {
           transition: none;
+        }
+      }
+
+      /* Landscape — compact hero so CTA is visible without scrolling */
+      @media (max-height: 700px) and (orientation: landscape) {
+        .v-scene-inner {
+          gap: 12px !important;
+          padding: 16px 0 !important;
+        }
+        .v-hero-points {
+          gap: 4px;
+          margin-top: 0;
+        }
+        .v-hero-point {
+          font-size: clamp(18px, 1.2vw + 0.9rem, 24px);
+        }
+        .v-heading.lg {
+          font-size: clamp(32px, 3vw + 1.2rem, 52px);
+        }
+        .v-logo-icon {
+          display: inline-flex;
+          margin-bottom: -8px;
+        }
+        .v-hero-logo-row {
+          flex-direction: row;
+          gap: 16px;
+        }
+        .v-hero-cta {
+          margin-top: 4px;
+          padding: 10px 24px;
+          font-size: 17px;
+        }
+        .v-hero-spacer {
+          display: none;
         }
       }
     </style>
@@ -1062,26 +1099,22 @@
       >
         <!-- Scene 0: Intro -->
         <div class="v-scene active" data-scene="0">
-          <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-logo-icon">
-              <img
-                src="/logo.png"
-                alt="Vauchi"
-                width="56"
-                height="56"
-                style="border-radius: 14px"
-              />
+          <div class="v-scene-inner" style="justify-content: center; gap: 28px; padding: 40px 0;">
+            <div class="v-fade v-d1 v-hero-logo-row">
+              <div class="v-logo-icon">
+                <img
+                  src="/logo.png"
+                  alt="Vauchi"
+                  width="56"
+                  height="56"
+                  style="border-radius: 14px"
+                />
+              </div>
+              <div class="v-heading lg">vauchi</div>
             </div>
-            <div class="v-fade v-d2 v-heading lg">vauchi</div>
-            <div class="v-fade v-d3 v-caption">
-              Your contacts. Your rules. No platform required.
-            </div>
-            <div class="v-fade v-d4 v-tags">
-              <span class="v-tag">End-to-End Encrypted</span>
-              <span class="v-tag">No Accounts</span>
-              <span class="v-tag">Open Source</span>
-              <span class="v-tag">No Tracking</span>
-              <span class="v-tag">No Ads</span>
+            <div class="v-fade v-d2 v-hero-points">
+              <div class="v-hero-point">Exchange contacts once.</div>
+              <div class="v-hero-point">They update themselves.</div>
             </div>
           </div>
         </div>
@@ -1811,9 +1844,9 @@
               <img
                 src="/logo.png"
                 alt="Vauchi"
-                width="40"
-                height="40"
-                style="border-radius: 10px"
+                width="56"
+                height="56"
+                style="border-radius: 14px"
               />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
@@ -1853,71 +1886,61 @@
                 >GitLab</a
               >
             </div>
+            <div class="v-fade v-d6" style="margin-top: 8px; font-size: 15px; color: var(--text-secondary)">
+              Have ideas? <a href="mailto:hello@vauchi.app" style="color: var(--accent); text-decoration: none; font-weight: 500">hello@vauchi.app</a>
+            </div>
             <div class="v-fade v-d7 v-efooter">
               Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts Required
             </div>
           </div>
         </div>
+        <!-- CTA button (shown on intro, replaced by dots on play) -->
+        <button
+          class="v-hero-cta"
+          id="hero-play"
+          aria-label="Play explainer"
+        >
+          &#x25B6;&#xFE0E;&ensp;Find out how it works
+        </button>
+        <!-- Dot navigation (hidden until play, then replaces CTA) -->
+        <div class="v-dots-nav" id="controls" style="display: none;"></div>
       </div>
 
-      <!-- Controls (outside player) -->
-      <div class="v-controls-wrap">
-        <div class="v-progress-track">
-          <div class="v-progress-bar" id="progressBar" style="width: 0%"></div>
+      <footer class="footer" style="flex-direction: column; gap: 14px;">
+        <div style="font-size: 1.15rem; color: var(--text-secondary)">
+          Have ideas? <a href="mailto:hello@vauchi.app" style="color: var(--accent); text-decoration: none; font-weight: 500">hello@vauchi.app</a>
         </div>
-        <div class="v-controls" id="controls"></div>
-        <div class="v-scroll-hint" aria-hidden="true">&#x25BE;</div>
-      </div>
-
-      <div class="links">
-        <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="m23.6 9.593-0.033-0.086L20.3 1.01a0.851 0.851 0 0 0-0.336-0.405 0.877 0.877 0 0 0-0.994 0.03 0.882 0.882 0 0 0-0.29 0.44l-2.204 6.748H7.538L5.334 1.075a0.857 0.857 0 0 0-0.29-0.441 0.877 0.877 0 0 0-0.994-0.03 0.86 0.86 0 0 0-0.336 0.405L0.433 9.502l-0.032 0.086a6.066 6.066 0 0 0 2.012 7.01l0.012 0.009 0.03 0.022 4.982 3.73 2.464 1.865 1.5 1.134a1.01 1.01 0 0 0 1.22 0l1.5-1.134 2.465-1.865 5.012-3.752 0.013-0.01a6.072 6.072 0 0 0 2.009-7.004"
-            />
-          </svg>
-          GitLab
-        </a>
-        <a href="https://github.com/vauchi" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-            />
-          </svg>
-          GitHub
-        </a>
-        <span class="demo-link">Demo (coming soon)</span>
-        <a
-          href="https://github.com/sponsors/vauchi"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
-          Sponsor
-        </a>
-        <a
-          href="https://liberapay.com/Vauchi/donate"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
-          Donate
-        </a>
-      </div>
-
-      <footer class="footer">
-        <span
+        <span style="font-size: 1.05rem; opacity: 0.8;"
           >Auditable &#xB7; End-to-End Encrypted &#xB7; No Accounts
           Required &#xB7; No Cookies &#xB7; No Tracking</span
         >
+        <div class="links" style="margin: 0;">
+          <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="m23.6 9.593-0.033-0.086L20.3 1.01a0.851 0.851 0 0 0-0.336-0.405 0.877 0.877 0 0 0-0.994 0.03 0.882 0.882 0 0 0-0.29 0.44l-2.204 6.748H7.538L5.334 1.075a0.857 0.857 0 0 0-0.29-0.441 0.877 0.877 0 0 0-0.994-0.03 0.86 0.86 0 0 0-0.336 0.405L0.433 9.502l-0.032 0.086a6.066 6.066 0 0 0 2.012 7.01l0.012 0.009 0.03 0.022 4.982 3.73 2.464 1.865 1.5 1.134a1.01 1.01 0 0 0 1.22 0l1.5-1.134 2.465-1.865 5.012-3.752 0.013-0.01a6.072 6.072 0 0 0 2.009-7.004"/>
+            </svg>
+            GitLab
+          </a>
+          <a href="https://github.com/vauchi" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+          <span class="demo-link">Demo (coming soon)</span>
+          <a href="https://github.com/sponsors/vauchi" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            Sponsor
+          </a>
+          <a href="https://liberapay.com/Vauchi/donate" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            Donate
+          </a>
+        </div>
         <div
           style="
             position: relative;
@@ -2046,20 +2069,6 @@
             </div>
             <div id="theme-menu-light"></div>
           </div>
-        </div>
-        <div
-          style="
-            width: 100%;
-            text-align: center;
-            margin-top: 8px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-          "
-        >
-          Have ideas? <a
-            href="mailto:hello@vauchi.app"
-            style="color: var(--accent); text-decoration: none; font-weight: 500"
-            >hello@vauchi.app</a>
         </div>
       </footer>
     </main>
