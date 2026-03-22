@@ -222,6 +222,10 @@
   function loadThemes(url, fallbackUrl) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
+    xhr.timeout = 3000; // Fast fallback if CDN unreachable
+    xhr.ontimeout = function () {
+      if (fallbackUrl) loadThemes(fallbackUrl, null);
+    };
     xhr.onload = function () {
       if (xhr.status === 200) {
         try {
