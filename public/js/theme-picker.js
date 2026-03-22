@@ -4,7 +4,8 @@
 // Theme picker — fetches themes.json, renders picker, applies CSS vars
 (function () {
   var THEME_KEY = "vauchi-theme";
-  var THEMES_URL = "/app-files/themes/themes.json";
+  var THEMES_URL = "https://cdn.vauchi.app/v1/themes/themes.json";
+  var THEMES_FALLBACK = "/app-files/themes/themes.json";
   var ROOT = document.documentElement;
   var modeToggleBtn = document.getElementById("mode-toggle");
   var menuToggleBtn = document.getElementById("theme-menu-toggle");
@@ -217,22 +218,31 @@
       });
   }
 
-  // Fetch themes and apply
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", THEMES_URL, true);
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      try {
-        themes = JSON.parse(xhr.responseText);
-      } catch (e) {
-        return;
+  // Fetch themes and apply (CDN primary, local fallback)
+  function loadThemes(url, fallbackUrl) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        try {
+          themes = JSON.parse(xhr.responseText);
+        } catch (e) {
+          if (fallbackUrl) return loadThemes(fallbackUrl, null);
+          return;
+        }
+        populateMenu();
+        var saved = getSavedPreference();
+        if (saved) currentIdx = findThemeById(saved);
+        if (currentIdx < 0) currentIdx = findDefaultTheme();
+        if (currentIdx >= 0) applyTheme(themes[currentIdx]);
+      } else if (fallbackUrl) {
+        loadThemes(fallbackUrl, null);
       }
-      populateMenu();
-      var saved = getSavedPreference();
-      if (saved) currentIdx = findThemeById(saved);
-      if (currentIdx < 0) currentIdx = findDefaultTheme();
-      if (currentIdx >= 0) applyTheme(themes[currentIdx]);
-    }
-  };
-  xhr.send();
+    };
+    xhr.onerror = function () {
+      if (fallbackUrl) loadThemes(fallbackUrl, null);
+    };
+    xhr.send();
+  }
+  loadThemes(THEMES_URL, THEMES_FALLBACK);
 })();
