@@ -37,20 +37,20 @@ for (const { lang, path } of LOCALES) {
     });
 
     test("dark/light toggle changes color scheme", async ({ page }) => {
-      // Default (no prefers-color-scheme: dark) is catppuccin-latte (light)
+      // Default (no prefers-color-scheme: dark) is a random light theme
       const bgBefore = await getCSSVar(page, "bg-primary");
-      expect(bgBefore).toBe("#eff1f5");
+      expect(bgBefore).toBeTruthy();
 
       // Toggle button should show sun emoji for light mode
       const toggleBefore = await page.textContent("#mode-toggle");
       expect(toggleBefore).toContain("☀");
 
-      // Click the dark/light toggle
+      // Click the dark/light toggle — should switch to a dark theme
       await page.click("#mode-toggle");
 
-      // Should switch to catppuccin-mocha (dark) — bg-primary changes
+      // bg-primary must change (different theme applied)
       const bgAfter = await getCSSVar(page, "bg-primary");
-      expect(bgAfter).toBe("#1e1e2e");
+      expect(bgAfter).not.toBe(bgBefore);
 
       // Verify the toggle button changed to moon emoji
       const toggleText = await page.textContent("#mode-toggle");

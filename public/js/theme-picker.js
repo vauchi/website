@@ -114,14 +114,14 @@
 
   function findDefaultTheme() {
     var mode = prefersDark() ? "dark" : "light";
-    var defaultId =
-      mode === "dark" ? "catppuccin-mocha" : "catppuccin-latte";
-    var idx = findThemeById(defaultId);
-    if (idx >= 0) return idx;
+    // Collect all themes matching the browser's preferred mode
+    var candidates = [];
     for (var i = 0; i < themes.length; i++) {
-      if (themes[i].mode === mode) return i;
+      if (themes[i].mode === mode) candidates.push(i);
     }
-    return 0;
+    if (candidates.length === 0) return 0;
+    // Random pick — each first visit gets a different theme
+    return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
   function toggleDarkLight() {
