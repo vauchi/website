@@ -66,7 +66,7 @@
       }
 
       .page-wrapper {
-        max-width: 680px;
+        max-width: 840px;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -90,7 +90,7 @@
         border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
         border-radius: 100px;
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-weight: 500;
         transition: all 0.2s ease;
       }
@@ -114,7 +114,7 @@
         color: var(--text-secondary);
         border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
         border-radius: 100px;
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-weight: 500;
         opacity: 0.5;
         cursor: default;
@@ -126,7 +126,7 @@
         justify-content: center;
         flex-wrap: wrap;
         gap: 8px;
-        font-size: 0.9rem;
+        font-size: 1rem;
         color: var(--text-secondary);
         border-top: 1px solid var(--bg-tertiary);
         padding-top: 2rem;
@@ -220,7 +220,7 @@
         font-family: var(--mono);
       }
       .v-heading {
-        font-size: clamp(16px, 0.89vw + 0.82rem, 20px);
+        font-size: clamp(18px, 1.1vw + 0.9rem, 24px);
         font-weight: 400;
         color: var(--text-primary);
         max-width: 400px;
@@ -228,7 +228,7 @@
         font-family: var(--serif);
       }
       .v-heading.lg {
-        font-size: clamp(26px, 1.96vw + 1.19rem, 44px);
+        font-size: clamp(32px, 2.5vw + 1.3rem, 52px);
         letter-spacing: -1.5px;
         max-width: none;
       }
@@ -238,14 +238,14 @@
         letter-spacing: 0.5px;
       }
       .v-caption {
-        font-size: clamp(12px, 0.45vw + 0.66rem, 14px);
+        font-size: clamp(14px, 0.5vw + 0.75rem, 17px);
         color: var(--text-secondary);
         max-width: 340px;
         line-height: 1.6;
         font-family: var(--sans);
       }
       .v-micro {
-        font-size: 9px;
+        font-size: 11px;
         font-family: var(--mono);
         letter-spacing: 0.8px;
         color: var(--text-secondary);
@@ -276,9 +276,9 @@
         gap: 6px;
       }
       .v-phone {
-        width: 160px;
-        height: 300px;
-        border-radius: 24px;
+        width: 200px;
+        height: 380px;
+        border-radius: 28px;
         background: var(--bg-secondary);
         border: 1.5px solid var(--bg-tertiary);
         padding: 6px;
@@ -333,8 +333,8 @@
         border-color: color-mix(in srgb, var(--accent) 30%, transparent);
       }
       .v-contact-avatar {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         flex-shrink: 0;
         background: var(--bg-tertiary);
@@ -356,7 +356,7 @@
         letter-spacing: 0.2px;
       }
       .v-contact-detail {
-        font-size: 9px;
+        font-size: 11px;
         font-family: var(--mono);
         transition: all 0.4s;
       }
@@ -365,14 +365,14 @@
         opacity: 0.5;
       }
       .v-contact-sub {
-        font-size: 8px;
+        font-size: 10px;
         font-family: var(--mono);
         margin-top: 1px;
       }
 
       .v-qr {
         display: inline-grid;
-        grid-template-columns: repeat(9, 7px);
+        grid-template-columns: repeat(9, 9px);
         gap: 1.5px;
         padding: 10px;
         border-radius: 12px;
@@ -437,7 +437,7 @@
         color: var(--text-primary);
       }
       .v-priv-card .v-priv-line {
-        font-size: 9px;
+        font-size: 11px;
         font-family: var(--mono);
         margin-top: 2px;
       }
@@ -467,7 +467,7 @@
       .v-trust-dot {
         width: 32px;
         height: 32px;
-        border-radius: 10px;
+        border-radius: 14px;
         background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
         border: 1px solid var(--bg-tertiary);
         display: flex;
@@ -495,7 +495,7 @@
         color: var(--text-secondary);
         font-family: var(--mono);
         background: var(--bg-secondary);
-        border-radius: 10px;
+        border-radius: 14px;
         padding: 5px 10px;
         border: 1px solid var(--bg-tertiary);
       }
@@ -569,7 +569,7 @@
         gap: 4px;
       }
       .v-relay-label {
-        font-size: 8px;
+        font-size: 10px;
         color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
@@ -578,7 +578,7 @@
       .v-status {
         text-align: center;
         padding: 4px 0;
-        font-size: 8px;
+        font-size: 10px;
         font-family: var(--mono);
         letter-spacing: 0.5px;
         transition: color 0.5s;
@@ -691,7 +691,7 @@
       }
 
       .v-efooter {
-        font-size: 9px;
+        font-size: 11px;
         color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
@@ -714,8 +714,8 @@
           padding: 16px 12px;
         }
         .v-phone {
-          width: 140px;
-          height: 260px;
+          width: 170px;
+          height: 320px;
         }
         .v-phone.sm {
           transform: scale(0.62);
@@ -744,7 +744,7 @@
         }
         .v-player {
           min-height: calc(100dvh - 56px);
-          border-radius: 10px;
+          border-radius: 14px;
         }
         .v-scene {
           padding: 14px 8px;
@@ -753,8 +753,8 @@
           gap: 10px;
         }
         .v-phone {
-          width: 140px;
-          height: 260px;
+          width: 170px;
+          height: 320px;
         }
         .v-phone.sm {
           transform: scale(0.62);
@@ -782,13 +782,13 @@
         .v-contact-avatar {
           width: 22px;
           height: 22px;
-          font-size: 9px;
+          font-size: 11px;
         }
         .v-contact-name {
           font-size: 10px;
         }
         .v-contact-detail {
-          font-size: 8px;
+          font-size: 10px;
         }
         .v-contact-sub {
           font-size: 7px;
@@ -833,7 +833,7 @@
           padding: 8px 10px;
         }
         .v-priv-card .v-priv-line {
-          font-size: 8px;
+          font-size: 10px;
         }
         .v-icon-box {
           width: 36px;
@@ -849,7 +849,7 @@
           gap: 6px;
         }
         .v-pill {
-          font-size: 8px;
+          font-size: 10px;
           padding: 4px 8px;
         }
         .v-label {
@@ -857,16 +857,16 @@
           letter-spacing: 2px;
         }
         .v-sub {
-          font-size: 9px;
+          font-size: 11px;
         }
         .v-micro {
-          font-size: 8px;
+          font-size: 10px;
         }
         .v-tags {
           gap: 5px;
         }
         .v-tag {
-          font-size: 8px;
+          font-size: 10px;
           padding: 2px 8px;
         }
         .page-wrapper {
@@ -926,10 +926,10 @@
         .v-contact-avatar {
           width: 18px;
           height: 18px;
-          font-size: 8px;
+          font-size: 10px;
         }
         .v-contact-name {
-          font-size: 9px;
+          font-size: 11px;
         }
         .v-contact-detail {
           font-size: 7px;
@@ -970,7 +970,7 @@
           font-size: 7px;
         }
         .v-label {
-          font-size: 9px;
+          font-size: 11px;
           letter-spacing: 1.5px;
         }
         .v-icon-box {
@@ -984,8 +984,8 @@
           font-size: 11px;
         }
         .v-pair-circle {
-          width: 28px;
-          height: 28px;
+          width: 32px;
+          height: 32px;
           font-size: 13px;
         }
         .v-scan-target {
@@ -994,7 +994,7 @@
           font-size: 18px;
         }
         .v-pill {
-          font-size: 8px;
+          font-size: 10px;
           padding: 3px 7px;
           gap: 3px;
         }
@@ -1014,7 +1014,7 @@
           padding: 5px 14px;
         }
         .v-efooter {
-          font-size: 8px;
+          font-size: 10px;
         }
         .v-controls {
           border-radius: 0 0 8px 8px;
@@ -1067,9 +1067,9 @@
               <img
                 src="/logo.png"
                 alt="Vauchi"
-                width="40"
-                height="40"
-                style="border-radius: 10px"
+                width="56"
+                height="56"
+                style="border-radius: 14px"
               />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
@@ -1080,6 +1080,8 @@
               <span class="v-tag">Crittografia end-to-end</span>
               <span class="v-tag">Senza account</span>
               <span class="v-tag">Open Source</span>
+              <span class="v-tag">Nessun tracciamento</span>
+              <span class="v-tag">Nessuna pubblicità</span>
             </div>
           </div>
         </div>
@@ -1809,9 +1811,9 @@
               <img
                 src="/logo.png"
                 alt="Vauchi"
-                width="40"
-                height="40"
-                style="border-radius: 10px"
+                width="56"
+                height="56"
+                style="border-radius: 14px"
               />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
@@ -2040,6 +2042,7 @@
             <div id="theme-menu-light"></div>
           </div>
         </div>
+      <div style="width:100%;text-align:center;margin-top:8px;font-size:0.9rem;color:var(--text-secondary)">Have ideas? <a href="mailto:hello@vauchi.app" style="color:var(--accent);text-decoration:none;font-weight:500">hello@vauchi.app</a></div>
       </footer>
     </main>
 
