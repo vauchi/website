@@ -79,13 +79,14 @@ lint:content:
         - scripts/**/*
 
 # E2E tests — theme toggle & language switching
+# Self-hosted shell runner: Node + Playwright pre-installed, no 2.3GB Docker pull.
 test:e2e:
   stage: test
-  tags: [docker]
-  image: mcr.microsoft.com/playwright:v1.58.2-noble
+  tags: [self-hosted]
   needs: []
   before_script:
     - npm ci
+    - npx playwright install --with-deps chromium 2>/dev/null || true
     - mkdir -p public/app-files/themes
     - curl -fsSL "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
       -o public/app-files/themes/themes.json
