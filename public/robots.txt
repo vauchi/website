@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/
+User-agent: *
+Allow: /
+Disallow: /app-files/
+
+Sitemap: https://vauchi.app/sitemap.xml
