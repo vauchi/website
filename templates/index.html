@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ lang }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,14 +10,14 @@
     <link
       rel="alternate"
       hreflang="en"
-      href="https://vauchi.app/fr/"
+      href="https://vauchi.app/{% if not is_default %}{{ lang }}/{% endif %}"
     />
     <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/" />
     <link rel="alternate" hreflang="de" href="https://vauchi.app/de/" />
     <link rel="alternate" hreflang="it" href="https://vauchi.app/it/" />
     <link rel="alternate" hreflang="x-default" href="https://vauchi.app/" />
-    <title>Vauchi - Échange de contacts confidentiel</title>
-    <meta name="description" content="Vauchi - Échange de contacts confidentiel" />
+    <title>{{ t['meta.title'] }}</title>
+    <meta name="description" content="{{ t['meta.description'] }}" />
     <meta name="author" content="Vauchi" />
     <meta name="theme-color" content="#4fc3f7" />
     <link rel="canonical" href="https://vauchi.app/" />
@@ -28,8 +28,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://vauchi.app/" />
-    <meta property="og:title" content="Vauchi - Échange de contacts confidentiel" />
-    <meta property="og:description" content="Vauchi - Échange de contacts confidentiel" />
+    <meta property="og:title" content="{{ t['meta.title'] }}" />
+    <meta property="og:description" content="{{ t['meta.description'] }}" />
     <meta property="og:image" content="https://vauchi.app/icon-512.png" />
     <meta property="og:locale" content="en" />
     <meta property="og:locale:alternate" content="fr" />
@@ -39,13 +39,29 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="Vauchi - Privacy-First Le problème"
+      content="Vauchi - Privacy-First {{ t['scene2.label'] }}"
     />
     <meta
       name="twitter:description"
       content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source."
     />
-    
+    {% if is_default %}
+    <script>
+      // Auto-redirect to user's preferred language (no cookies, no tracking).
+      (function () {
+        if (window.location.pathname !== "/") return;
+        try {
+          if (sessionStorage.getItem("vauchi-lang-checked")) return;
+          sessionStorage.setItem("vauchi-lang-checked", "1");
+        } catch (e) {
+          return;
+        }
+        var lang = (navigator.language || "").toLowerCase().split("-")[0];
+        var supported = { fr: "/fr/", de: "/de/", it: "/it/" };
+        if (supported[lang]) window.location.replace(supported[lang]);
+      })();
+    </script>
+    {% endif %}
     <style>
       :root {
         /* Core theme tokens — default: Catppuccin Mocha */
@@ -1137,8 +1153,8 @@
               <div class="v-heading lg">vauchi</div>
             </div>
             <div class="v-fade v-d2 v-hero-points">
-              <div class="v-hero-point">Échangez vos contacts une fois.</div>
-              <div class="v-hero-point">Ils se mettent à jour automatiquement.</div>
+              <div class="v-hero-point">{{ t['hero.point1'] }}</div>
+              <div class="v-hero-point">{{ t['hero.point2'] }}</div>
             </div>
           </div>
         </div>
@@ -1147,9 +1163,9 @@
         <div class="v-scene" data-scene="1">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--error)">
-              Le problème
+              {{ t['scene1.label'] }}
             </div>
-            <div class="v-fade v-d2 v-heading">Votre carnet d'adresses est un cimetière de contacts obsolètes.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene1.heading'] }}</div>
             <div class="v-fade v-d3">
               <div class="v-phone-wrap">
                 <div class="v-phone lg">
@@ -1163,7 +1179,7 @@
                           class="v-contact-detail strike"
                           style="color: var(--error)"
                         >
-                          +1 555-0147 (déconnecté)
+                          {{ t['scene1.contact1.detail'] }}
                         </div>
                       </div>
                     </div>
@@ -1175,7 +1191,7 @@
                           class="v-contact-detail strike"
                           style="color: var(--error)"
                         >
-                          +44 7911 ████ (ancien numéro)
+                          {{ t['scene1.contact2.detail'] }}
                         </div>
                       </div>
                     </div>
@@ -1187,7 +1203,7 @@
                           class="v-contact-detail strike"
                           style="color: var(--error)"
                         >
-                          maya@oldcompany.com
+                          {{ t['scene1.contact3.detail'] }}
                         </div>
                       </div>
                     </div>
@@ -1199,7 +1215,7 @@
                           class="v-contact-detail strike"
                           style="color: var(--error)"
                         >
-                          @jordan.p (supprimé)
+                          {{ t['scene1.contact4.detail'] }}
                         </div>
                       </div>
                     </div>
@@ -1222,7 +1238,7 @@
             <div class="v-fade v-d1 v-label" style="color: var(--accent)">
               Contact Exchange
             </div>
-            <div class="v-fade v-d2 v-heading">Rencontrez-vous. Scannez. Connectés.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene2.heading'] }}</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-phone-wrap">
                 <div class="v-phone tilt-l">
@@ -1362,9 +1378,9 @@
         <div class="v-scene" data-scene="3">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--success)">
-              Échange de contacts
+              {{ t['scene3.label'] }}
             </div>
-            <div class="v-fade v-d2 v-heading">Les deux téléphones détiennent maintenant la fiche contact chiffrée de l'autre.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene3.heading'] }}</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
                 <div class="v-micro">YOUR PHONE</div>
@@ -1428,13 +1444,13 @@
           </div>
         </div>
 
-        <!-- Scene 4: &#x2713; Exchanged -->
+        <!-- Scene 4: {{ t['scene4.label'] }} -->
         <div class="v-scene" data-scene="4">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent)">
               Silent Updates
             </div>
-            <div class="v-fade v-d2 v-heading">Quand vos coordonnées changent, les téléphones de vos amis se mettent à jour automatiquement. Pas de notifications, pas de bruit.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene4.heading'] }}</div>
             <div class="v-fade v-d3 v-row tight">
               <div class="v-phone-wrap">
                 <div class="v-micro">YOU UPDATE</div>
@@ -1559,13 +1575,13 @@
           </div>
         </div>
 
-        <!-- Scene 5: Mises à jour silencieuses -->
+        <!-- Scene 5: {{ t['scene5.label'] }} -->
         <div class="v-scene" data-scene="5">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
               Platform Freedom
             </div>
-            <div class="v-fade v-d2 v-heading">Changez de réseau social ? De fournisseur email ? Vos contacts restent connectés à votre identité, pas à une plateforme.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene5.heading'] }}</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
                 <div class="v-micro">BEFORE</div>
@@ -1631,13 +1647,13 @@
           </div>
         </div>
 
-        <!-- Scene 6: Liberté de plateforme -->
+        <!-- Scene 6: {{ t['scene6.label'] }} -->
         <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--warning)">
               Granular Privacy
             </div>
-            <div class="v-fade v-d2 v-heading">Partagez vos coordonnées professionnelles avec vos collègues et votre adresse personnelle avec votre famille &#x2014; le tout depuis une seule identité.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene6.heading'] }}</div>
             <div
               class="v-fade v-d3 v-row"
               style="gap: 20px; align-items: flex-start"
@@ -1701,13 +1717,13 @@
           </div>
         </div>
 
-        <!-- Scene 7: Confidentialité granulaire -->
+        <!-- Scene 7: {{ t['scene7.label'] }} -->
         <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
               Physical Recovery
             </div>
-            <div class="v-fade v-d2 v-heading">Pas de fils, pas de profils, pas de graphes sociaux.</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene7.heading'] }}</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-col">
                 <div class="v-icon-box red">&#x1F4F1;</div>
@@ -1785,13 +1801,13 @@
           </div>
         </div>
 
-        <!-- Scene 8: Récupération physique -->
+        <!-- Scene 8: {{ t['scene8.label'] }} -->
         <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--success)">
               Zero Platform
             </div>
-            <div class="v-fade v-d2 v-heading">vauchi</div>
+            <div class="v-fade v-d2 v-heading">{{ t['scene8.heading'] }}</div>
             <div class="v-fade v-d3 v-row" style="gap: 24px">
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
@@ -1835,7 +1851,7 @@
                 </div>
               </div>
             </div>
-            <div class="v-fade v-d5 v-caption">Vos contacts. Vos règles. Aucune plateforme requise.</div>
+            <div class="v-fade v-d5 v-caption">{{ t['hero.caption'] }}</div>
           </div>
         </div>
 
@@ -1852,7 +1868,7 @@
               />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
-            <div class="v-fade v-d3 v-caption">Échangez une fois. Restez connectés &#x2014; peu importe ce qui change.</div>
+            <div class="v-fade v-d3 v-caption">{{ t['outro.caption'] }}</div>
             <div class="v-fade v-d4 v-pills">
               <div class="v-pill">
                 <span class="v-pill-icon">&#x1F504;</span> Silent Updates
@@ -1894,7 +1910,7 @@
                 color: var(--text-secondary);
               "
             >
-              Des idées ?
+              {{ t['footer.have_ideas'] }}
               <a
                 href="mailto:hello@vauchi.app"
                 style="
@@ -1905,12 +1921,12 @@
                 >hello@vauchi.app</a
               >
             </div>
-            <div class="v-fade v-d7 v-efooter">Vérifiable &#xB7; Chiffré de bout en bout &#xB7; Aucun compte requis</div>
+            <div class="v-fade v-d7 v-efooter">{{ t['outro.footer'] }}</div>
           </div>
         </div>
         <!-- CTA button (shown on intro, replaced by dots on play) -->
         <button class="v-hero-cta" id="hero-play" aria-label="Play explainer">
-          &#x25B6;&#xFE0E;&ensp;Découvrez comment ça marche
+          {{ t['cta.play'] }}
         </button>
         <!-- Dot navigation (hidden until play, then replaces CTA) -->
         <div class="v-dots-nav" id="controls" style="display: none"></div>
@@ -1930,7 +1946,7 @@
           >
         </div>
         <span style="font-size: 1.05rem; opacity: 0.8"
-          >Vérifiable &#xB7; Chiffré de bout en bout &#xB7; Aucun compte requis &#xB7; No Cookies &#xB7; No Tracking</span
+          >{{ t['outro.footer'] }} &#xB7; No Cookies &#xB7; No Tracking</span
         >
         <div class="links" style="margin: 0">
           <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
@@ -2102,28 +2118,7 @@
     </main>
 
     <script id="player-i18n" type="application/json">
-      {
-      "scene_names": [
-            "Introduction",
-            "Le problème",
-            "Échange de contacts",
-            "Échangé",
-            "Mises à jour silencieuses",
-            "Liberté de plateforme",
-            "Confidentialité granulaire",
-            "Récupération physique",
-            "Zéro plateforme",
-            "Conclusion"
-      ],
-      "txt_auto_synced": "✓ synchronisé",
-      "txt_editing": "modification...",
-      "txt_new_device": "nouvel appareil",
-      "txt_paired": "jumelé",
-      "txt_restored": "✓ restauré",
-      "txt_saved": "✓ enregistré",
-      "txt_scanning": "scan en cours",
-      "txt_waiting": "en attente..."
-}
+      {{ player_i18n | safe }}
     </script>
     <script src="/js/player.js" defer></script>
     <script src="/js/theme-picker.js" defer></script>

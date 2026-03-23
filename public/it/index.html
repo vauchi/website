@@ -6,12 +6,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="alternate" hreflang="en" href="https://vauchi.app/" />
+    <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://vauchi.app/it/"
+    />
     <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/" />
     <link rel="alternate" hreflang="de" href="https://vauchi.app/de/" />
     <link rel="alternate" hreflang="it" href="https://vauchi.app/it/" />
     <link rel="alternate" hreflang="x-default" href="https://vauchi.app/" />
     <title>Vauchi - Scambio di contatti riservato</title>
+    <meta name="description" content="Vauchi - Scambio di contatti riservato" />
+    <meta name="author" content="Vauchi" />
+    <meta name="theme-color" content="#4fc3f7" />
+    <link rel="canonical" href="https://vauchi.app/" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vauchi.app/" />
+    <meta property="og:title" content="Vauchi - Scambio di contatti riservato" />
+    <meta property="og:description" content="Vauchi - Scambio di contatti riservato" />
+    <meta property="og:image" content="https://vauchi.app/icon-512.png" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:locale:alternate" content="fr" />
+    <meta property="og:locale:alternate" content="de" />
+    <meta property="og:locale:alternate" content="it" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Vauchi - Privacy-First Il problema"
+    />
+    <meta
+      name="twitter:description"
+      content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source."
+    />
+    
     <style>
       :root {
         /* Core theme tokens — default: Catppuccin Mocha */
@@ -92,7 +126,7 @@
         text-decoration: none;
         font-size: 1rem;
         font-weight: 500;
-        transition: all 0.2s ease;
+        transition: background 0.2s ease, border-color 0.2s ease;
       }
 
       .links a:hover {
@@ -125,7 +159,7 @@
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 10px;
         font-size: 1rem;
         color: var(--text-secondary);
         border-top: 1px solid var(--bg-tertiary);
@@ -136,7 +170,7 @@
 
       .v-player {
         width: 100%;
-        min-height: calc(100dvh - 90px);
+        min-height: calc(100dvh - 50px);
         background: var(--bg-primary);
         border-radius: 14px;
         overflow: hidden;
@@ -166,11 +200,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: safe center;
         width: 100%;
         height: 100%;
-        gap: 14px;
+        gap: 16px;
         text-align: center;
+        padding: 24px 0 48px; /* top breathing room + bottom for dot nav */
+        overflow-y: auto; /* safety — scroll rather than clip */
+        overflow-x: hidden;
       }
 
       .v-scene.active .v-fade {
@@ -213,39 +250,39 @@
       }
 
       .v-label {
-        font-size: 11px;
+        font-size: 20px;
         font-weight: 600;
         letter-spacing: 2.5px;
         text-transform: uppercase;
         font-family: var(--mono);
       }
       .v-heading {
-        font-size: clamp(20px, 1.3vw + 1rem, 28px);
+        font-size: clamp(26px, 2vw + 1.3rem, 38px);
         font-weight: 400;
         color: var(--text-primary);
-        max-width: 400px;
+        max-width: 580px;
         line-height: 1.5;
         font-family: var(--serif);
       }
       .v-heading.lg {
-        font-size: clamp(36px, 3vw + 1.5rem, 60px);
+        font-size: clamp(48px, 4.5vw + 2rem, 84px);
         letter-spacing: -1.5px;
         max-width: none;
       }
       .v-sub {
-        font-size: 10px;
+        font-size: 18px;
         font-family: var(--mono);
         letter-spacing: 0.5px;
       }
       .v-caption {
-        font-size: clamp(16px, 0.6vw + 0.85rem, 20px);
+        font-size: clamp(22px, 1vw + 1.15rem, 28px);
         color: var(--text-secondary);
-        max-width: 340px;
+        max-width: 580px;
         line-height: 1.6;
         font-family: var(--sans);
       }
       .v-micro {
-        font-size: 13px;
+        font-size: 17px;
         font-family: var(--mono);
         letter-spacing: 0.8px;
         color: var(--text-secondary);
@@ -258,15 +295,65 @@
         justify-content: center;
       }
       .v-tag {
-        font-size: 11px;
+        font-size: 17px;
         color: var(--text-secondary);
         border: 1px solid var(--bg-tertiary);
-        border-radius: 12px;
-        padding: 3px 12px;
+        border-radius: 16px;
+        padding: 5px 16px;
         font-family: var(--mono);
         letter-spacing: 0.6px;
-        line-height: 18px;
+        line-height: 20px;
         white-space: nowrap;
+      }
+
+      .v-hero-logo-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .v-hero-points {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .v-hero-point {
+        font-size: clamp(22px, 1.4vw + 1.1rem, 32px);
+        color: var(--text-secondary);
+        font-family: var(--serif);
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      .v-hero-cta {
+        position: absolute;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 11;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 14px 32px;
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        color: var(--accent);
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+        border-radius: 100px;
+        font-size: 20px;
+        font-weight: 600;
+        font-family: var(--sans);
+        cursor: pointer;
+        transition: background 0.25s, border-color 0.25s, transform 0.25s;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+      }
+      .v-hero-cta:hover {
+        background: color-mix(in srgb, var(--accent) 25%, transparent);
+        border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+        transform: translateX(-50%) scale(1.03);
       }
 
       .v-phone-wrap {
@@ -276,9 +363,10 @@
         gap: 6px;
       }
       .v-phone {
-        width: 200px;
-        height: 380px;
-        border-radius: 28px;
+        width: min(290px, 35vw);
+        height: min(530px, 42vh);
+        aspect-ratio: 290 / 530;
+        border-radius: 34px;
         background: var(--bg-secondary);
         border: 1.5px solid var(--bg-tertiary);
         padding: 6px;
@@ -303,19 +391,19 @@
         flex-direction: column;
       }
       .v-phone.sm {
-        transform: scale(0.68);
+        transform: scale(0.78);
       }
       .v-phone.med {
-        transform: scale(0.72);
-      }
-      .v-phone.lg {
         transform: scale(0.82);
       }
+      .v-phone.lg {
+        transform: scale(0.92);
+      }
       .v-phone.tilt-l {
-        transform: scale(0.68) rotate(-2deg);
+        transform: scale(0.78) rotate(-2deg);
       }
       .v-phone.tilt-r {
-        transform: scale(0.68) rotate(2deg);
+        transform: scale(0.78) rotate(2deg);
       }
 
       .v-contact {
@@ -326,22 +414,22 @@
         margin: 3px 8px;
         border-radius: 12px;
         border: 1px solid transparent;
-        transition: all 0.5s ease;
+        transition: background 0.5s ease, border-color 0.5s ease;
       }
       .v-contact.glow {
         background: var(--accent-dim);
         border-color: color-mix(in srgb, var(--accent) 30%, transparent);
       }
       .v-contact-avatar {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         flex-shrink: 0;
         background: var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 11px;
+        font-size: 14px;
         font-weight: 700;
         color: var(--text-secondary);
       }
@@ -350,46 +438,45 @@
         color: var(--bg-primary);
       }
       .v-contact-name {
-        font-size: 14px;
+        font-size: 17px;
         font-weight: 600;
         color: var(--text-primary);
         letter-spacing: 0.2px;
       }
       .v-contact-detail {
-        font-size: 12px;
+        font-size: 15px;
         font-family: var(--mono);
-        transition: all 0.4s;
+        transition: opacity 0.4s;
       }
       .v-contact-detail.strike {
         text-decoration: line-through;
         opacity: 0.5;
       }
       .v-contact-sub {
-        font-size: 12px;
+        font-size: 14px;
         font-family: var(--mono);
         margin-top: 1px;
       }
 
       .v-qr {
         display: inline-grid;
-        grid-template-columns: repeat(9, 9px);
-        gap: 1.5px;
-        padding: 10px;
+        grid-template-columns: repeat(9, 12px);
+        gap: 3px;
+        padding: 16px;
         border-radius: 12px;
         background: color-mix(in srgb, var(--bg-primary) 30%, transparent);
         border: 1px solid var(--bg-tertiary);
-        transition: all 0.6s ease;
+        transition: background 0.6s ease, border-color 0.6s ease;
       }
       .v-qr.active {
         background: var(--accent-dim);
         border-color: color-mix(in srgb, var(--accent) 25%, transparent);
       }
       .v-qr-cell {
-        width: 7px;
-        height: 7px;
-        border-radius: 1.5px;
+        aspect-ratio: 1;
+        border-radius: 2px;
         background: var(--bg-tertiary);
-        transition: all 0.3s ease;
+        transition: background 0.3s ease, opacity 0.3s ease;
         opacity: 0.3;
       }
       .v-qr.active .v-qr-cell.filled {
@@ -421,7 +508,7 @@
       .v-arrow {
         display: block;
         color: var(--text-secondary);
-        transition: all 0.5s;
+        transition: color 0.5s;
       }
 
       .v-priv-card {
@@ -432,25 +519,25 @@
         min-width: 150px;
       }
       .v-priv-card .v-priv-name {
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
         color: var(--text-primary);
       }
       .v-priv-card .v-priv-line {
-        font-size: 13px;
+        font-size: 14px;
         font-family: var(--mono);
         margin-top: 2px;
       }
 
       .v-icon-box {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
-        transition: all 0.5s;
+        font-size: 28px;
+        transition: background 0.5s, border-color 0.5s;
       }
       .v-icon-box.red {
         background: color-mix(in srgb, var(--error) 8%, transparent);
@@ -465,16 +552,16 @@
         border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
       }
       .v-trust-dot {
-        width: 32px;
-        height: 32px;
-        border-radius: 14px;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
         background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
         border: 1px solid var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
-        transition: all 0.4s ease;
+        font-size: 18px;
+        transition: background 0.4s ease, border-color 0.4s ease;
       }
       .v-trust-dot.lit {
         background: var(--accent-dim);
@@ -490,17 +577,17 @@
       .v-pill {
         display: flex;
         align-items: center;
-        gap: 5px;
-        font-size: 10px;
+        gap: 6px;
+        font-size: 14px;
         color: var(--text-secondary);
         font-family: var(--mono);
         background: var(--bg-secondary);
-        border-radius: 14px;
+        border-radius: 10px;
         padding: 5px 10px;
         border: 1px solid var(--bg-tertiary);
       }
       .v-pill-icon {
-        font-size: 12px;
+        font-size: 16px;
       }
 
       .v-links {
@@ -509,9 +596,9 @@
         margin-top: 4px;
       }
       .v-link {
-        font-size: 11px;
-        border-radius: 16px;
-        padding: 6px 18px;
+        font-size: 15px;
+        border-radius: 20px;
+        padding: 8px 22px;
         text-decoration: none;
         font-family: var(--mono);
         letter-spacing: 0.5px;
@@ -530,31 +617,32 @@
       }
 
       .v-scan-target {
-        width: 52px;
-        height: 52px;
-        border-radius: 12px;
+        width: 72px;
+        height: 72px;
+        border-radius: 14px;
         border: 2px dashed var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
-        transition: all 0.4s;
+        font-size: 28px;
+        transition: border-color 0.4s;
       }
       .v-scan-target.active {
         border-color: var(--accent);
       }
 
       .v-pair-circle {
-        width: 36px;
-        height: 36px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
-        border: 1.5px solid var(--bg-tertiary);
+        border: 2px solid var(--bg-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 20px;
         color: var(--text-secondary);
-        transition: all 0.5s ease;
+        transition: border-color 0.5s ease, background 0.5s ease,
+          color 0.5s ease;
       }
       .v-pair-circle.done {
         border-color: var(--success);
@@ -569,7 +657,7 @@
         gap: 4px;
       }
       .v-relay-label {
-        font-size: 10px;
+        font-size: 13px;
         color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
@@ -578,7 +666,7 @@
       .v-status {
         text-align: center;
         padding: 4px 0;
-        font-size: 10px;
+        font-size: 13px;
         font-family: var(--mono);
         letter-spacing: 0.5px;
         transition: color 0.5s;
@@ -595,20 +683,16 @@
         justify-content: center;
       }
 
-      .v-controls-wrap {
+      .v-dots-nav {
+        position: absolute;
+        bottom: 16px;
+        left: 0;
+        right: 0;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: 0;
-        margin-top: -1px;
-      }
-      .v-scroll-hint {
-        margin-top: 12px;
-        opacity: 0.3;
-        animation: vBounce 2s ease infinite;
-        color: var(--text-secondary);
-        font-size: 14px;
-        line-height: 1;
+        justify-content: center;
+        gap: 10px;
+        z-index: 10;
       }
       @keyframes vBounce {
         0%,
@@ -619,49 +703,13 @@
           transform: translateY(4px);
         }
       }
-      .v-controls {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        background: var(--bg-secondary);
-        border-radius: 0 0 14px 14px;
-        padding: 6px 16px;
-        border: 1px solid var(--bg-tertiary);
-        border-top: none;
-      }
-      .v-play-btn {
-        background: none;
-        border: none;
-        color: var(--text-secondary);
-        font-size: 11px;
-        min-height: 44px;
-        min-width: 44px;
-        padding: 2px 6px;
-        border-radius: 6px;
-        font-family: var(--mono);
-        cursor: pointer;
-        transition: all 0.25s;
-      }
-      .v-play-btn:hover {
-        background: var(--bg-tertiary);
-        color: var(--accent);
-      }
-      .v-play-btn:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-      }
-      .v-divider {
-        width: 1px;
-        height: 12px;
-        background: var(--bg-tertiary);
-      }
       .v-dot-btn {
-        height: 5px;
-        border-radius: 3px;
+        height: 10px;
+        border-radius: 5px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        border: none;
+        transition: transform 0.3s ease;
+        border: 1.5px solid var(--border);
+        background: transparent;
         padding: 0;
         position: relative;
       }
@@ -678,20 +726,8 @@
         outline-offset: 2px;
       }
 
-      .v-progress-track {
-        width: 100%;
-        height: 2px;
-        background: var(--bg-secondary);
-      }
-      .v-progress-bar {
-        height: 100%;
-        border-radius: 0 1px 1px 0;
-        background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-        transition: width 0.1s linear;
-      }
-
       .v-efooter {
-        font-size: 11px;
+        font-size: 14px;
         color: var(--text-secondary);
         font-family: var(--mono);
         letter-spacing: 1px;
@@ -707,33 +743,30 @@
           padding: 14px;
         }
         .v-player {
-          min-height: calc(100dvh - 70px);
+          min-height: calc(100dvh - 50px);
           border-radius: 12px;
         }
         .v-scene {
           padding: 16px 12px;
         }
         .v-phone {
-          width: 170px;
-          height: 320px;
+          width: min(210px, 30vw);
+          height: min(400px, 42vh);
         }
         .v-phone.sm {
-          transform: scale(0.62);
+          transform: scale(0.72);
         }
         .v-phone.med {
-          transform: scale(0.66);
-        }
-        .v-phone.lg {
           transform: scale(0.76);
         }
+        .v-phone.lg {
+          transform: scale(0.85);
+        }
         .v-phone.tilt-l {
-          transform: scale(0.62) rotate(-2deg);
+          transform: scale(0.72) rotate(-2deg);
         }
         .v-phone.tilt-r {
-          transform: scale(0.62) rotate(2deg);
-        }
-        .v-controls {
-          border-radius: 0 0 12px 12px;
+          transform: scale(0.72) rotate(2deg);
         }
       }
 
@@ -743,8 +776,8 @@
           padding: 10px 8px;
         }
         .v-player {
-          min-height: calc(100dvh - 56px);
-          border-radius: 14px;
+          min-height: calc(100dvh - 44px);
+          border-radius: 10px;
         }
         .v-scene {
           padding: 14px 8px;
@@ -753,23 +786,23 @@
           gap: 10px;
         }
         .v-phone {
-          width: 170px;
-          height: 320px;
+          width: min(175px, 38vw);
+          height: min(330px, 42vh);
         }
         .v-phone.sm {
-          transform: scale(0.62);
+          transform: scale(0.72);
         }
         .v-phone.med {
-          transform: scale(0.66);
-        }
-        .v-phone.lg {
           transform: scale(0.76);
         }
+        .v-phone.lg {
+          transform: scale(0.85);
+        }
         .v-phone.tilt-l {
-          transform: scale(0.62) rotate(-2deg);
+          transform: scale(0.72) rotate(-2deg);
         }
         .v-phone.tilt-r {
-          transform: scale(0.62) rotate(2deg);
+          transform: scale(0.72) rotate(2deg);
         }
         .v-phone-screen {
           border-radius: 16px;
@@ -888,9 +921,6 @@
           padding: 0.45rem 0.9rem;
           font-size: 0.8rem;
         }
-        .v-controls {
-          border-radius: 0 0 10px 10px;
-        }
         .footer {
           font-size: 0.75rem;
           padding-top: 1rem;
@@ -929,7 +959,7 @@
           font-size: 10px;
         }
         .v-contact-name {
-          font-size: 14px;
+          font-size: 11px;
         }
         .v-contact-detail {
           font-size: 7px;
@@ -984,8 +1014,8 @@
           font-size: 11px;
         }
         .v-pair-circle {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
           font-size: 13px;
         }
         .v-scan-target {
@@ -1016,9 +1046,6 @@
         .v-efooter {
           font-size: 10px;
         }
-        .v-controls {
-          border-radius: 0 0 8px 8px;
-        }
         .links a {
           padding: 0.4rem 0.75rem;
           font-size: 0.75rem;
@@ -1032,9 +1059,6 @@
           opacity: 1;
           transform: none;
         }
-        .v-scroll-hint {
-          animation: none;
-        }
         .v-scene {
           transition: none;
         }
@@ -1044,9 +1068,42 @@
         .v-pair-circle,
         .v-trust-dot,
         .v-icon-box,
-        .v-arrow,
-        .v-progress-bar {
+        .v-arrow {
           transition: none;
+        }
+      }
+
+      /* Landscape — compact hero so CTA is visible without scrolling */
+      @media (max-height: 700px) and (orientation: landscape) {
+        .v-scene-inner {
+          gap: 12px !important;
+          padding: 16px 0 !important;
+        }
+        .v-hero-points {
+          gap: 4px;
+          margin-top: 0;
+        }
+        .v-hero-point {
+          font-size: clamp(18px, 1.2vw + 0.9rem, 24px);
+        }
+        .v-heading.lg {
+          font-size: clamp(32px, 3vw + 1.2rem, 52px);
+        }
+        .v-logo-icon {
+          display: inline-flex;
+          margin-bottom: -8px;
+        }
+        .v-hero-logo-row {
+          flex-direction: row;
+          gap: 16px;
+        }
+        .v-hero-cta {
+          margin-top: 4px;
+          padding: 10px 24px;
+          font-size: 17px;
+        }
+        .v-hero-spacer {
+          display: none;
         }
       }
     </style>
@@ -1057,31 +1114,31 @@
         class="v-player"
         id="player"
         role="region"
-        aria-label="Come funziona Vauchi"
+        aria-label="How Vauchi works"
         tabindex="0"
       >
         <!-- Scene 0: Intro -->
         <div class="v-scene active" data-scene="0">
-          <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-logo-icon">
-              <img
-                src="/logo.png"
-                alt="Vauchi"
-                width="56"
-                height="56"
-                style="border-radius: 14px"
-              />
+          <div class="v-scene-inner" style="gap: 28px">
+            <div class="v-fade v-d1 v-hero-logo-row">
+              <div class="v-logo-icon">
+                <picture>
+                  <source srcset="/logo.webp" type="image/webp" />
+                  <img
+                    src="/logo.png"
+                    alt="Vauchi"
+                    width="56"
+                    height="56"
+                    style="border-radius: 14px"
+                    loading="eager"
+                  />
+                </picture>
+              </div>
+              <div class="v-heading lg">vauchi</div>
             </div>
-            <div class="v-fade v-d2 v-heading lg">vauchi</div>
-            <div class="v-fade v-d3 v-caption">
-              L’ultima volta che scambierai le tue informazioni di contatto.
-            </div>
-            <div class="v-fade v-d4 v-tags">
-              <span class="v-tag">Crittografia end-to-end</span>
-              <span class="v-tag">Senza account</span>
-              <span class="v-tag">Open Source</span>
-              <span class="v-tag">Nessun tracciamento</span>
-              <span class="v-tag">Nessuna pubblicità</span>
+            <div class="v-fade v-d2 v-hero-points">
+              <div class="v-hero-point">Scambia i contatti una volta.</div>
+              <div class="v-hero-point">Si aggiornano da soli.</div>
             </div>
           </div>
         </div>
@@ -1092,9 +1149,7 @@
             <div class="v-fade v-d1 v-label" style="color: var(--error)">
               Il problema
             </div>
-            <div class="v-fade v-d2 v-heading">
-              La tua rubrica è un cimitero di contatti obsoleti.
-            </div>
+            <div class="v-fade v-d2 v-heading">La tua rubrica è un cimitero di contatti obsoleti.</div>
             <div class="v-fade v-d3">
               <div class="v-phone-wrap">
                 <div class="v-phone lg">
@@ -1156,23 +1211,20 @@
               class="v-fade v-d5 v-sub"
               style="color: color-mix(in srgb, var(--error) 50%, transparent)"
             >
-              ti suona familiare?
+              sound familiar?
             </div>
           </div>
         </div>
 
         <!-- Scene 2: Exchange -->
         <div class="v-scene" data-scene="2">
-          <div class="v-scene-inner" style="gap: 18px">
+          <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent)">
-              Scambio di contatti
+              Contact Exchange
             </div>
-            <div class="v-fade v-d2 v-heading">
-              Incontra. Scansiona. Connesso.
-            </div>
+            <div class="v-fade v-d2 v-heading">Incontratevi di persona. Scansionate. Connessi.</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-phone-wrap">
-                <div class="v-micro">TU</div>
                 <div class="v-phone tilt-l">
                   <div class="v-phone-notch"></div>
                   <div
@@ -1182,10 +1234,10 @@
                       flex-direction: column;
                       align-items: center;
                       justify-content: center;
-                      gap: 6px;
+                      gap: 8px;
                     "
                   >
-                    <div class="v-micro">Mostra QR</div>
+                    <div class="v-sub">Show QR</div>
                     <div class="v-qr" id="qr2">
                       <div class="v-qr-cell filled"></div>
                       <div class="v-qr-cell filled"></div>
@@ -1271,13 +1323,13 @@
                     </div>
                   </div>
                 </div>
+                <div class="v-sub" style="margin-top: 6px">YOU</div>
               </div>
               <div class="v-col">
                 <div class="v-pair-circle" id="pair2">&#x27F7;</div>
-                <div class="v-micro" id="pair2-label">scanning</div>
+                <div class="v-sub" id="pair2-label">scanning</div>
               </div>
               <div class="v-phone-wrap">
-                <div class="v-micro">ALEX</div>
                 <div class="v-phone tilt-r">
                   <div class="v-phone-notch"></div>
                   <div
@@ -1287,20 +1339,21 @@
                       flex-direction: column;
                       align-items: center;
                       justify-content: center;
-                      gap: 6px;
+                      gap: 8px;
                     "
                   >
-                    <div class="v-micro">Scansiona</div>
+                    <div class="v-sub">Scan</div>
                     <div class="v-scan-target" id="scan2">&#x1F4F7;</div>
                   </div>
                 </div>
+                <div class="v-sub" style="margin-top: 6px">ALEX</div>
               </div>
             </div>
             <div
               class="v-fade v-d6 v-sub"
               style="color: color-mix(in srgb, var(--accent) 50%, transparent)"
             >
-              Nessun numero di telefono o account necessario
+              No phone number or account needed
             </div>
           </div>
         </div>
@@ -1309,14 +1362,12 @@
         <div class="v-scene" data-scene="3">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--success)">
-              &#x2713; Exchanged
+              Scambio di contatti
             </div>
-            <div class="v-fade v-d2 v-heading">
-              Entrambi i telefoni ora contengono la scheda contatto crittografata dell’altro.
-            </div>
+            <div class="v-fade v-d2 v-heading">Entrambi i telefoni ora contengono la scheda di contatto crittografata dell'altro.</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
-                <div class="v-micro">IL TUO TELEFONO</div>
+                <div class="v-micro">YOUR PHONE</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen" style="padding: 8px 0">
@@ -1342,14 +1393,14 @@
                 </div>
               </div>
               <div class="v-phone-wrap">
-                <div class="v-micro">TELEFONO DI ALEX</div>
+                <div class="v-micro">ALEX'S PHONE</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen" style="padding: 8px 0">
                     <div class="v-contact glow">
                       <div class="v-contact-avatar">Y</div>
                       <div>
-                        <div class="v-contact-name">Tu</div>
+                        <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail"
                           style="color: var(--success)"
@@ -1372,24 +1423,21 @@
               class="v-fade v-d4 v-sub"
               style="color: color-mix(in srgb, var(--success) 50%, transparent)"
             >
-              scambia una volta &#x2014; resta connesso
+              exchange once &#x2014; stay connected
             </div>
           </div>
         </div>
 
-        <!-- Scene 4: Aggiornamenti silenziosi -->
+        <!-- Scene 4: &#x2713; Exchanged -->
         <div class="v-scene" data-scene="4">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent)">
-              Aggiornamenti silenziosi
+              Silent Updates
             </div>
-            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
-              Quando i tuoi dati cambiano, i telefoni dei tuoi amici si aggiornano
-              automaticamente. Nessuna notifica, nessun rumore.
-            </div>
+            <div class="v-fade v-d2 v-heading">Quando cambiano i tuoi dati, i telefoni dei tuoi amici si aggiornano automaticamente. Nessuna notifica, nessun rumore.</div>
             <div class="v-fade v-d3 v-row tight">
               <div class="v-phone-wrap">
-                <div class="v-micro">TU AGGIORNI</div>
+                <div class="v-micro">YOU UPDATE</div>
                 <div class="v-phone sm">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen" style="padding: 6px 0">
@@ -1403,7 +1451,7 @@
                     <div class="v-contact" id="card4a">
                       <div class="v-contact-avatar">Y</div>
                       <div>
-                        <div class="v-contact-name">Tu</div>
+                        <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail"
                           id="detail4a"
@@ -1461,7 +1509,7 @@
                 <div class="v-relay-label">E2EE</div>
               </div>
               <div class="v-phone-wrap">
-                <div class="v-micro">ALEX VEDE</div>
+                <div class="v-micro">ALEX SEES</div>
                 <div class="v-phone sm">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen" style="padding: 6px 0">
@@ -1475,7 +1523,7 @@
                     <div class="v-contact" id="card4b">
                       <div class="v-contact-avatar">Y</div>
                       <div>
-                        <div class="v-contact-name">Tu</div>
+                        <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail"
                           id="detail4b"
@@ -1506,31 +1554,28 @@
                 );
               "
             >
-              qualunque cosa cambi
+              no matter what changes
             </div>
           </div>
         </div>
 
-        <!-- Scene 5: Libertà di piattaforma -->
+        <!-- Scene 5: Aggiornamenti silenziosi -->
         <div class="v-scene" data-scene="5">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
-              Libertà di piattaforma
+              Platform Freedom
             </div>
-            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
-              Cambi social network? Cambi provider e-mail? I tuoi contatti restano
-              aggiornati.
-            </div>
+            <div class="v-fade v-d2 v-heading">Cambi social network? Provider email? I tuoi contatti restano connessi alla tua identità, non a una piattaforma.</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
-                <div class="v-micro">PRIMA</div>
+                <div class="v-micro">BEFORE</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen" style="padding: 8px 0">
                     <div class="v-contact">
                       <div class="v-contact-avatar">Y</div>
                       <div>
-                        <div class="v-contact-name">Tu</div>
+                        <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail strike"
                           style="color: var(--error)"
@@ -1549,14 +1594,14 @@
                 </div>
               </div>
               <div class="v-phone-wrap">
-                <div class="v-micro">DOPO</div>
+                <div class="v-micro">AFTER</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen" style="padding: 8px 0">
                     <div class="v-contact glow">
                       <div class="v-contact-avatar">Y</div>
                       <div>
-                        <div class="v-contact-name">Tu</div>
+                        <div class="v-contact-name">You</div>
                         <div
                           class="v-contact-detail"
                           style="color: var(--success)"
@@ -1581,29 +1626,26 @@
                 color: color-mix(in srgb, var(--accent-dark) 50%, transparent);
               "
             >
-              aggiorna una volta &#x2014; tutti vedono il cambiamento
+              update once &#x2014; everyone sees the change
             </div>
           </div>
         </div>
 
-        <!-- Scene 6: Privacy granulare -->
+        <!-- Scene 6: Libertà di piattaforma -->
         <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--warning)">
-              Privacy granulare
+              Granular Privacy
             </div>
-            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
-              Condividi i dettagli lavorativi con i colleghi e gli indirizzi di casa con la famiglia
-              &#x2014; tutto da un’unica identità.
-            </div>
+            <div class="v-fade v-d2 v-heading">Condividi i dati di lavoro con i colleghi e l'indirizzo di casa con la famiglia &#x2014; tutto da un'unica identità.</div>
             <div
               class="v-fade v-d3 v-row"
               style="gap: 20px; align-items: flex-start"
             >
               <div class="v-col" style="gap: 4px">
-                <div class="v-micro">Il collega vede</div>
+                <div class="v-micro">Colleague sees</div>
                 <div class="v-priv-card">
-                  <div class="v-priv-name">Tu</div>
+                  <div class="v-priv-name">You</div>
                   <div
                     class="v-priv-line"
                     style="color: var(--success); margin-top: 4px"
@@ -1621,14 +1663,14 @@
                       font-style: italic;
                     "
                   >
-                    &#x1F512; indirizzo, social personali nascosti
+                    &#x1F512; address, personal social hidden
                   </div>
                 </div>
               </div>
               <div class="v-col" style="gap: 4px">
-                <div class="v-micro">La famiglia vede</div>
+                <div class="v-micro">Family sees</div>
                 <div class="v-priv-card">
-                  <div class="v-priv-name">Tu</div>
+                  <div class="v-priv-name">You</div>
                   <div
                     class="v-priv-line"
                     style="color: var(--success); margin-top: 4px"
@@ -1654,26 +1696,23 @@
                 );
               "
             >
-              tu controlli la visibilità
+              you control the visibility
             </div>
           </div>
         </div>
 
-        <!-- Scene 7: Recupero fisico -->
+        <!-- Scene 7: Privacy granulare -->
         <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
-              Recupero fisico
+              Physical Recovery
             </div>
-            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
-              Nessuna password principale da perdere. Recupera l’accesso tramite verifica
-              di persona con il tuo cerchio di fiducia.
-            </div>
+            <div class="v-fade v-d2 v-heading">Nessun feed, nessun profilo, nessun grafo sociale.</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-col">
                 <div class="v-icon-box red">&#x1F4F1;</div>
                 <div class="v-micro" style="color: var(--error)">
-                  dispositivo perso
+                  lost device
                 </div>
               </div>
               <svg
@@ -1699,7 +1738,7 @@
                   <div class="v-trust-dot" id="trust2">&#x1F464;</div>
                 </div>
                 <div class="v-micro" style="color: var(--accent)">
-                  cerchio di fiducia
+                  trusted circle
                 </div>
               </div>
               <svg
@@ -1727,7 +1766,7 @@
                   id="recovery-label"
                   style="color: var(--text-secondary)"
                 >
-                  nuovo dispositivo
+                  new device
                 </div>
               </div>
             </div>
@@ -1741,24 +1780,22 @@
                 );
               "
             >
-              verifica di persona &#x2014; nessun cloud, nessuna password
+              in-person verification &#x2014; no cloud, no passwords
             </div>
           </div>
         </div>
 
-        <!-- Scene 8: Zero piattaforma -->
+        <!-- Scene 8: Recupero fisico -->
         <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
             <div class="v-fade v-d1 v-label" style="color: var(--success)">
-              Zero piattaforma
+              Zero Platform
             </div>
-            <div class="v-fade v-d2 v-heading" style="font-size: 17px">
-              Nessun feed, nessun profilo, nessun grafo sociale.
-            </div>
+            <div class="v-fade v-d2 v-heading">vauchi</div>
             <div class="v-fade v-d3 v-row" style="gap: 24px">
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
-                  <span style="font-size: 18px">&#x1F4E1;</span>
+                  <span style="font-size: 24px">&#x1F4E1;</span>
                 </div>
                 <div
                   class="v-micro"
@@ -1769,7 +1806,7 @@
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
-                  <span style="font-size: 18px">&#x1F464;</span>
+                  <span style="font-size: 24px">&#x1F464;</span>
                 </div>
                 <div
                   class="v-micro"
@@ -1780,7 +1817,7 @@
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
-                  <span style="font-size: 18px">&#x1F578;&#xFE0F;</span>
+                  <span style="font-size: 24px">&#x1F578;&#xFE0F;</span>
                 </div>
                 <div
                   class="v-micro"
@@ -1791,16 +1828,14 @@
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box green">
-                  <span style="font-size: 18px">&#x1F4D6;</span>
+                  <span style="font-size: 24px">&#x1F4D6;</span>
                 </div>
                 <div class="v-micro" style="color: var(--success)">
                   open source
                 </div>
               </div>
             </div>
-            <div class="v-fade v-d5 v-caption">
-              Infrastruttura open source interamente tua.
-            </div>
+            <div class="v-fade v-d5 v-caption">L’ultima volta che scambierai le tue informazioni di contatto.</div>
           </div>
         </div>
 
@@ -1817,24 +1852,22 @@
               />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
-            <div class="v-fade v-d3 v-caption">
-              Scambia una volta. Resta connesso &#x2014; qualunque cosa cambi.
-            </div>
+            <div class="v-fade v-d3 v-caption">Scambia una volta. Resta connesso &#x2014; qualunque cosa cambi.</div>
             <div class="v-fade v-d4 v-pills">
               <div class="v-pill">
-                <span class="v-pill-icon">&#x1F504;</span> Aggiornamenti silenziosi
+                <span class="v-pill-icon">&#x1F504;</span> Silent Updates
               </div>
               <div class="v-pill">
-                <span class="v-pill-icon">&#x1F310;</span> Libertà di piattaforma
+                <span class="v-pill-icon">&#x1F310;</span> Platform Freedom
               </div>
               <div class="v-pill">
-                <span class="v-pill-icon">&#x1F6E1;</span> Privacy granulare
+                <span class="v-pill-icon">&#x1F6E1;</span> Granular Privacy
               </div>
               <div class="v-pill">
-                <span class="v-pill-icon">&#x1F91D;</span> Recupero fisico
+                <span class="v-pill-icon">&#x1F91D;</span> Physical Recovery
               </div>
               <div class="v-pill">
-                <span class="v-pill-icon">&#x1F4D6;</span> Zero piattaforma
+                <span class="v-pill-icon">&#x1F4D6;</span> Zero Platform
               </div>
             </div>
             <div class="v-fade v-d5 v-links">
@@ -1853,90 +1886,113 @@
                 >GitLab</a
               >
             </div>
-            <div class="v-fade v-d7 v-efooter">
-              Verificabile &#xB7; Crittografia end-to-end &#xB7; Nessun account richiesto
+            <div
+              class="v-fade v-d6"
+              style="
+                margin-top: 8px;
+                font-size: 18px;
+                color: var(--text-secondary);
+              "
+            >
+              Hai idee?
+              <a
+                href="mailto:hello@vauchi.app"
+                style="
+                  color: var(--accent);
+                  text-decoration: none;
+                  font-weight: 500;
+                "
+                >hello@vauchi.app</a
+              >
             </div>
+            <div class="v-fade v-d7 v-efooter">Verificabile &#xB7; Crittografia end-to-end &#xB7; Nessun account richiesto</div>
           </div>
         </div>
+        <!-- CTA button (shown on intro, replaced by dots on play) -->
+        <button class="v-hero-cta" id="hero-play" aria-label="Play explainer">
+          &#x25B6;&#xFE0E;&ensp;Scopri come funziona
+        </button>
+        <!-- Dot navigation (hidden until play, then replaces CTA) -->
+        <div class="v-dots-nav" id="controls" style="display: none"></div>
       </div>
 
-      <!-- Controls (outside player) -->
-      <div class="v-controls-wrap">
-        <div class="v-progress-track">
-          <div class="v-progress-bar" id="progressBar" style="width: 0%"></div>
+      <footer class="footer" style="flex-direction: column; gap: 14px">
+        <div style="font-size: 1.15rem; color: var(--text-secondary)">
+          Have ideas?
+          <a
+            href="mailto:hello@vauchi.app"
+            style="
+              color: var(--accent);
+              text-decoration: none;
+              font-weight: 500;
+            "
+            >hello@vauchi.app</a
+          >
         </div>
-        <div class="v-controls" id="controls"></div>
-        <div class="v-scroll-hint" aria-hidden="true">&#x25BE;</div>
-      </div>
-
-      <div class="links">
-        <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="m23.6 9.593-0.033-0.086L20.3 1.01a0.851 0.851 0 0 0-0.336-0.405 0.877 0.877 0 0 0-0.994 0.03 0.882 0.882 0 0 0-0.29 0.44l-2.204 6.748H7.538L5.334 1.075a0.857 0.857 0 0 0-0.29-0.441 0.877 0.877 0 0 0-0.994-0.03 0.86 0.86 0 0 0-0.336 0.405L0.433 9.502l-0.032 0.086a6.066 6.066 0 0 0 2.012 7.01l0.012 0.009 0.03 0.022 4.982 3.73 2.464 1.865 1.5 1.134a1.01 1.01 0 0 0 1.22 0l1.5-1.134 2.465-1.865 5.012-3.752 0.013-0.01a6.072 6.072 0 0 0 2.009-7.004"
-            />
-          </svg>
-          GitLab
-        </a>
-        <a href="https://github.com/vauchi" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-            />
-          </svg>
-          GitHub
-        </a>
-        <span class="demo-link">Demo (in arrivo)</span>
-        <a
-          href="https://github.com/sponsors/vauchi"
-          target="_blank"
-          rel="noopener"
+        <span style="font-size: 1.05rem; opacity: 0.8"
+          >Verificabile &#xB7; Crittografia end-to-end &#xB7; Nessun account richiesto &#xB7; No Cookies &#xB7; No Tracking</span
         >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
-          Sponsor
-        </a>
-        <a
-          href="https://liberapay.com/Vauchi/donate"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
-          Donate
-        </a>
-      </div>
-
-      <footer class="footer">
-        <span
-          >Verificabile &#xB7; Crittografia end-to-end &#xB7; Nessun account richiesto</span
-        >
+        <div class="links" style="margin: 0">
+          <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="m23.6 9.593-0.033-0.086L20.3 1.01a0.851 0.851 0 0 0-0.336-0.405 0.877 0.877 0 0 0-0.994 0.03 0.882 0.882 0 0 0-0.29 0.44l-2.204 6.748H7.538L5.334 1.075a0.857 0.857 0 0 0-0.29-0.441 0.877 0.877 0 0 0-0.994-0.03 0.86 0.86 0 0 0-0.336 0.405L0.433 9.502l-0.032 0.086a6.066 6.066 0 0 0 2.012 7.01l0.012 0.009 0.03 0.022 4.982 3.73 2.464 1.865 1.5 1.134a1.01 1.01 0 0 0 1.22 0l1.5-1.134 2.465-1.865 5.012-3.752 0.013-0.01a6.072 6.072 0 0 0 2.009-7.004"
+              />
+            </svg>
+            GitLab
+          </a>
+          <a href="https://github.com/vauchi" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+            GitHub
+          </a>
+          <span class="demo-link">Demo (coming soon)</span>
+          <a
+            href="https://github.com/sponsors/vauchi"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+            Sponsor
+          </a>
+          <a
+            href="https://liberapay.com/Vauchi/donate"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+            Donate
+          </a>
+        </div>
         <div
           style="
             position: relative;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            margin-left: 12px;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
           "
         >
-          <div
-            style="
-              display: flex;
-              gap: 6px;
-              margin-left: 12px;
-              font-size: 0.8rem;
-            "
-          >
+          <div style="display: flex; gap: 8px; font-size: 0.9rem">
             <a
               href="/"
-              style="color: var(--text-secondary); text-decoration: none"
+              style="
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 600;
+              "
               >EN</a
             >
             <span style="color: var(--border)">·</span>
@@ -1954,14 +2010,14 @@
             <span style="color: var(--border)">·</span>
             <a
               href="/it/"
-              style="color: var(--accent); text-decoration: none; font-weight: 600"
+              style="color: var(--text-secondary); text-decoration: none"
               >IT</a
             >
           </div>
           <button
             id="mode-toggle"
-            aria-label="Alterna modalità scuro/chiaro"
-            title="Alterna modalità scuro/chiaro"
+            aria-label="Toggle dark/light mode"
+            title="Toggle dark/light mode"
             style="
               background: none;
               border: 1px solid var(--border);
@@ -1977,10 +2033,10 @@
           </button>
           <button
             id="theme-menu-toggle"
-            aria-label="Scegli tema"
+            aria-label="Choose theme"
             aria-haspopup="true"
             aria-expanded="false"
-            title="Scegli tema"
+            title="Choose theme"
             style="
               background: none;
               border: 1px solid var(--border);
@@ -2042,24 +2098,34 @@
             <div id="theme-menu-light"></div>
           </div>
         </div>
-      <div style="width:100%;text-align:center;margin-top:8px;font-size:0.9rem;color:var(--text-secondary)">Have ideas? <a href="mailto:hello@vauchi.app" style="color:var(--accent);text-decoration:none;font-weight:500">hello@vauchi.app</a></div>
       </footer>
     </main>
 
     <script id="player-i18n" type="application/json">
       {
-        "scene_names": ["Introduzione", "Il problema", "Scambio di contatti", "Scambiato", "Aggiornamenti silenziosi", "Libertà di piattaforma", "Privacy granulare", "Recupero fisico", "Zero piattaforma", "Conclusione"],
-        "txt_scanning": "scansione",
-        "txt_paired": "collegato",
-        "txt_editing": "modifica...",
-        "txt_saved": "\u2713 salvato",
-        "txt_auto_synced": "\u2713 sincronizzato",
-        "txt_waiting": "in attesa...",
-        "txt_restored": "\u2713 ripristinato",
-        "txt_new_device": "nuovo dispositivo"
-      }
+      "scene_names": [
+            "Introduzione",
+            "Il problema",
+            "Scambio di contatti",
+            "Scambiato",
+            "Aggiornamenti silenziosi",
+            "Libertà di piattaforma",
+            "Privacy granulare",
+            "Recupero fisico",
+            "Zero piattaforma",
+            "Conclusione"
+      ],
+      "txt_auto_synced": "✓ sincronizzato",
+      "txt_editing": "modifica...",
+      "txt_new_device": "nuovo dispositivo",
+      "txt_paired": "collegato",
+      "txt_restored": "✓ ripristinato",
+      "txt_saved": "✓ salvato",
+      "txt_scanning": "scansione",
+      "txt_waiting": "in attesa..."
+}
     </script>
-    <script src="/js/player.js"></script>
-    <script src="/js/theme-picker.js"></script>
+    <script src="/js/player.js" defer></script>
+    <script src="/js/theme-picker.js" defer></script>
   </body>
 </html>
