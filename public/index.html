@@ -6,6 +6,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin />
     <link rel="alternate" hreflang="en" href="https://vauchi.app/" />
     <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/" />
     <link rel="alternate" hreflang="de" href="https://vauchi.app/de/" />
@@ -109,7 +110,7 @@
         text-decoration: none;
         font-size: 1rem;
         font-weight: 500;
-        transition: all 0.2s ease;
+        transition: background 0.2s ease, border-color 0.2s ease;
       }
 
       .links a:hover {
@@ -329,7 +330,7 @@
         font-weight: 600;
         font-family: var(--sans);
         cursor: pointer;
-        transition: all 0.25s;
+        transition: background 0.25s, border-color 0.25s, transform 0.25s;
         letter-spacing: 0.3px;
         white-space: nowrap;
       }
@@ -397,7 +398,7 @@
         margin: 3px 8px;
         border-radius: 12px;
         border: 1px solid transparent;
-        transition: all 0.5s ease;
+        transition: background 0.5s ease, border-color 0.5s ease;
       }
       .v-contact.glow {
         background: var(--accent-dim);
@@ -429,7 +430,7 @@
       .v-contact-detail {
         font-size: 15px;
         font-family: var(--mono);
-        transition: all 0.4s;
+        transition: opacity 0.4s;
       }
       .v-contact-detail.strike {
         text-decoration: line-through;
@@ -449,7 +450,7 @@
         border-radius: 12px;
         background: color-mix(in srgb, var(--bg-primary) 30%, transparent);
         border: 1px solid var(--bg-tertiary);
-        transition: all 0.6s ease;
+        transition: background 0.6s ease, border-color 0.6s ease;
       }
       .v-qr.active {
         background: var(--accent-dim);
@@ -459,7 +460,7 @@
         aspect-ratio: 1;
         border-radius: 2px;
         background: var(--bg-tertiary);
-        transition: all 0.3s ease;
+        transition: background 0.3s ease, opacity 0.3s ease;
         opacity: 0.3;
       }
       .v-qr.active .v-qr-cell.filled {
@@ -491,7 +492,7 @@
       .v-arrow {
         display: block;
         color: var(--text-secondary);
-        transition: all 0.5s;
+        transition: color 0.5s;
       }
 
       .v-priv-card {
@@ -520,7 +521,7 @@
         align-items: center;
         justify-content: center;
         font-size: 28px;
-        transition: all 0.5s;
+        transition: background 0.5s, border-color 0.5s;
       }
       .v-icon-box.red {
         background: color-mix(in srgb, var(--error) 8%, transparent);
@@ -544,7 +545,7 @@
         align-items: center;
         justify-content: center;
         font-size: 18px;
-        transition: all 0.4s ease;
+        transition: background 0.4s ease, border-color 0.4s ease;
       }
       .v-trust-dot.lit {
         background: var(--accent-dim);
@@ -608,7 +609,7 @@
         align-items: center;
         justify-content: center;
         font-size: 28px;
-        transition: all 0.4s;
+        transition: border-color 0.4s;
       }
       .v-scan-target.active {
         border-color: var(--accent);
@@ -624,7 +625,8 @@
         justify-content: center;
         font-size: 20px;
         color: var(--text-secondary);
-        transition: all 0.5s ease;
+        transition: border-color 0.5s ease, background 0.5s ease,
+          color 0.5s ease;
       }
       .v-pair-circle.done {
         border-color: var(--success);
@@ -689,7 +691,7 @@
         height: 10px;
         border-radius: 5px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease;
         border: 1.5px solid var(--border);
         background: transparent;
         padding: 0;
@@ -1104,13 +1106,17 @@
           <div class="v-scene-inner" style="gap: 28px">
             <div class="v-fade v-d1 v-hero-logo-row">
               <div class="v-logo-icon">
-                <img
-                  src="/logo.png"
-                  alt="Vauchi"
-                  width="56"
-                  height="56"
-                  style="border-radius: 14px"
-                />
+                <picture>
+                  <source srcset="/logo.webp" type="image/webp" />
+                  <img
+                    src="/logo.png"
+                    alt="Vauchi"
+                    width="56"
+                    height="56"
+                    style="border-radius: 14px"
+                    loading="eager"
+                  />
+                </picture>
               </div>
               <div class="v-heading lg">vauchi</div>
             </div>
@@ -2130,7 +2136,7 @@
         "txt_new_device": "new device"
       }
     </script>
-    <script src="/js/player.js"></script>
-    <script src="/js/theme-picker.js"></script>
+    <script src="/js/player.js" defer></script>
+    <script src="/js/theme-picker.js" defer></script>
   </body>
 </html>
