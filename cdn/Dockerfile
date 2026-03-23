@@ -8,6 +8,9 @@
 
 FROM nginx:alpine
 
+# Patch all OS packages to fix container scan CVEs (zlib, libpng, etc.)
+RUN apk update && apk upgrade --no-cache && rm -rf /var/cache/apk/*
+
 # Privacy-hardened Nginx config (listen :80, kamal-proxy handles TLS)
 COPY cdn/nginx-cdn.conf /etc/nginx/conf.d/default.conf
 
