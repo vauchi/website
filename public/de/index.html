@@ -1156,6 +1156,10 @@
         }
       }
 
+      /* Language switcher */
+      .lang-switcher { display: flex; gap: 8px; font-size: 0.9rem; }
+      .lang-active { color: var(--accent); text-decoration: none; font-weight: 600; }
+
       /* Utility classes (extracted from inline styles) */
       .c-success { color: var(--success); }
       .c-error { color: var(--error); }
@@ -1178,11 +1182,11 @@
       .br-14 { border-radius: 14px; }
       .hidden { display: none; }
       .flex-gap-4 { display: flex; gap: 4px; }
-      .c-error-50 { color: color-mix(in srgb, var(--error) 50%, transparent); }
-      .c-accent-50 { color: color-mix(in srgb, var(--accent) 50%, transparent); }
-      .c-success-50 { color: color-mix(in srgb, var(--success) 50%, transparent); }
-      .c-accent-dark-50 { color: color-mix(in srgb, var(--accent-dark) 50%, transparent); }
-      .c-muted-60 { color: color-mix(in srgb, var(--text-secondary) 60%, transparent); }
+      .c-error-50 { color: color-mix(in srgb, var(--error) 70%, transparent); }
+      .c-accent-50 { color: color-mix(in srgb, var(--accent) 70%, transparent); }
+      .c-success-50 { color: color-mix(in srgb, var(--success) 70%, transparent); }
+      .c-accent-dark-50 { color: color-mix(in srgb, var(--accent-dark) 70%, transparent); }
+      .c-muted-60 { color: color-mix(in srgb, var(--text-secondary) 80%, transparent); }
     </style>
   </head>
   <body>
@@ -1980,34 +1984,14 @@
             flex-wrap: wrap;
           "
         >
-          <div style="display: flex; gap: 8px; font-size: 0.9rem">
-            <a
-              href="/"
-              style="
-                color: var(--accent);
-                text-decoration: none;
-                font-weight: 600;
-              "
-              >EN</a
-            >
+          <div class="lang-switcher">
+            <a href="/" class="c-muted-no-underline">EN</a>
             <span class="c-border">·</span>
-            <a
-              href="/fr/"
-              class="c-muted-no-underline"
-              >FR</a
-            >
+            <a href="/fr/" class="c-muted-no-underline">FR</a>
             <span class="c-border">·</span>
-            <a
-              href="/de/"
-              class="c-muted-no-underline"
-              >DE</a
-            >
+            <a href="/de/" class="lang-active">DE</a>
             <span class="c-border">·</span>
-            <a
-              href="/it/"
-              class="c-muted-no-underline"
-              >IT</a
-            >
+            <a href="/it/" class="c-muted-no-underline">IT</a>
           </div>
           <button
             id="mode-toggle"
