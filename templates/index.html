@@ -21,7 +21,18 @@
     <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json">
-    <!-- Open Graph -->
+    <!-- Dublin Core (DCMI Terms) -->
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
+    <meta name="dcterms.title" content="{{ t['meta.title'] }}">
+    <meta name="dcterms.description" content="{{ t['meta.description'] }}">
+    <meta name="dcterms.creator" content="Mattia Egloff">
+    <meta name="dcterms.publisher" content="Vauchi">
+    <meta name="dcterms.type" content="Software">
+    <meta name="dcterms.language" content="{{ lang }}">
+    <meta name="dcterms.license" content="https://spdx.org/licenses/GPL-3.0-or-later.html">
+    <meta name="dcterms.rights" content="GPL-3.0-or-later">
+    <meta name="dcterms.subject" content="privacy, contacts, encryption, open-source">
+    <!-- Open Graph (ogp.me) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://vauchi.app/">
     <meta property="og:title" content="{{ t['meta.title'] }}">
