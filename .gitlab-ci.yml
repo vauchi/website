@@ -55,12 +55,10 @@ lint:nginx:
   tags: [docker]
   image: nginx:alpine
   script:
-    - nginx -t -c /dev/stdin < nginx.conf || true
-    - echo "Nginx config syntax check complete"
+    - nginx -t -c /dev/stdin < nginx.conf
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-  allow_failure: true
 
 # Validate app-files content against schemas
 lint:content:
@@ -163,9 +161,9 @@ sign:content:
 build:docker:
   stage: build
   tags: [docker]
-  image: docker:latest
+  image: docker:27
   services:
-    - docker:dind
+    - docker:27-dind
   variables:
     DOCKER_BUILDKIT: "1"
   script:
@@ -246,9 +244,9 @@ deploy:trigger:
 build:cdn-docker:
   stage: build
   tags: [docker]
-  image: docker:latest
+  image: docker:27
   services:
-    - docker:dind
+    - docker:27-dind
   needs:
     - job: sign:content
       optional: true
