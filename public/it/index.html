@@ -1155,6 +1155,34 @@
           display: none;
         }
       }
+
+      /* Utility classes (extracted from inline styles) */
+      .c-success { color: var(--success); }
+      .c-error { color: var(--error); }
+      .c-muted { color: var(--text-secondary); }
+      .c-accent { color: var(--accent); }
+      .c-accent-dark { color: var(--accent-dark); }
+      .c-warning { color: var(--warning); }
+      .c-border { color: var(--border); }
+      .c-error-strike { color: var(--error); text-decoration: line-through; }
+      .c-muted-no-underline { color: var(--text-secondary); text-decoration: none; }
+      .c-success-mt { color: var(--success); margin-top: 4px; }
+      .pad-v8 { padding: 8px 0; }
+      .pad-v6 { padding: 6px 0; }
+      .fs-emoji { font-size: 24px; }
+      .gap-8 { gap: 8px; }
+      .gap-4 { gap: 4px; }
+      .gap-24 { gap: 24px; }
+      .gap-20-start { gap: 20px; align-items: flex-start; }
+      .mt-6 { margin-top: 6px; }
+      .br-14 { border-radius: 14px; }
+      .hidden { display: none; }
+      .flex-gap-4 { display: flex; gap: 4px; }
+      .c-error-50 { color: color-mix(in srgb, var(--error) 50%, transparent); }
+      .c-accent-50 { color: color-mix(in srgb, var(--accent) 50%, transparent); }
+      .c-success-50 { color: color-mix(in srgb, var(--success) 50%, transparent); }
+      .c-accent-dark-50 { color: color-mix(in srgb, var(--accent-dark) 50%, transparent); }
+      .c-muted-60 { color: color-mix(in srgb, var(--text-secondary) 60%, transparent); }
     </style>
   </head>
   <body>
@@ -1178,7 +1206,7 @@
                     alt="Vauchi"
                     width="56"
                     height="56"
-                    style="border-radius: 14px"
+                    class="br-14"
                     loading="eager"
                   />
                 </picture>
@@ -1195,7 +1223,7 @@
         <!-- Scene 1: Problem -->
         <div class="v-scene" data-scene="1">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--error)">
+            <div class="v-fade v-d1 v-label c-error">
               Il problema
             </div>
             <div class="v-fade v-d2 v-heading">La tua rubrica è un cimitero di contatti obsoleti.</div>
@@ -1203,14 +1231,13 @@
               <div class="v-phone-wrap">
                 <div class="v-phone lg">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 6px 0">
+                  <div class="v-phone-screen pad-v6">
                     <div class="v-contact">
                       <div class="v-contact-avatar">A</div>
                       <div>
                         <div class="v-contact-name">Alex Rivera</div>
                         <div
-                          class="v-contact-detail strike"
-                          style="color: var(--error)"
+                          class="v-contact-detail strike c-error"
                         >
                           +1 555-0147 (disconnesso)
                         </div>
@@ -1221,8 +1248,7 @@
                       <div>
                         <div class="v-contact-name">Sam Chen</div>
                         <div
-                          class="v-contact-detail strike"
-                          style="color: var(--error)"
+                          class="v-contact-detail strike c-error"
                         >
                           +44 7911 ████ (vecchio numero)
                         </div>
@@ -1233,8 +1259,7 @@
                       <div>
                         <div class="v-contact-name">Maya Okafor</div>
                         <div
-                          class="v-contact-detail strike"
-                          style="color: var(--error)"
+                          class="v-contact-detail strike c-error"
                         >
                           maya@oldcompany.com
                         </div>
@@ -1245,8 +1270,7 @@
                       <div>
                         <div class="v-contact-name">Jordan Petrov</div>
                         <div
-                          class="v-contact-detail strike"
-                          style="color: var(--error)"
+                          class="v-contact-detail strike c-error"
                         >
                           @jordan.p (eliminato)
                         </div>
@@ -1258,7 +1282,7 @@
             </div>
             <div
               class="v-fade v-d5 v-sub"
-              style="color: color-mix(in srgb, var(--error) 50%, transparent)"
+              class="c-error-50"
             >
               suona familiare?
             </div>
@@ -1268,7 +1292,7 @@
         <!-- Scene 2: Exchange -->
         <div class="v-scene" data-scene="2">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent)">Scambio contatti</div>
+            <div class="v-fade v-d1 v-label c-accent">Scambio contatti</div>
             <div class="v-fade v-d2 v-heading">Incontratevi di persona. Scansionate. Connessi.</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-phone-wrap">
@@ -1370,7 +1394,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="v-sub" style="margin-top: 6px">YOU</div>
+                <div class="v-sub mt-6">YOU</div>
               </div>
               <div class="v-col">
                 <div class="v-pair-circle" id="pair2">&#x27F7;</div>
@@ -1393,12 +1417,12 @@
                     <div class="v-scan-target" id="scan2">&#x1F4F7;</div>
                   </div>
                 </div>
-                <div class="v-sub" style="margin-top: 6px">ALEX</div>
+                <div class="v-sub mt-6">ALEX</div>
               </div>
             </div>
             <div
               class="v-fade v-d6 v-sub"
-              style="color: color-mix(in srgb, var(--accent) 50%, transparent)"
+              class="c-accent-50"
             >Nessun numero di telefono o account necessario</div>
           </div>
         </div>
@@ -1406,7 +1430,7 @@
         <!-- Scene 3: Connected -->
         <div class="v-scene" data-scene="3">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--success)">
+            <div class="v-fade v-d1 v-label c-success">
               Scambio di contatti
             </div>
             <div class="v-fade v-d2 v-heading">Entrambi i telefoni ora contengono la scheda di contatto crittografata dell'altro.</div>
@@ -1415,20 +1439,18 @@
                 <div class="v-micro">YOUR PHONE</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 8px 0">
+                  <div class="v-phone-screen pad-v8">
                     <div class="v-contact glow">
                       <div class="v-contact-avatar">A</div>
                       <div>
                         <div class="v-contact-name">Alex Rivera</div>
                         <div
-                          class="v-contact-detail"
-                          style="color: var(--success)"
+                          class="v-contact-detail c-success"
                         >
                           +1 555-8832 · alex@company.io
                         </div>
                         <div
-                          class="v-contact-sub"
-                          style="color: var(--success)"
+                          class="v-contact-sub c-success"
                         >
                           @alex.r
                         </div>
@@ -1441,20 +1463,18 @@
                 <div class="v-micro">ALEX'S PHONE</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 8px 0">
+                  <div class="v-phone-screen pad-v8">
                     <div class="v-contact glow">
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
                         <div
-                          class="v-contact-detail"
-                          style="color: var(--success)"
+                          class="v-contact-detail c-success"
                         >
                           +1 555-0123 · you@email.com
                         </div>
                         <div
-                          class="v-contact-sub"
-                          style="color: var(--success)"
+                          class="v-contact-sub c-success"
                         >
                           @yourhandle
                         </div>
@@ -1466,7 +1486,7 @@
             </div>
             <div
               class="v-fade v-d4 v-sub"
-              style="color: color-mix(in srgb, var(--success) 50%, transparent)"
+              class="c-success-50"
             >scambia una volta &#x2014; resta connesso</div>
           </div>
         </div>
@@ -1474,18 +1494,18 @@
         <!-- Scene 4: &#x2713; Exchanged -->
         <div class="v-scene" data-scene="4">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent)">Aggiornamenti silenziosi</div>
+            <div class="v-fade v-d1 v-label c-accent">Aggiornamenti silenziosi</div>
             <div class="v-fade v-d2 v-heading">Quando cambiano i tuoi dati, i telefoni dei tuoi amici si aggiornano automaticamente. Nessuna notifica, nessun rumore.</div>
             <div class="v-fade v-d3 v-row tight">
               <div class="v-phone-wrap">
                 <div class="v-micro">YOU UPDATE</div>
                 <div class="v-phone sm">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 6px 0">
+                  <div class="v-phone-screen pad-v6">
                     <div
                       class="v-status"
                       id="status4a"
-                      style="color: var(--text-secondary)"
+                      class="c-muted"
                     >
                       editing...
                     </div>
@@ -1496,14 +1516,14 @@
                         <div
                           class="v-contact-detail"
                           id="detail4a"
-                          style="color: var(--text-secondary)"
+                          class="c-muted"
                         >
                           +1 555-0123
                         </div>
                         <div
                           class="v-contact-sub"
                           id="sub4a"
-                          style="color: var(--text-secondary)"
+                          class="c-muted"
                         >
                           you@email.com
                         </div>
@@ -1553,11 +1573,11 @@
                 <div class="v-micro">ALEX SEES</div>
                 <div class="v-phone sm">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 6px 0">
+                  <div class="v-phone-screen pad-v6">
                     <div
                       class="v-status"
                       id="status4b"
-                      style="color: var(--text-secondary)"
+                      class="c-muted"
                     >
                       waiting...
                     </div>
@@ -1568,14 +1588,14 @@
                         <div
                           class="v-contact-detail"
                           id="detail4b"
-                          style="color: var(--text-secondary)"
+                          class="c-muted"
                         >
                           +1 555-0123
                         </div>
                         <div
                           class="v-contact-sub"
                           id="sub4b"
-                          style="color: var(--text-secondary)"
+                          class="c-muted"
                         >
                           you@email.com
                         </div>
@@ -1587,13 +1607,7 @@
             </div>
             <div
               class="v-fade v-d8 v-sub"
-              style="
-                color: color-mix(
-                  in srgb,
-                  var(--text-secondary) 60%,
-                  transparent
-                );
-              "
+              class="c-muted-60"
             >indipendentemente da cosa cambia</div>
           </div>
         </div>
@@ -1601,27 +1615,25 @@
         <!-- Scene 5: Aggiornamenti silenziosi -->
         <div class="v-scene" data-scene="5">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">Libertà di piattaforma</div>
+            <div class="v-fade v-d1 v-label c-accent-dark">Libertà di piattaforma</div>
             <div class="v-fade v-d2 v-heading">Cambi social network? Provider email? I tuoi contatti restano connessi alla tua identità, non a una piattaforma.</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
                 <div class="v-micro">BEFORE</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 8px 0">
+                  <div class="v-phone-screen pad-v8">
                     <div class="v-contact">
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
                         <div
-                          class="v-contact-detail strike"
-                          style="color: var(--error)"
+                          class="v-contact-detail strike c-error"
                         >
                           @old_handle
                         </div>
                         <div
-                          class="v-contact-sub strike"
-                          style="color: var(--error)"
+                          class="v-contact-sub strike c-error"
                         >
                           you@oldmail.com
                         </div>
@@ -1634,20 +1646,18 @@
                 <div class="v-micro">AFTER</div>
                 <div class="v-phone med">
                   <div class="v-phone-notch"></div>
-                  <div class="v-phone-screen" style="padding: 8px 0">
+                  <div class="v-phone-screen pad-v8">
                     <div class="v-contact glow">
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
                         <div
-                          class="v-contact-detail"
-                          style="color: var(--success)"
+                          class="v-contact-detail c-success"
                         >
                           @new_handle
                         </div>
                         <div
-                          class="v-contact-sub"
-                          style="color: var(--success)"
+                          class="v-contact-sub c-success"
                         >
                           you@newmail.com
                         </div>
@@ -1659,9 +1669,7 @@
             </div>
             <div
               class="v-fade v-d5 v-sub"
-              style="
-                color: color-mix(in srgb, var(--accent-dark) 50%, transparent);
-              "
+              class="c-accent-dark-50"
             >aggiorna una volta &#x2014; tutti vedono il cambiamento</div>
           </div>
         </div>
@@ -1669,7 +1677,7 @@
         <!-- Scene 6: Libertà di piattaforma -->
         <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--warning)">Privacy granulare</div>
+            <div class="v-fade v-d1 v-label c-warning">Privacy granulare</div>
             <div class="v-fade v-d2 v-heading">Condividi i dati di lavoro con i colleghi e l'indirizzo di casa con la famiglia &#x2014; tutto da un'unica identità.</div>
             <div
               class="v-fade v-d3 v-row"
@@ -1680,12 +1688,11 @@
                 <div class="v-priv-card">
                   <div class="v-priv-name">You</div>
                   <div
-                    class="v-priv-line"
-                    style="color: var(--success); margin-top: 4px"
+                    class="v-priv-line c-success-mt"
                   >
                     +1 555-WORK
                   </div>
-                  <div class="v-priv-line" style="color: var(--success)">
+                  <div class="v-priv-line c-success">
                     you@company.io · @you_work
                   </div>
                   <div
@@ -1703,15 +1710,14 @@
                 <div class="v-priv-card">
                   <div class="v-priv-name">You</div>
                   <div
-                    class="v-priv-line"
-                    style="color: var(--success); margin-top: 4px"
+                    class="v-priv-line c-success-mt"
                   >
                     +1 555-HOME
                   </div>
-                  <div class="v-priv-line" style="color: var(--success)">
+                  <div class="v-priv-line c-success">
                     you@personal.me · @you_personal
                   </div>
-                  <div class="v-priv-line" style="color: var(--success)">
+                  <div class="v-priv-line c-success">
                     123 Home Street
                   </div>
                 </div>
@@ -1719,13 +1725,7 @@
             </div>
             <div
               class="v-fade v-d5 v-sub"
-              style="
-                color: color-mix(
-                  in srgb,
-                  var(--text-secondary) 60%,
-                  transparent
-                );
-              "
+              class="c-muted-60"
             >tu controlli la visibilità</div>
           </div>
         </div>
@@ -1733,12 +1733,12 @@
         <!-- Scene 7: Privacy granulare -->
         <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">Recupero fisico</div>
+            <div class="v-fade v-d1 v-label c-accent-dark">Recupero fisico</div>
             <div class="v-fade v-d2 v-heading">Nessun feed, nessun profilo, nessun grafo sociale.</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-col">
                 <div class="v-icon-box red">&#x1F4F1;</div>
-                <div class="v-micro" style="color: var(--error)">dispositivo perso</div>
+                <div class="v-micro c-error">dispositivo perso</div>
               </div>
               <svg
                 class="v-arrow"
@@ -1762,7 +1762,7 @@
                   <div class="v-trust-dot" id="trust1">&#x1F464;</div>
                   <div class="v-trust-dot" id="trust2">&#x1F464;</div>
                 </div>
-                <div class="v-micro" style="color: var(--accent)">cerchia di fiducia</div>
+                <div class="v-micro c-accent">cerchia di fiducia</div>
               </div>
               <svg
                 class="v-arrow"
@@ -1787,7 +1787,7 @@
                 <div
                   class="v-micro"
                   id="recovery-label"
-                  style="color: var(--text-secondary)"
+                  class="c-muted"
                 >
                   nuovo dispositivo
                 </div>
@@ -1795,13 +1795,7 @@
             </div>
             <div
               class="v-fade v-d7 v-sub"
-              style="
-                color: color-mix(
-                  in srgb,
-                  var(--text-secondary) 60%,
-                  transparent
-                );
-              "
+              class="c-muted-60"
             >verifica di persona &#x2014; nessun cloud, nessuna password</div>
           </div>
         </div>
@@ -1809,41 +1803,38 @@
         <!-- Scene 8: Recupero fisico -->
         <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--success)">Zero piattaforme</div>
+            <div class="v-fade v-d1 v-label c-success">Zero piattaforme</div>
             <div class="v-fade v-d2 v-heading">vauchi</div>
             <div class="v-fade v-d3 v-row" style="gap: 24px">
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
-                  <span style="font-size: 24px">&#x1F4E1;</span>
+                  <span class="fs-emoji">&#x1F4E1;</span>
                 </div>
                 <div
-                  class="v-micro"
-                  style="color: var(--error); text-decoration: line-through"
+                  class="v-micro c-error-strike"
                 >feed</div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
-                  <span style="font-size: 24px">&#x1F464;</span>
+                  <span class="fs-emoji">&#x1F464;</span>
                 </div>
                 <div
-                  class="v-micro"
-                  style="color: var(--error); text-decoration: line-through"
+                  class="v-micro c-error-strike"
                 >profili</div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
-                  <span style="font-size: 24px">&#x1F578;&#xFE0F;</span>
+                  <span class="fs-emoji">&#x1F578;&#xFE0F;</span>
                 </div>
                 <div
-                  class="v-micro"
-                  style="color: var(--error); text-decoration: line-through"
+                  class="v-micro c-error-strike"
                 >grafo sociale</div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box green">
-                  <span style="font-size: 24px">&#x1F4D6;</span>
+                  <span class="fs-emoji">&#x1F4D6;</span>
                 </div>
-                <div class="v-micro" style="color: var(--success)">open source</div>
+                <div class="v-micro c-success">open source</div>
               </div>
             </div>
             <div class="v-fade v-d5 v-caption">L’ultima volta che scambierai le tue informazioni di contatto.</div>
@@ -1859,7 +1850,7 @@
                 alt="Vauchi"
                 width="56"
                 height="56"
-                style="border-radius: 14px"
+                class="br-14"
               />
             </div>
             <div class="v-fade v-d2 v-heading lg">vauchi</div>
@@ -1924,7 +1915,7 @@
           &#x25B6;&#xFE0E;&ensp;Scopri come funziona
         </button>
         <!-- Dot navigation (hidden until play, then replaces CTA) -->
-        <div class="v-dots-nav" id="controls" style="display: none"></div>
+        <div class="v-dots-nav" id="controls" class="hidden"></div>
       </div>
 
       <footer class="footer" style="flex-direction: column; gap: 14px">
@@ -2006,22 +1997,22 @@
               "
               >EN</a
             >
-            <span style="color: var(--border)">·</span>
+            <span class="c-border">·</span>
             <a
               href="/fr/"
-              style="color: var(--text-secondary); text-decoration: none"
+              class="c-muted-no-underline"
               >FR</a
             >
-            <span style="color: var(--border)">·</span>
+            <span class="c-border">·</span>
             <a
               href="/de/"
-              style="color: var(--text-secondary); text-decoration: none"
+              class="c-muted-no-underline"
               >DE</a
             >
-            <span style="color: var(--border)">·</span>
+            <span class="c-border">·</span>
             <a
               href="/it/"
-              style="color: var(--text-secondary); text-decoration: none"
+              class="c-muted-no-underline"
               >IT</a
             >
           </div>
