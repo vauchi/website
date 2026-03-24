@@ -95,21 +95,7 @@
     }
     </script>
     {% if is_default %}
-    <script>
-      // Auto-redirect to user's preferred language (no cookies, no tracking).
-      (function () {
-        if (window.location.pathname !== "/") return;
-        try {
-          if (sessionStorage.getItem("vauchi-lang-checked")) return;
-          sessionStorage.setItem("vauchi-lang-checked", "1");
-        } catch (e) {
-          return;
-        }
-        var lang = (navigator.language || "").toLowerCase().split("-")[0];
-        var supported = { fr: "/fr/", de: "/de/", it: "/it/" };
-        if (supported[lang]) window.location.replace(supported[lang]);
-      })();
-    </script>
+    <script src="/js/lang-redirect.js"></script>
     {% endif %}
     <style>
       :root {
@@ -1276,7 +1262,7 @@
               class="v-fade v-d5 v-sub"
               style="color: color-mix(in srgb, var(--error) 50%, transparent)"
             >
-              sound familiar?
+              {{ t['scene1.sub'] }}
             </div>
           </div>
         </div>
@@ -1284,9 +1270,7 @@
         <!-- Scene 2: Exchange -->
         <div class="v-scene" data-scene="2">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent)">
-              Contact Exchange
-            </div>
+            <div class="v-fade v-d1 v-label" style="color: var(--accent)">{{ t['scene2.label_text'] }}</div>
             <div class="v-fade v-d2 v-heading">{{ t['scene2.heading'] }}</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-phone-wrap">
@@ -1417,9 +1401,7 @@
             <div
               class="v-fade v-d6 v-sub"
               style="color: color-mix(in srgb, var(--accent) 50%, transparent)"
-            >
-              No phone number or account needed
-            </div>
+            >{{ t['scene2.sub'] }}</div>
           </div>
         </div>
 
@@ -1487,18 +1469,14 @@
             <div
               class="v-fade v-d4 v-sub"
               style="color: color-mix(in srgb, var(--success) 50%, transparent)"
-            >
-              exchange once &#x2014; stay connected
-            </div>
+            >{{ t['scene3.sub'] }}</div>
           </div>
         </div>
 
         <!-- Scene 4: {{ t['scene4.label'] }} -->
         <div class="v-scene" data-scene="4">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent)">
-              Silent Updates
-            </div>
+            <div class="v-fade v-d1 v-label" style="color: var(--accent)">{{ t['scene4.label_text'] }}</div>
             <div class="v-fade v-d2 v-heading">{{ t['scene4.heading'] }}</div>
             <div class="v-fade v-d3 v-row tight">
               <div class="v-phone-wrap">
@@ -1618,18 +1596,14 @@
                   transparent
                 );
               "
-            >
-              no matter what changes
-            </div>
+            >{{ t['scene4.sub'] }}</div>
           </div>
         </div>
 
         <!-- Scene 5: {{ t['scene5.label'] }} -->
         <div class="v-scene" data-scene="5">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
-              Platform Freedom
-            </div>
+            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">{{ t['scene5.label_text'] }}</div>
             <div class="v-fade v-d2 v-heading">{{ t['scene5.heading'] }}</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
@@ -1690,18 +1664,14 @@
               style="
                 color: color-mix(in srgb, var(--accent-dark) 50%, transparent);
               "
-            >
-              update once &#x2014; everyone sees the change
-            </div>
+            >{{ t['scene5.sub'] }}</div>
           </div>
         </div>
 
         <!-- Scene 6: {{ t['scene6.label'] }} -->
         <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--warning)">
-              Granular Privacy
-            </div>
+            <div class="v-fade v-d1 v-label" style="color: var(--warning)">{{ t['scene6.label_text'] }}</div>
             <div class="v-fade v-d2 v-heading">{{ t['scene6.heading'] }}</div>
             <div
               class="v-fade v-d3 v-row"
@@ -1727,9 +1697,7 @@
                       margin-top: 3px;
                       font-style: italic;
                     "
-                  >
-                    &#x1F512; address, personal social hidden
-                  </div>
+                  >{{ t['scene6.priv_hidden'] }}</div>
                 </div>
               </div>
               <div class="v-col" style="gap: 4px">
@@ -1760,25 +1728,19 @@
                   transparent
                 );
               "
-            >
-              you control the visibility
-            </div>
+            >{{ t['scene6.sub'] }}</div>
           </div>
         </div>
 
         <!-- Scene 7: {{ t['scene7.label'] }} -->
         <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">
-              Physical Recovery
-            </div>
+            <div class="v-fade v-d1 v-label" style="color: var(--accent-dark)">{{ t['scene7.label_text'] }}</div>
             <div class="v-fade v-d2 v-heading">{{ t['scene7.heading'] }}</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-col">
                 <div class="v-icon-box red">&#x1F4F1;</div>
-                <div class="v-micro" style="color: var(--error)">
-                  lost device
-                </div>
+                <div class="v-micro" style="color: var(--error)">{{ t['scene7.lost'] }}</div>
               </div>
               <svg
                 class="v-arrow"
@@ -1802,9 +1764,7 @@
                   <div class="v-trust-dot" id="trust1">&#x1F464;</div>
                   <div class="v-trust-dot" id="trust2">&#x1F464;</div>
                 </div>
-                <div class="v-micro" style="color: var(--accent)">
-                  trusted circle
-                </div>
+                <div class="v-micro" style="color: var(--accent)">{{ t['scene7.trusted'] }}</div>
               </div>
               <svg
                 class="v-arrow"
@@ -1831,7 +1791,7 @@
                   id="recovery-label"
                   style="color: var(--text-secondary)"
                 >
-                  new device
+                  {{ t['scene7.new'] }}
                 </div>
               </div>
             </div>
@@ -1844,18 +1804,14 @@
                   transparent
                 );
               "
-            >
-              in-person verification &#x2014; no cloud, no passwords
-            </div>
+            >{{ t['scene7.sub'] }}</div>
           </div>
         </div>
 
         <!-- Scene 8: {{ t['scene8.label'] }} -->
         <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label" style="color: var(--success)">
-              Zero Platform
-            </div>
+            <div class="v-fade v-d1 v-label" style="color: var(--success)">{{ t['scene8.label_text'] }}</div>
             <div class="v-fade v-d2 v-heading">{{ t['scene8.heading'] }}</div>
             <div class="v-fade v-d3 v-row" style="gap: 24px">
               <div class="v-col" style="gap: 8px">
@@ -1865,9 +1821,7 @@
                 <div
                   class="v-micro"
                   style="color: var(--error); text-decoration: line-through"
-                >
-                  feeds
-                </div>
+                >{{ t['scene8.feeds'] }}</div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
@@ -1876,9 +1830,7 @@
                 <div
                   class="v-micro"
                   style="color: var(--error); text-decoration: line-through"
-                >
-                  profiles
-                </div>
+                >{{ t['scene8.profiles'] }}</div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
@@ -1887,17 +1839,13 @@
                 <div
                   class="v-micro"
                   style="color: var(--error); text-decoration: line-through"
-                >
-                  social graph
-                </div>
+                >{{ t['scene8.social_graph'] }}</div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box green">
                   <span style="font-size: 24px">&#x1F4D6;</span>
                 </div>
-                <div class="v-micro" style="color: var(--success)">
-                  open source
-                </div>
+                <div class="v-micro" style="color: var(--success)">{{ t['scene8.open_source'] }}</div>
               </div>
             </div>
             <div class="v-fade v-d5 v-caption">{{ t['hero.caption'] }}</div>
