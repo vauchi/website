@@ -49,15 +49,19 @@ lint:html:
         - "public/**/*.html"
     - if: $CI_COMMIT_BRANCH == "main"
 
-# Lint nginx config
+# Lint nginx config (validates snippet inside the real nginx:alpine config)
 lint:nginx:
   stage: lint
   tags: [docker]
   image: nginx:alpine
   script:
-    - nginx -t -c /dev/stdin < nginx.conf
+    - cp nginx.conf /etc/nginx/conf.d/default.conf
+    - nginx -t
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - nginx.conf
+        - Dockerfile
     - if: $CI_COMMIT_BRANCH == "main"
 
 # Validate app-files content against schemas
