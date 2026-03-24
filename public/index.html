@@ -4,47 +4,90 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="https://vauchi.app/"
-    />
-    <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/" />
-    <link rel="alternate" hreflang="de" href="https://vauchi.app/de/" />
-    <link rel="alternate" hreflang="it" href="https://vauchi.app/it/" />
-    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin>
+    <link rel="alternate" hreflang="en" href="https://vauchi.app/">
+    <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/">
+    <link rel="alternate" hreflang="de" href="https://vauchi.app/de/">
+    <link rel="alternate" hreflang="it" href="https://vauchi.app/it/">
+    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/">
     <title>Vauchi - Privacy-First Contact Exchange</title>
-    <meta name="description" content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source." />
-    <meta name="author" content="Vauchi" />
-    <meta name="theme-color" content="#4fc3f7" />
-    <link rel="canonical" href="https://vauchi.app/" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json" />
+    <meta name="description" content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source.">
+    <meta name="author" content="Vauchi">
+    <meta name="theme-color" content="#4fc3f7">
+    <link rel="canonical" href="https://vauchi.app/">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://vauchi.app/" />
-    <meta property="og:title" content="Vauchi - Privacy-First Contact Exchange" />
-    <meta property="og:description" content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source." />
-    <meta property="og:image" content="https://vauchi.app/icon-512.png" />
-    <meta property="og:locale" content="en" />
-    <meta property="og:locale:alternate" content="fr" />
-    <meta property="og:locale:alternate" content="de" />
-    <meta property="og:locale:alternate" content="it" />
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vauchi.app/">
+    <meta property="og:title" content="Vauchi - Privacy-First Contact Exchange">
+    <meta property="og:description" content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source.">
+    <meta property="og:image" content="https://vauchi.app/social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Vauchi">
+    <meta property="og:locale" content="en">
+    <meta property="og:locale:alternate" content="fr">
+    <meta property="og:locale:alternate" content="de">
+    <meta property="og:locale:alternate" content="it">
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta
-      name="twitter:title"
-      content="Vauchi - Privacy-First The Problem"
-    />
-    <meta
-      name="twitter:description"
-      content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source."
-    />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vauchi - Privacy-First Contact Exchange">
+    <meta name="twitter:description" content="Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source.">
+    <meta name="twitter:image" content="https://vauchi.app/social-preview.png">
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Vauchi",
+      "url": "https://vauchi.app",
+      "logo": "https://vauchi.app/icon-512.png",
+      "sameAs": [
+        "https://gitlab.com/vauchi",
+        "https://github.com/vauchi"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hello@vauchi.app",
+        "contactType": "customer support"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Vauchi",
+      "url": "https://vauchi.app",
+      "inLanguage": ["en", "fr", "de", "it"]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Vauchi",
+      "description": "Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source.",
+      "applicationCategory": "CommunicationApplication",
+      "operatingSystem": "iOS, Android, macOS, Windows, Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "license": "https://spdx.org/licenses/GPL-3.0-or-later.html",
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Organization",
+        "name": "Vauchi"
+      }
+    }
+    </script>
     
     <script>
       // Auto-redirect to user's preferred language (no cookies, no tracking).
@@ -1925,7 +1968,7 @@
           </div>
         </div>
         <!-- CTA button (shown on intro, replaced by dots on play) -->
-        <button class="v-hero-cta" id="hero-play" aria-label="Play explainer">
+        <button class="v-hero-cta" id="hero-play" aria-label="&#x25B6;&#xFE0E;&ensp;Find out how it works">
           &#x25B6;&#xFE0E;&ensp;Find out how it works
         </button>
         <!-- Dot navigation (hidden until play, then replaces CTA) -->

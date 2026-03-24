@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap');
+    </style>
+  </defs>
+  <!-- Background: Catppuccin Mocha Base -->
+  <rect width="1200" height="630" fill="#1e1e2e"/>
+  <!-- Accent gradient strip at top -->
+  <rect width="1200" height="4" fill="#4fc3f7"/>
+  <!-- Logo area: simple shield shape -->
+  <g transform="translate(600, 220)">
+    <circle cx="0" cy="0" r="64" fill="none" stroke="#4fc3f7" stroke-width="3" opacity="0.3"/>
+    <circle cx="0" cy="0" r="48" fill="none" stroke="#4fc3f7" stroke-width="2" opacity="0.5"/>
+    <text x="0" y="16" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="48" font-weight="700" fill="#cdd6f4">V</text>
+  </g>
+  <!-- Brand name -->
+  <text x="600" y="340" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="56" font-weight="700" fill="#cdd6f4">Vauchi</text>
+  <!-- Tagline -->
+  <text x="600" y="390" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" fill="#a6adc8">Exchange contacts once. They update themselves.</text>
+  <!-- Features bar -->
+  <text x="600" y="450" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="16" fill="#6c7086">End-to-End Encrypted · No Accounts · Open Source · Free</text>
+  <!-- Platform icons text -->
+  <text x="600" y="520" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" fill="#585b70">iOS · Android · macOS · Windows · Linux</text>
+</svg>
