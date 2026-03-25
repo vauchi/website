@@ -53,7 +53,7 @@ lint:html:
         - "public/**/*.html"
     - if: $CI_COMMIT_BRANCH == "main"
 
-# Lint nginx config (validates snippet inside the real nginx:alpine config)
+# Lint nginx config (validates snippet inside the real nginx:1.27-alpine config)
 lint:nginx:
   stage: lint
   tags: [docker]
