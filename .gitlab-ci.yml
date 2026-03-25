@@ -79,10 +79,10 @@ lint:content:
     - python scripts/validate-content.py
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - changes:
+      changes:
         - app-files-src/**/*
         - scripts/**/*
+    - if: $CI_COMMIT_BRANCH == "main"
 
 # E2E tests — theme toggle & language switching
 # Uses node:22-bookworm (~300MB) instead of playwright:noble (~2.3GB).
@@ -129,10 +129,10 @@ build:content:
     expire_in: 1 week
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - changes:
+      changes:
         - app-files-src/**/*
         - scripts/**/*
+    - if: $CI_COMMIT_BRANCH == "main"
 
 # Sign content manifest with Ed25519 (main only)
 sign:content:
