@@ -22,6 +22,7 @@ include:
     ref: main
     file:
       - '/ci-templates/reuse.yml'
+      - '/ci-templates/image-lint.yml'
       - '/ci-templates/badges.yml'
 
 variables:
@@ -33,6 +34,9 @@ stages:
   - build
   - scan
   - deploy
+
+lint:images:
+  extends: .image-lint
 
 # Lint HTML files
 lint:html:
