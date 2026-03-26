@@ -385,7 +385,7 @@
   "faq.how_updates_work.question": "Como llegan las actualizaciones a mis contactos?",
   "faq.multiple_devices.answer": "Si! Vincula tus dispositivos en Ajustes:\n\n1. Instala Vauchi en el nuevo dispositivo\n2. Elige 'Vincular a identidad existente'\n3. En el dispositivo original, ve a Ajustes > Dispositivos > Vincular dispositivo\n4. Escanea el codigo QR en el nuevo dispositivo\n\nTus contactos y ajustes se sincronizaran.",
   "faq.multiple_devices.question": "Puedo usar Vauchi en multiples dispositivos?",
-  "faq.offline_updates.answer": "Vauchi maneja la desconexion con elegancia:\n\n**Cuando estas sin conexion:**\n- Tus cambios se guardan localmente\n- Se enviaran cuando te reconectes\n\n**Cuando tus contactos estan sin conexion:**\n- Las actualizaciones esperan en el relay\n- Se entregan al reconectarse\n- Sin perdida de datos\n\nEl relay almacena mensajes cifrados hasta 30 dias.",
+  "faq.offline_updates.answer": "Vauchi maneja la desconexion con elegancia:\n\n**Cuando estas sin conexion:**\n- Tus cambios se guardan localmente\n- Se enviaran cuando te reconectes\n\n**Cuando tus contactos estan sin conexion:**\n- Las actualizaciones esperan en el relay\n- Se entregan al reconectarse\n- Sin perdida de datos\n\nEl relay almacena mensajes cifrados hasta 120 dias.",
   "faq.offline_updates.question": "Que pasa cuando estoy sin conexion?",
   "faq.phone_lost.answer": "Tu identidad puede recuperarse mediante Recuperacion Social. Si has configurado contactos de recuperacion, reunete con 3 o mas de ellos en persona. Pueden responder por ti y tu identidad sera restaurada.\n\nPara configurar: Ve a Ajustes > Recuperacion > Agregar contactos.",
   "faq.phone_lost.question": "Que pasa si pierdo mi telefono?",

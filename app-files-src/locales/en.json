@@ -385,7 +385,7 @@
   "faq.how_updates_work.question": "How do updates reach my contacts?",
   "faq.multiple_devices.answer": "Yes! Link your devices in Settings:\n\n1. On your new device, install Vauchi\n2. Choose 'Link to Existing Identity'\n3. On your original device, go to Settings > Devices > Link Device\n4. Scan the QR code on your new device\n\nYour contacts, cards, and settings will sync across devices.",
   "faq.multiple_devices.question": "Can I use Vauchi on multiple devices?",
-  "faq.offline_updates.answer": "Vauchi handles offline gracefully:\n\n**When you go offline:**\n- Your edits are saved locally\n- They'll be sent when you reconnect\n\n**When contacts are offline:**\n- Updates queue on the relay\n- Delivered when they reconnect\n- No data loss\n\nThe relay stores encrypted messages for up to 30 days.",
+  "faq.offline_updates.answer": "Vauchi handles offline gracefully:\n\n**When you go offline:**\n- Your edits are saved locally\n- They'll be sent when you reconnect\n\n**When contacts are offline:**\n- Updates queue on the relay\n- Delivered when they reconnect\n- No data loss\n\nThe relay stores encrypted messages for up to 120 days.",
   "faq.offline_updates.question": "What happens when I'm offline?",
   "faq.phone_lost.answer": "Your identity can be recovered through Social Recovery. If you've set up recovery contacts, meet 3 or more of them in person. They can vouch for you, and your identity will be restored.\n\nTo set up recovery: Go to Settings > Recovery > Add Recovery Contacts.",
   "faq.phone_lost.question": "What happens if I lose my phone?",
