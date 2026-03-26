@@ -20,8 +20,6 @@ keys/
 # Public verification keys are served from .well-known (RFC 8615)
 !public/.well-known/cosign.pub
 !public/.well-known/cosign.pub.license
-!public/.well-known/cosign.pub.md5
-!public/.well-known/cosign.pub.md5.license
 
 # Node / Playwright
 node_modules/
