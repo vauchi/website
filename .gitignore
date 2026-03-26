@@ -17,12 +17,11 @@ venv/
 
 # Signing keys — NEVER commit private keys
 keys/
-# Public verification keys are safe to commit
-!public/keys/
-!public/keys/cosign.pub
-!public/keys/cosign.pub.license
-!public/keys/cosign.pub.md5
-!public/keys/cosign.pub.md5.license
+# Public verification keys are served from .well-known (RFC 8615)
+!public/.well-known/cosign.pub
+!public/.well-known/cosign.pub.license
+!public/.well-known/cosign.pub.md5
+!public/.well-known/cosign.pub.md5.license
 
 # Node / Playwright
 node_modules/
