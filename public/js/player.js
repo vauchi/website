@@ -446,6 +446,34 @@
     controls.style.display = "flex";
   }
 
+  // Touch swipe navigation
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var SWIPE_THRESHOLD = 50;
+
+  player.addEventListener("touchstart", function (e) {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  player.addEventListener("touchend", function (e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+
+    // Only act on horizontal swipes (ignore vertical scroll)
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dy) > Math.abs(dx)) return;
+
+    if (dx < 0 && current < TOTAL - 1) {
+      // Swipe left → next slide
+      goTo(current + 1);
+      showDots();
+    } else if (dx > 0 && current > 0) {
+      // Swipe right → previous slide
+      goTo(current - 1);
+      showDots();
+    }
+  }, { passive: true });
+
   // Init — show intro scene statically (no autoplay)
   showScene(0);
   updateProgress();
