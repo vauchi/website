@@ -73,9 +73,9 @@ lint:nginx:
 lint:content:
   stage: lint
   tags: [docker]
-  image: python:3.11-slim
+  image: ghcr.io/astral-sh/uv:python3.11-bookworm-slim
   before_script:
-    - pip install --quiet uv && uv pip install --system --quiet jsonschema
+    - uv pip install --system --quiet jsonschema
   script:
     - python scripts/validate-content.py
   rules:
@@ -120,7 +120,7 @@ test:e2e:
 build:content:
   stage: build
   tags: [docker]
-  image: python:3.11-slim
+  image: ghcr.io/astral-sh/uv:python3.11-bookworm-slim
   script:
     - python scripts/build-manifest.py --version "${CONTENT_VERSION:-1.0.0}"
       --base-url "https://cdn.vauchi.app/v1/"
@@ -139,10 +139,10 @@ build:content:
 sign:content:
   stage: build
   tags: [docker]
-  image: python:3.11-slim
+  image: ghcr.io/astral-sh/uv:python3.11-bookworm-slim
   needs: ["build:content"]
   before_script:
-    - pip install --quiet uv && uv pip install --system --quiet PyNaCl
+    - uv pip install --system --quiet PyNaCl
   script:
     - |
       if [ -z "${CONTENT_SIGNING_KEY:-}" ]; then
