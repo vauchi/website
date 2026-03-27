@@ -75,7 +75,7 @@ lint:content:
   tags: [docker]
   image: python:3.11-slim
   before_script:
-    - pip install --quiet jsonschema
+    - pip install --quiet uv && uv pip install --system --quiet jsonschema
   script:
     - python scripts/validate-content.py
   rules:
@@ -142,7 +142,7 @@ sign:content:
   image: python:3.11-slim
   needs: ["build:content"]
   before_script:
-    - pip install --quiet PyNaCl
+    - pip install --quiet uv && uv pip install --system --quiet PyNaCl
   script:
     - |
       if [ -z "${CONTENT_SIGNING_KEY:-}" ]; then
