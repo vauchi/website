@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# typos spell checker configuration for website repo
+#
+# Non-English locale files (de, fr, es, it) contain correct foreign words
+# that the English spell checker flags as typos. We disable typos checking
+# for all locale JSON files and rely on the validation script
+# (scripts/validate.py --strict) for locale quality instead.
+
+[type.json]
+check-file = false
