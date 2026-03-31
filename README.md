@@ -3,7 +3,7 @@
 
 > **Mirror:** This repo is a read-only mirror of [gitlab.com/vauchi/website](https://gitlab.com/vauchi/website). Please open issues and merge requests there.
 
-[![Pipeline](https://vauchi.gitlab.io/website/badges/pipeline.svg)](https://gitlab.com/vauchi/website/-/pipelines)
+[![Pipeline](https://img.shields.io/endpoint?url=https://vauchi.gitlab.io/website/badges/pipeline.json&label=pipeline)](https://gitlab.com/vauchi/website/-/pipelines)
 [![REUSE](https://api.reuse.software/badge/gitlab.com/vauchi/website)](https://api.reuse.software/info/gitlab.com/vauchi/website)
 
 # Vauchi Website
@@ -30,11 +30,14 @@ Required for `validate-content.py` schema validation.
 
 ## Overview
 
-Static website explaining what Vauchi is and linking to app downloads. Also serves dynamic app content (locales, themes, networks) via JSON manifests with checksums.
+Static website explaining what Vauchi is and linking
+to app downloads. Also serves dynamic app content
+(locales, themes, networks) via JSON manifests with
+checksums.
 
 ## Structure
 
-```
+```text
 website/
 ├── public/                    # Static files served by nginx
 │   ├── index.html             # Main landing page
