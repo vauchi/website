@@ -58,7 +58,7 @@ lint:html:
 lint:nginx:
   stage: lint
   tags: [docker]
-  image: nginx:1.27-alpine
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/nginx:1.27-alpine
   script:
     - cp nginx.conf /etc/nginx/conf.d/default.conf
     - nginx -t
@@ -91,7 +91,7 @@ lint:content:
 test:e2e:
   stage: test
   tags: [docker]
-  image: node:22-bookworm
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/node:22-bookworm
   needs: []
   before_script:
     - npm ci
@@ -170,9 +170,9 @@ sign:content:
 build:docker:
   stage: build
   tags: [docker]
-  image: docker:27
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27
   services:
-    - docker:27-dind
+    - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27-dind
   variables:
     DOCKER_BUILDKIT: "1"
   script:
@@ -253,9 +253,9 @@ deploy:trigger:
 build:cdn-docker:
   stage: build
   tags: [docker]
-  image: docker:27
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27
   services:
-    - docker:27-dind
+    - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27-dind
   needs:
     - job: sign:content
       optional: true
