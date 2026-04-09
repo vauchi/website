@@ -4,95 +4,101 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin>
-    <link rel="alternate" hreflang="en" href="https://vauchi.app/">
-    <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/">
-    <link rel="alternate" hreflang="de" href="https://vauchi.app/de/">
-    <link rel="alternate" hreflang="it" href="https://vauchi.app/it/">
-    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin />
+    <link rel="alternate" hreflang="en" href="https://vauchi.app/" />
+    <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/" />
+    <link rel="alternate" hreflang="de" href="https://vauchi.app/de/" />
+    <link rel="alternate" hreflang="it" href="https://vauchi.app/it/" />
+    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/" />
     <title>{{ t['meta.title'] }}</title>
-    <meta name="description" content="{{ t['meta.description'] }}">
-    <meta name="author" content="Vauchi">
-    <meta name="theme-color" content="#4fc3f7">
-    <link rel="canonical" href="https://vauchi.app/{% if not is_default %}{{ lang }}/{% endif %}">
-    <link rel="icon" href="/favicon.ico" sizes="32x32">
-    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/manifest.json">
+    <meta name="description" content="{{ t['meta.description'] }}" />
+    <meta name="author" content="Vauchi" />
+    <meta name="theme-color" content="#4fc3f7" />
+    <link
+      rel="canonical"
+      href="https://vauchi.app/{% if not is_default %}{{ lang }}/{% endif %}"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
     <!-- Dublin Core (DCMI Terms) -->
-    <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
-    <meta name="dcterms.title" content="{{ t['meta.title'] }}">
-    <meta name="dcterms.description" content="{{ t['meta.description'] }}">
-    <meta name="dcterms.creator" content="Mattia Egloff">
-    <meta name="dcterms.publisher" content="Vauchi">
-    <meta name="dcterms.type" content="Software">
-    <meta name="dcterms.language" content="{{ lang }}">
-    <meta name="dcterms.license" content="https://spdx.org/licenses/GPL-3.0-or-later.html">
-    <meta name="dcterms.rights" content="GPL-3.0-or-later">
-    <meta name="dcterms.subject" content="privacy, contacts, encryption, open-source">
+    <link rel="schema.dcterms" href="https://purl.org/dc/terms/" />
+    <meta name="dcterms.title" content="{{ t['meta.title'] }}" />
+    <meta name="dcterms.description" content="{{ t['meta.description'] }}" />
+    <meta name="dcterms.creator" content="Mattia Egloff" />
+    <meta name="dcterms.publisher" content="Vauchi" />
+    <meta name="dcterms.type" content="Software" />
+    <meta name="dcterms.language" content="{{ lang }}" />
+    <meta
+      name="dcterms.license"
+      content="https://spdx.org/licenses/GPL-3.0-or-later.html"
+    />
+    <meta name="dcterms.rights" content="GPL-3.0-or-later" />
+    <meta
+      name="dcterms.subject"
+      content="privacy, contacts, encryption, open-source"
+    />
     <!-- Open Graph (ogp.me) -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vauchi.app/">
-    <meta property="og:title" content="{{ t['meta.title'] }}">
-    <meta property="og:description" content="{{ t['meta.description'] }}">
-    <meta property="og:image" content="https://vauchi.app/social-preview.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="Vauchi">
-    <meta property="og:locale" content="{{ lang }}">
-    <meta property="og:locale:alternate" content="fr">
-    <meta property="og:locale:alternate" content="de">
-    <meta property="og:locale:alternate" content="it">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vauchi.app/" />
+    <meta property="og:title" content="{{ t['meta.title'] }}" />
+    <meta property="og:description" content="{{ t['meta.description'] }}" />
+    <meta property="og:image" content="https://vauchi.app/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Vauchi" />
+    <meta property="og:locale" content="{{ lang }}" />
+    <meta property="og:locale:alternate" content="fr" />
+    <meta property="og:locale:alternate" content="de" />
+    <meta property="og:locale:alternate" content="it" />
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Vauchi",
-      "url": "https://vauchi.app",
-      "logo": "https://vauchi.app/icon-512.png",
-      "sameAs": [
-        "https://gitlab.com/vauchi",
-        "https://github.com/vauchi"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "hello@vauchi.app",
-        "contactType": "customer support"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Vauchi",
-      "url": "https://vauchi.app",
-      "inLanguage": ["en", "fr", "de", "it"]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Vauchi",
-      "description": "{{ t['meta.description'] }}",
-      "applicationCategory": "CommunicationApplication",
-      "operatingSystem": "iOS, Android, macOS, Windows, Linux",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "license": "https://spdx.org/licenses/GPL-3.0-or-later.html",
-      "isAccessibleForFree": true,
-      "author": {
+      {
+        "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Vauchi"
+        "name": "Vauchi",
+        "url": "https://vauchi.app",
+        "logo": "https://vauchi.app/icon-512.png",
+        "sameAs": ["https://gitlab.com/vauchi", "https://github.com/vauchi"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "hello@vauchi.app",
+          "contactType": "customer support"
+        }
       }
-    }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Vauchi",
+        "url": "https://vauchi.app",
+        "inLanguage": ["en", "fr", "de", "it"]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Vauchi",
+        "description": "{{ t['meta.description'] }}",
+        "applicationCategory": "CommunicationApplication",
+        "operatingSystem": "iOS, Android, macOS, Windows, Linux",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "license": "https://spdx.org/licenses/GPL-3.0-or-later.html",
+        "isAccessibleForFree": true,
+        "author": {
+          "@type": "Organization",
+          "name": "Vauchi"
+        }
+      }
     </script>
     {% if is_default %}
     <script src="/js/lang-redirect.js"></script>
@@ -234,7 +240,7 @@
 
       .v-scene {
         position: absolute;
-        inset: 0;
+        inset: 0 0 44px 0; /* reserve space for dot nav at bottom */
         padding: 20px;
         display: flex;
         align-items: center;
@@ -254,11 +260,16 @@
         justify-content: safe center;
         width: 100%;
         height: 100%;
-        gap: 16px;
+        gap: 12px;
         text-align: center;
-        padding: 24px 0 48px; /* top breathing room + bottom for dot nav */
+        padding: 16px 0 12px;
         overflow-y: auto; /* safety — scroll rather than clip */
         overflow-x: hidden;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+      }
+      .v-scene-inner::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
       }
 
       .v-scene.active .v-fade {
@@ -301,32 +312,32 @@
       }
 
       .v-label {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
         letter-spacing: 2.5px;
         text-transform: uppercase;
         font-family: var(--mono);
       }
       .v-heading {
-        font-size: clamp(26px, 2vw + 1.3rem, 38px);
+        font-size: clamp(22px, 2vw + 1rem, 32px);
         font-weight: 400;
         color: var(--text-primary);
         max-width: 580px;
-        line-height: 1.5;
+        line-height: 1.4;
         font-family: var(--serif);
       }
       .v-heading.lg {
-        font-size: clamp(48px, 4.5vw + 2rem, 84px);
+        font-size: clamp(40px, 4vw + 1.5rem, 72px);
         letter-spacing: -1.5px;
         max-width: none;
       }
       .v-sub {
-        font-size: 18px;
+        font-size: 16px;
         font-family: var(--mono);
         letter-spacing: 0.5px;
       }
       .v-caption {
-        font-size: clamp(22px, 1vw + 1.15rem, 28px);
+        font-size: clamp(18px, 1vw + 1rem, 24px);
         color: var(--text-secondary);
         max-width: 580px;
         line-height: 1.6;
@@ -372,7 +383,7 @@
         margin-top: 8px;
       }
       .v-hero-point {
-        font-size: clamp(22px, 1.4vw + 1.1rem, 32px);
+        font-size: clamp(18px, 1.2vw + 0.9rem, 26px);
         color: var(--text-secondary);
         font-family: var(--serif);
         line-height: 1.4;
@@ -414,9 +425,9 @@
         gap: 6px;
       }
       .v-phone {
-        width: min(290px, 35vw);
-        height: min(530px, 42vh);
-        aspect-ratio: 290 / 530;
+        width: min(260px, 32vw);
+        height: min(440px, 38vh);
+        aspect-ratio: 260 / 440;
         border-radius: 34px;
         background: var(--bg-secondary);
         border: 2px solid var(--border);
@@ -1160,36 +1171,101 @@
       }
 
       /* Language switcher */
-      .lang-switcher { display: flex; gap: 8px; font-size: 0.9rem; }
-      .lang-active { color: var(--accent); text-decoration: none; font-weight: 600; }
+      .lang-switcher {
+        display: flex;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
+      .lang-active {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+      }
 
       /* Utility classes (extracted from inline styles) */
-      .c-success { color: var(--success); }
-      .c-error { color: var(--error); }
-      .c-muted { color: var(--text-secondary); }
-      .c-accent { color: var(--accent); }
-      .c-accent-dark { color: var(--accent-dark); }
-      .c-warning { color: var(--warning); }
-      .c-border { color: var(--border); }
-      .c-error-strike { color: var(--error); text-decoration: line-through; }
-      .c-muted-no-underline { color: var(--text-secondary); text-decoration: none; }
-      .c-success-mt { color: var(--success); margin-top: 4px; }
-      .pad-v8 { padding: 8px 0; }
-      .pad-v6 { padding: 6px 0; }
-      .fs-emoji { font-size: 24px; }
-      .gap-8 { gap: 8px; }
-      .gap-4 { gap: 4px; }
-      .gap-24 { gap: 24px; }
-      .gap-20-start { gap: 20px; align-items: flex-start; }
-      .mt-6 { margin-top: 6px; }
-      .br-14 { border-radius: 14px; }
-      .hidden { display: none; }
-      .flex-gap-4 { display: flex; gap: 4px; }
-      .c-error-50 { color: color-mix(in srgb, var(--error) 70%, transparent); }
-      .c-accent-50 { color: color-mix(in srgb, var(--accent) 70%, transparent); }
-      .c-success-50 { color: color-mix(in srgb, var(--success) 70%, transparent); }
-      .c-accent-dark-50 { color: color-mix(in srgb, var(--accent-dark) 70%, transparent); }
-      .c-muted-60 { color: color-mix(in srgb, var(--text-secondary) 80%, transparent); }
+      .c-success {
+        color: var(--success);
+      }
+      .c-error {
+        color: var(--error);
+      }
+      .c-muted {
+        color: var(--text-secondary);
+      }
+      .c-accent {
+        color: var(--accent);
+      }
+      .c-accent-dark {
+        color: var(--accent-dark);
+      }
+      .c-warning {
+        color: var(--warning);
+      }
+      .c-border {
+        color: var(--border);
+      }
+      .c-error-strike {
+        color: var(--error);
+        text-decoration: line-through;
+      }
+      .c-muted-no-underline {
+        color: var(--text-secondary);
+        text-decoration: none;
+      }
+      .c-success-mt {
+        color: var(--success);
+        margin-top: 4px;
+      }
+      .pad-v8 {
+        padding: 8px 0;
+      }
+      .pad-v6 {
+        padding: 6px 0;
+      }
+      .fs-emoji {
+        font-size: 24px;
+      }
+      .gap-8 {
+        gap: 8px;
+      }
+      .gap-4 {
+        gap: 4px;
+      }
+      .gap-24 {
+        gap: 24px;
+      }
+      .gap-20-start {
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .mt-6 {
+        margin-top: 6px;
+      }
+      .br-14 {
+        border-radius: 14px;
+      }
+      .hidden {
+        display: none;
+      }
+      .flex-gap-4 {
+        display: flex;
+        gap: 4px;
+      }
+      .c-error-50 {
+        color: color-mix(in srgb, var(--error) 70%, transparent);
+      }
+      .c-accent-50 {
+        color: color-mix(in srgb, var(--accent) 70%, transparent);
+      }
+      .c-success-50 {
+        color: color-mix(in srgb, var(--success) 70%, transparent);
+      }
+      .c-accent-dark-50 {
+        color: color-mix(in srgb, var(--accent-dark) 70%, transparent);
+      }
+      .c-muted-60 {
+        color: color-mix(in srgb, var(--text-secondary) 80%, transparent);
+      }
     </style>
   </head>
   <body>
@@ -1243,9 +1319,7 @@
                       <div class="v-contact-avatar">A</div>
                       <div>
                         <div class="v-contact-name">Alex Rivera</div>
-                        <div
-                          class="v-contact-detail strike c-error"
-                        >
+                        <div class="v-contact-detail strike c-error">
                           {{ t['scene1.contact1.detail'] }}
                         </div>
                       </div>
@@ -1254,9 +1328,7 @@
                       <div class="v-contact-avatar">S</div>
                       <div>
                         <div class="v-contact-name">Sam Chen</div>
-                        <div
-                          class="v-contact-detail strike c-error"
-                        >
+                        <div class="v-contact-detail strike c-error">
                           {{ t['scene1.contact2.detail'] }}
                         </div>
                       </div>
@@ -1265,9 +1337,7 @@
                       <div class="v-contact-avatar">M</div>
                       <div>
                         <div class="v-contact-name">Maya Okafor</div>
-                        <div
-                          class="v-contact-detail strike c-error"
-                        >
+                        <div class="v-contact-detail strike c-error">
                           {{ t['scene1.contact3.detail'] }}
                         </div>
                       </div>
@@ -1276,9 +1346,7 @@
                       <div class="v-contact-avatar">J</div>
                       <div>
                         <div class="v-contact-name">Jordan Petrov</div>
-                        <div
-                          class="v-contact-detail strike c-error"
-                        >
+                        <div class="v-contact-detail strike c-error">
                           {{ t['scene1.contact4.detail'] }}
                         </div>
                       </div>
@@ -1287,9 +1355,7 @@
                 </div>
               </div>
             </div>
-            <div
-              class="v-fade v-d5 v-sub c-error-50"
-            >
+            <div class="v-fade v-d5 v-sub c-error-50">
               {{ t['scene1.sub'] }}
             </div>
           </div>
@@ -1298,7 +1364,9 @@
         <!-- Scene 2: Exchange -->
         <div class="v-scene" data-scene="2">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label c-accent">{{ t['scene2.label_text'] }}</div>
+            <div class="v-fade v-d1 v-label c-accent">
+              {{ t['scene2.label_text'] }}
+            </div>
             <div class="v-fade v-d2 v-heading">{{ t['scene2.heading'] }}</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-phone-wrap">
@@ -1426,9 +1494,9 @@
                 <div class="v-sub mt-6">ALEX</div>
               </div>
             </div>
-            <div
-              class="v-fade v-d6 v-sub c-accent-50"
-            >{{ t['scene2.sub'] }}</div>
+            <div class="v-fade v-d6 v-sub c-accent-50">
+              {{ t['scene2.sub'] }}
+            </div>
           </div>
         </div>
 
@@ -1449,16 +1517,10 @@
                       <div class="v-contact-avatar">A</div>
                       <div>
                         <div class="v-contact-name">Alex Rivera</div>
-                        <div
-                          class="v-contact-detail c-success"
-                        >
+                        <div class="v-contact-detail c-success">
                           +1 555-8832 · alex@company.io
                         </div>
-                        <div
-                          class="v-contact-sub c-success"
-                        >
-                          @alex.r
-                        </div>
+                        <div class="v-contact-sub c-success">@alex.r</div>
                       </div>
                     </div>
                   </div>
@@ -1473,32 +1535,28 @@
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
-                        <div
-                          class="v-contact-detail c-success"
-                        >
+                        <div class="v-contact-detail c-success">
                           +1 555-0123 · you@email.com
                         </div>
-                        <div
-                          class="v-contact-sub c-success"
-                        >
-                          @yourhandle
-                        </div>
+                        <div class="v-contact-sub c-success">@yourhandle</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              class="v-fade v-d4 v-sub c-success-50"
-            >{{ t['scene3.sub'] }}</div>
+            <div class="v-fade v-d4 v-sub c-success-50">
+              {{ t['scene3.sub'] }}
+            </div>
           </div>
         </div>
 
         <!-- Scene 4: {{ t['scene4.label'] }} -->
         <div class="v-scene" data-scene="4">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label c-accent">{{ t['scene4.label_text'] }}</div>
+            <div class="v-fade v-d1 v-label c-accent">
+              {{ t['scene4.label_text'] }}
+            </div>
             <div class="v-fade v-d2 v-heading">{{ t['scene4.heading'] }}</div>
             <div class="v-fade v-d3 v-row tight">
               <div class="v-phone-wrap">
@@ -1506,29 +1564,15 @@
                 <div class="v-phone sm">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen pad-v6">
-                    <div
-                      class="v-status c-muted"
-                      id="status4a"
-                      
-                    >
-                      editing...
-                    </div>
+                    <div class="v-status c-muted" id="status4a">editing...</div>
                     <div class="v-contact" id="card4a">
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
-                        <div
-                          class="v-contact-detail c-muted"
-                          id="detail4a"
-                          
-                        >
+                        <div class="v-contact-detail c-muted" id="detail4a">
                           +1 555-0123
                         </div>
-                        <div
-                          class="v-contact-sub c-muted"
-                          id="sub4a"
-                          
-                        >
+                        <div class="v-contact-sub c-muted" id="sub4a">
                           you@email.com
                         </div>
                       </div>
@@ -1578,29 +1622,15 @@
                 <div class="v-phone sm">
                   <div class="v-phone-notch"></div>
                   <div class="v-phone-screen pad-v6">
-                    <div
-                      class="v-status c-muted"
-                      id="status4b"
-                      
-                    >
-                      waiting...
-                    </div>
+                    <div class="v-status c-muted" id="status4b">waiting...</div>
                     <div class="v-contact" id="card4b">
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
-                        <div
-                          class="v-contact-detail c-muted"
-                          id="detail4b"
-                          
-                        >
+                        <div class="v-contact-detail c-muted" id="detail4b">
                           +1 555-0123
                         </div>
-                        <div
-                          class="v-contact-sub c-muted"
-                          id="sub4b"
-                          
-                        >
+                        <div class="v-contact-sub c-muted" id="sub4b">
                           you@email.com
                         </div>
                       </div>
@@ -1609,16 +1639,18 @@
                 </div>
               </div>
             </div>
-            <div
-              class="v-fade v-d8 v-sub c-muted-60"
-            >{{ t['scene4.sub'] }}</div>
+            <div class="v-fade v-d8 v-sub c-muted-60">
+              {{ t['scene4.sub'] }}
+            </div>
           </div>
         </div>
 
         <!-- Scene 5: {{ t['scene5.label'] }} -->
         <div class="v-scene" data-scene="5">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label c-accent-dark">{{ t['scene5.label_text'] }}</div>
+            <div class="v-fade v-d1 v-label c-accent-dark">
+              {{ t['scene5.label_text'] }}
+            </div>
             <div class="v-fade v-d2 v-heading">{{ t['scene5.heading'] }}</div>
             <div class="v-fade v-d3 v-row wide">
               <div class="v-phone-wrap">
@@ -1630,14 +1662,10 @@
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
-                        <div
-                          class="v-contact-detail strike c-error"
-                        >
+                        <div class="v-contact-detail strike c-error">
                           @old_handle
                         </div>
-                        <div
-                          class="v-contact-sub strike c-error"
-                        >
+                        <div class="v-contact-sub strike c-error">
                           you@oldmail.com
                         </div>
                       </div>
@@ -1654,14 +1682,10 @@
                       <div class="v-contact-avatar">Y</div>
                       <div>
                         <div class="v-contact-name">You</div>
-                        <div
-                          class="v-contact-detail c-success"
-                        >
+                        <div class="v-contact-detail c-success">
                           @new_handle
                         </div>
-                        <div
-                          class="v-contact-sub c-success"
-                        >
+                        <div class="v-contact-sub c-success">
                           you@newmail.com
                         </div>
                       </div>
@@ -1670,16 +1694,18 @@
                 </div>
               </div>
             </div>
-            <div
-              class="v-fade v-d5 v-sub c-accent-dark-50"
-            >{{ t['scene5.sub'] }}</div>
+            <div class="v-fade v-d5 v-sub c-accent-dark-50">
+              {{ t['scene5.sub'] }}
+            </div>
           </div>
         </div>
 
         <!-- Scene 6: {{ t['scene6.label'] }} -->
         <div class="v-scene" data-scene="6">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label c-warning">{{ t['scene6.label_text'] }}</div>
+            <div class="v-fade v-d1 v-label c-warning">
+              {{ t['scene6.label_text'] }}
+            </div>
             <div class="v-fade v-d2 v-heading">{{ t['scene6.heading'] }}</div>
             <div
               class="v-fade v-d3 v-row"
@@ -1689,11 +1715,7 @@
                 <div class="v-micro">Colleague sees</div>
                 <div class="v-priv-card">
                   <div class="v-priv-name">You</div>
-                  <div
-                    class="v-priv-line c-success-mt"
-                  >
-                    +1 555-WORK
-                  </div>
+                  <div class="v-priv-line c-success-mt">+1 555-WORK</div>
                   <div class="v-priv-line c-success">
                     you@company.io · @you_work
                   </div>
@@ -1704,37 +1726,35 @@
                       margin-top: 3px;
                       font-style: italic;
                     "
-                  >{{ t['scene6.priv_hidden'] }}</div>
+                  >
+                    {{ t['scene6.priv_hidden'] }}
+                  </div>
                 </div>
               </div>
               <div class="v-col" style="gap: 4px">
                 <div class="v-micro">Family sees</div>
                 <div class="v-priv-card">
                   <div class="v-priv-name">You</div>
-                  <div
-                    class="v-priv-line c-success-mt"
-                  >
-                    +1 555-HOME
-                  </div>
+                  <div class="v-priv-line c-success-mt">+1 555-HOME</div>
                   <div class="v-priv-line c-success">
                     you@personal.me · @you_personal
                   </div>
-                  <div class="v-priv-line c-success">
-                    123 Home Street
-                  </div>
+                  <div class="v-priv-line c-success">123 Home Street</div>
                 </div>
               </div>
             </div>
-            <div
-              class="v-fade v-d5 v-sub c-muted-60"
-            >{{ t['scene6.sub'] }}</div>
+            <div class="v-fade v-d5 v-sub c-muted-60">
+              {{ t['scene6.sub'] }}
+            </div>
           </div>
         </div>
 
         <!-- Scene 7: {{ t['scene7.label'] }} -->
         <div class="v-scene" data-scene="7">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label c-accent-dark">{{ t['scene7.label_text'] }}</div>
+            <div class="v-fade v-d1 v-label c-accent-dark">
+              {{ t['scene7.label_text'] }}
+            </div>
             <div class="v-fade v-d2 v-heading">{{ t['scene7.heading'] }}</div>
             <div class="v-fade v-d3 v-row">
               <div class="v-col">
@@ -1785,56 +1805,56 @@
                 <div class="v-icon-box neutral" id="recovery-icon">
                   &#x1F4F1;
                 </div>
-                <div
-                  class="v-micro c-muted"
-                  id="recovery-label"
-                  
-                >
+                <div class="v-micro c-muted" id="recovery-label">
                   {{ t['scene7.new'] }}
                 </div>
               </div>
             </div>
-            <div
-              class="v-fade v-d7 v-sub c-muted-60"
-            >{{ t['scene7.sub'] }}</div>
+            <div class="v-fade v-d7 v-sub c-muted-60">
+              {{ t['scene7.sub'] }}
+            </div>
           </div>
         </div>
 
         <!-- Scene 8: {{ t['scene8.label'] }} -->
         <div class="v-scene" data-scene="8">
           <div class="v-scene-inner">
-            <div class="v-fade v-d1 v-label c-success">{{ t['scene8.label_text'] }}</div>
+            <div class="v-fade v-d1 v-label c-success">
+              {{ t['scene8.label_text'] }}
+            </div>
             <div class="v-fade v-d2 v-heading">{{ t['scene8.heading'] }}</div>
             <div class="v-fade v-d3 v-row" style="gap: 24px">
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
                   <span class="fs-emoji">&#x1F4E1;</span>
                 </div>
-                <div
-                  class="v-micro c-error-strike"
-                >{{ t['scene8.feeds'] }}</div>
+                <div class="v-micro c-error-strike">
+                  {{ t['scene8.feeds'] }}
+                </div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
                   <span class="fs-emoji">&#x1F464;</span>
                 </div>
-                <div
-                  class="v-micro c-error-strike"
-                >{{ t['scene8.profiles'] }}</div>
+                <div class="v-micro c-error-strike">
+                  {{ t['scene8.profiles'] }}
+                </div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box red">
                   <span class="fs-emoji">&#x1F578;&#xFE0F;</span>
                 </div>
-                <div
-                  class="v-micro c-error-strike"
-                >{{ t['scene8.social_graph'] }}</div>
+                <div class="v-micro c-error-strike">
+                  {{ t['scene8.social_graph'] }}
+                </div>
               </div>
               <div class="v-col" style="gap: 8px">
                 <div class="v-icon-box green">
                   <span class="fs-emoji">&#x1F4D6;</span>
                 </div>
-                <div class="v-micro c-success">{{ t['scene8.open_source'] }}</div>
+                <div class="v-micro c-success">
+                  {{ t['scene8.open_source'] }}
+                </div>
               </div>
             </div>
             <div class="v-fade v-d5 v-caption">{{ t['hero.caption'] }}</div>
@@ -1911,11 +1931,15 @@
           </div>
         </div>
         <!-- CTA button (shown on intro, replaced by dots on play) -->
-        <button class="v-hero-cta" id="hero-play" aria-label="{{ t['cta.play'] }}">
+        <button
+          class="v-hero-cta"
+          id="hero-play"
+          aria-label="{{ t['cta.play'] }}"
+        >
           {{ t['cta.play'] }}
         </button>
         <!-- Dot navigation (hidden until play, then replaces CTA) -->
-        <div class="v-dots-nav hidden" id="controls" ></div>
+        <div class="v-dots-nav hidden" id="controls"></div>
       </div>
 
       <footer class="footer" style="flex-direction: column; gap: 14px">
@@ -1932,12 +1956,25 @@
           >
         </div>
         <span style="font-size: 1.05rem; opacity: 0.8"
-          >Free &#xB7; Open Source &#xB7; {{ t['outro.footer'] }} &#xB7; No Cookies &#xB7; No Tracking</span
+          >Free &#xB7; Open Source &#xB7; {{ t['outro.footer'] }} &#xB7; No
+          Cookies &#xB7; No Tracking</span
         >
         <div style="display: flex; gap: 16px; font-size: 0.85rem; opacity: 0.6">
-          <a href="https://docs.vauchi.app/legal/privacy-policy.html" class="c-muted-no-underline">Privacy Policy</a>
-          <a href="https://docs.vauchi.app/about/security.html" class="c-muted-no-underline">Security</a>
-          <a href="https://docs.vauchi.app/developers/threat-model.html" class="c-muted-no-underline">Threat Model</a>
+          <a
+            href="https://docs.vauchi.app/legal/privacy-policy.html"
+            class="c-muted-no-underline"
+            >Privacy Policy</a
+          >
+          <a
+            href="https://docs.vauchi.app/about/security.html"
+            class="c-muted-no-underline"
+            >Security</a
+          >
+          <a
+            href="https://docs.vauchi.app/developers/threat-model.html"
+            class="c-muted-no-underline"
+            >Threat Model</a
+          >
         </div>
         <div class="links" style="margin: 0">
           <a href="https://gitlab.com/vauchi" target="_blank" rel="noopener">
@@ -1958,7 +1995,9 @@
           </a>
           <a href="https://docs.vauchi.app" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12h8v2H8v-2zm0 4h5v2H8v-2z"/>
+              <path
+                d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12h8v2H8v-2zm0 4h5v2H8v-2z"
+              />
             </svg>
             Docs
           </a>
@@ -1998,13 +2037,29 @@
           "
         >
           <div class="lang-switcher">
-            <a href="/" class="{% if lang == 'en' %}lang-active{% else %}c-muted-no-underline{% endif %}">EN</a>
+            <a
+              href="/"
+              class="{% if lang == 'en' %}lang-active{% else %}c-muted-no-underline{% endif %}"
+              >EN</a
+            >
             <span class="c-border">·</span>
-            <a href="/fr/" class="{% if lang == 'fr' %}lang-active{% else %}c-muted-no-underline{% endif %}">FR</a>
+            <a
+              href="/fr/"
+              class="{% if lang == 'fr' %}lang-active{% else %}c-muted-no-underline{% endif %}"
+              >FR</a
+            >
             <span class="c-border">·</span>
-            <a href="/de/" class="{% if lang == 'de' %}lang-active{% else %}c-muted-no-underline{% endif %}">DE</a>
+            <a
+              href="/de/"
+              class="{% if lang == 'de' %}lang-active{% else %}c-muted-no-underline{% endif %}"
+              >DE</a
+            >
             <span class="c-border">·</span>
-            <a href="/it/" class="{% if lang == 'it' %}lang-active{% else %}c-muted-no-underline{% endif %}">IT</a>
+            <a
+              href="/it/"
+              class="{% if lang == 'it' %}lang-active{% else %}c-muted-no-underline{% endif %}"
+              >IT</a
+            >
           </div>
           <button
             id="mode-toggle"

@@ -9,5 +9,8 @@
 # for all locale JSON files and rely on the validation script
 # (scripts/validate.py --strict) for locale quality instead.
 
+[files]
+extend-exclude = ["public/index.html", "public/de/", "public/fr/", "public/it/"]
+
 [type.json]
 check-file = false

@@ -328,7 +328,7 @@
     startScene();
   }
 
-  // Keyboard navigation
+  // Keyboard navigation (player-focused: arrows + space)
   player.addEventListener("keydown", function (e) {
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
@@ -340,6 +340,18 @@
       e.preventDefault();
       showDots();
       togglePlay();
+    }
+  });
+
+  // Document-level arrow key navigation (works without player focus)
+  document.addEventListener("keydown", function (e) {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      if (current < TOTAL - 1) goTo(current + 1);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      if (current > 0) goTo(current - 1);
     }
   });
 
