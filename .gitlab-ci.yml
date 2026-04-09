@@ -61,11 +61,17 @@ lint:html:
     - self-hosted
     - node
   needs: []
+  before_script:
+    - pip3 install --break-system-packages --quiet jinja2 2>/dev/null
+      || pip3 install --quiet jinja2
+    - python3 scripts/build-pages.py
   script:
     - htmlhint public/**/*.html
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
+        - "templates/**/*"
+        - "i18n/**/*"
         - "public/**/*.html"
     - if: $CI_COMMIT_BRANCH == "main"
 
@@ -111,6 +117,9 @@ test:e2e:
   before_script:
     - npm ci
     - npx playwright install --with-deps chromium
+    - apt-get update -qq && apt-get install -y -qq python3 python3-pip > /dev/null
+    - pip3 install --break-system-packages --quiet jinja2
+    - python3 scripts/build-pages.py
     - mkdir -p public/app-files/themes
     - curl -fsSL "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
       -o public/app-files/themes/themes.json
@@ -126,9 +135,12 @@ test:e2e:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
+        - "templates/**/*"
+        - "i18n/**/*"
         - "public/**/*"
         - "tests/**/*"
         - "playwright.config.js"
+        - "scripts/build-pages.py"
     - if: $CI_COMMIT_BRANCH == "main"
 
 # Build app-files manifest and output
