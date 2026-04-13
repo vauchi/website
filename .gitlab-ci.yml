@@ -228,6 +228,19 @@ build:docker:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
 
+# Security scanning overrides — pin to docker runner, make blocking
+gemnasium-dependency_scanning:
+  tags: [docker]
+  allow_failure: false
+
+secret_detection:
+  tags: [docker]
+  allow_failure: false
+
+semgrep-sast:
+  tags: [docker]
+  allow_failure: false
+
 # Container vulnerability scanning (overrides GitLab template)
 container_scanning:
   stage: scan
