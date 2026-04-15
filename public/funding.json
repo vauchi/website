@@ -15,7 +15,7 @@
     {
       "guid": "vauchi",
       "name": "Vauchi",
-      "description": "Privacy-focused updatable contact cards. Exchange contact information in person via QR code, with end-to-end encryption. When you update your phone number or email, everyone who has your card sees the change — without any central server having access to your data. Uses Signal protocol cryptography (X3DH + Double Ratchet) with a zero-knowledge relay.",
+      "description": "Privacy-focused updatable contact cards. Exchange contact information in person via QR code, with end-to-end encryption. When you update your phone number or email, everyone who has your card sees the change — without any central server having access to your data. Uses Signal protocol cryptography (X3DH + Double Ratchet) with an oblivious privacy-preserving relay.",
       "webpageUrl": {
         "url": "https://vauchi.app"
       },
