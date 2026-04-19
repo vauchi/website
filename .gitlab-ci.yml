@@ -217,7 +217,9 @@ build:docker:
       "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
       -o public/app-files/themes/themes.json
       || echo "WARN: themes.json fetch failed — CDN will be sole source"
-    - docker build -t $IMAGE:$CI_COMMIT_SHA -t $IMAGE:latest .
+    # --pull forces a fresh base-image fetch on every build so upstream
+    # Alpine/zlib/etc. security patches land in the next image.
+    - docker build --pull -t $IMAGE:$CI_COMMIT_SHA -t $IMAGE:latest .
     - |
       if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
         echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
@@ -303,7 +305,8 @@ build:cdn-docker:
     DOCKER_BUILDKIT: "1"
   script:
     - CDN_IMAGE="${CI_REGISTRY_IMAGE}/cdn"
-    - docker build -f cdn/Dockerfile -t $CDN_IMAGE:$CI_COMMIT_SHA -t $CDN_IMAGE:latest .
+    # --pull mirrors the main site build — pick up upstream base-image patches.
+    - docker build --pull -f cdn/Dockerfile -t $CDN_IMAGE:$CI_COMMIT_SHA -t $CDN_IMAGE:latest .
     - |
       if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
         echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
