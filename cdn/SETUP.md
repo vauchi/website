@@ -9,12 +9,24 @@ Static content CDN deployed as a Docker container behind kamal-proxy on `bold-ho
 
 ```mermaid
 flowchart TB
+    Client["Client"]
+    Gateway["OHTTP Gateway<br/>(strips client IP) — planned"]
     Proxy["kamal-proxy<br/>:443, TLS via *.vauchi.app wildcard cert"]
     Container["vauchi-cdn container<br/>:80"]
     Nginx["nginx:alpine<br/>serving /v1/*"]
+    Client -. "OHTTP (planned)" .-> Gateway
+    Gateway -. TLS .-> Proxy
+    Client -- "TLS (current)" --> Proxy
     Proxy -- "cdn.vauchi.app" --> Container
     Container --> Nginx
 ```
+
+> **Privacy note:** The CDN serves signed static content (themes,
+> locales, manifests). Per the same threat model as ADR-037, the CDN
+> operator could fingerprint clients via IP + access-pattern
+> correlation. Routing CDN traffic through the OHTTP gateway is the
+> intended architecture but is **not yet implemented** — clients
+> currently hit the CDN over plain TLS. Tracked as a follow-up.
 
 Content is baked into the Docker image at build time (same pattern as
 the landing page). Each content update produces a new image tag →
