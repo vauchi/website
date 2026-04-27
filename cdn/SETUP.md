@@ -7,14 +7,18 @@ Static content CDN deployed as a Docker container behind kamal-proxy on `bold-ho
 
 ## Architecture
 
-```
-kamal-proxy (:443, TLS via *.vauchi.app wildcard cert)
-  └── cdn.vauchi.app → vauchi-cdn container (:80)
-                          └── nginx:alpine serving /v1/*
+```mermaid
+flowchart TB
+    Proxy["kamal-proxy<br/>:443, TLS via *.vauchi.app wildcard cert"]
+    Container["vauchi-cdn container<br/>:80"]
+    Nginx["nginx:alpine<br/>serving /v1/*"]
+    Proxy -- "cdn.vauchi.app" --> Container
+    Container --> Nginx
 ```
 
-Content is baked into the Docker image at build time (same pattern as the landing page).
-Each content update produces a new image tag → deploy via `ci-deploy-service.sh`.
+Content is baked into the Docker image at build time (same pattern as
+the landing page). Each content update produces a new image tag →
+deploy via `ci-deploy-service.sh`.
 
 ## DNS
 
@@ -31,6 +35,7 @@ python scripts/sign-manifest.py --generate-key --key-dir keys/
 ```
 
 Store as GitLab CI variables:
+
 - `CONTENT_SIGNING_KEY` (protected, masked) — base64 Ed25519 private key
 - Embed `keys/content-signing.pub` in vauchi-core for client verification
 
@@ -40,11 +45,13 @@ Store as GitLab CI variables:
 
 The website CI builds and deploys the CDN image:
 
-```
-build:content (build-manifest.py)
-  → sign:content (sign-manifest.py, main only)
-    → build:cdn-docker (docker build -f cdn/Dockerfile)
-      → deploy:cdn (ci-deploy-service.sh --service=cdn, manual gate)
+```mermaid
+flowchart TB
+    BC["build:content<br/>(build-manifest.py)"]
+    SC["sign:content<br/>(sign-manifest.py, main only)"]
+    BD["build:cdn-docker<br/>(docker build -f cdn/Dockerfile)"]
+    DC["deploy:cdn<br/>(ci-deploy-service.sh --service=cdn, manual gate)"]
+    BC --> SC --> BD --> DC
 ```
 
 ## GitLab CI Variables
