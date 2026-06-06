@@ -5,9 +5,9 @@ import { test, expect } from "@playwright/test";
 
 // English reference strings — if these appear in non-EN pages, translation is missing.
 // Update these if the EN i18n values change.
-const EN_TITLE = "Vauchi - Privacy-First Contact Exchange";
+const EN_TITLE = "Vauchi - Stay in touch, for good";
 const EN_DESCRIPTION =
-  "Exchange contacts once, they update themselves. End-to-end encrypted, no accounts, open source.";
+  "Swap details once, in person — they keep themselves current, forever. End-to-end encrypted, no accounts, open source.";
 const EN_SCENE1_HEADING =
   "Your address book is a graveyard of dead contacts.";
 const EN_FOOTER_TAGLINE = "Auditable";
