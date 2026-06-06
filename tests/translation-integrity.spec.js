@@ -10,7 +10,10 @@ const EN_DESCRIPTION =
   "Swap details once, in person — they keep themselves current, forever. End-to-end encrypted, no accounts, open source.";
 const EN_SCENE1_HEADING =
   "Your address book is a graveyard of dead contacts.";
-const EN_FOOTER_TAGLINE = "Auditable";
+// NB: not "Auditable" — that is a true EN/ES cognate (the Spanish footer
+// legitimately reads "Auditable …"), so it would false-positive on /es/.
+// "No Accounts Required" has no cognate collision in de/fr/it/es.
+const EN_FOOTER_TAGLINE = "No Accounts Required";
 
 const NON_EN_LOCALES = [
   { lang: "fr", path: "/fr/" },
@@ -118,7 +121,7 @@ for (const { lang, path } of NON_EN_LOCALES) {
       await page.goto(path);
       const footer = page.locator("footer");
       const text = await footer.textContent();
-      // "Auditable" is English — should be translated
+      // EN_FOOTER_TAGLINE is an English-only phrase — should be translated
       expect(text).not.toContain(EN_FOOTER_TAGLINE);
     });
 
