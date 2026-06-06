@@ -16,6 +16,7 @@ const NON_EN_LOCALES = [
   { lang: "fr", path: "/fr/" },
   { lang: "de", path: "/de/" },
   { lang: "it", path: "/it/" },
+  { lang: "es", path: "/es/" },
 ];
 
 const ALL_LOCALES = [{ lang: "en", path: "/" }, ...NON_EN_LOCALES];

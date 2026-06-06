@@ -7,6 +7,7 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://vauchi.app/de/" />
     <xhtml:link rel="alternate" hreflang="it" href="https://vauchi.app/it/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://vauchi.app/es/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://vauchi.app/" />
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
@@ -23,6 +24,11 @@
   </url>
   <url>
     <loc>https://vauchi.app/it/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vauchi.app/es/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

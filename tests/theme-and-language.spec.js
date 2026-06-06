@@ -8,6 +8,7 @@ const LOCALES = [
   { lang: "fr", path: "/fr/" },
   { lang: "de", path: "/de/" },
   { lang: "it", path: "/it/" },
+  { lang: "es", path: "/es/" },
 ];
 
 // CSS variable helper — reads computed custom property from :root

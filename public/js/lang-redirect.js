@@ -11,6 +11,6 @@
     return;
   }
   var lang = (navigator.language || "").toLowerCase().split("-")[0];
-  var supported = { fr: "/fr/", de: "/de/", it: "/it/" };
+  var supported = { fr: "/fr/", de: "/de/", it: "/it/", es: "/es/" };
   if (supported[lang]) window.location.replace(supported[lang]);
 })();
