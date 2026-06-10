@@ -1,12 +1,12 @@
 {
-  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
-  "version": "v1.1.0",
+  "$schema": "https://fundingjson.org/schema/v1.json",
+  "version": "v1",
   "entity": {
     "type": "individual",
     "role": "owner",
     "name": "Mattia Egloff",
-    "email": "mattia.egloff@pm.me",
-    "description": "Creator and maintainer of Vauchi — privacy-focused updatable contact cards via in-person QR exchange. E2E encrypted using Signal protocol (X3DH + Double Ratchet), decentralized, no accounts required. Built in Rust with iOS (SwiftUI), Android (Kotlin/Compose), Desktop (Tauri), CLI, and TUI clients.",
+    "email": "hello@vauchi.app",
+    "description": "Creator and maintainer of Vauchi — privacy-focused updatable contact cards via in-person QR exchange. E2E encrypted using Signal protocol primitives (X3DH + Double Ratchet), decentralized, no accounts required. Core in Rust; CLI and desktop (Tauri) clients functional, iOS (SwiftUI) and Android (Kotlin/Compose) clients in development.",
     "webpageUrl": {
       "url": "https://vauchi.app"
     }
@@ -15,31 +15,29 @@
     {
       "guid": "vauchi",
       "name": "Vauchi",
-      "description": "Privacy-focused updatable contact cards. Exchange contact information in person via QR code, with end-to-end encryption. When you update your phone number or email, everyone who has your card sees the change — without any central server having access to your data. Uses Signal protocol cryptography (X3DH + Double Ratchet) with a zero-knowledge relay.",
+      "description": "Privacy-focused updatable contact cards. Exchange contact information in person via QR code, with end-to-end encryption. When you update your phone number or email, everyone who has your card sees the change — without any central server having access to your data. Uses Signal protocol cryptography (X3DH + Double Ratchet) with an oblivious privacy-preserving relay. Self-hostable; no accounts, no phone number, no social graph.",
       "webpageUrl": {
         "url": "https://vauchi.app"
       },
       "repositoryUrl": {
-        "url": "https://gitlab.com/vauchi/vauchi"
+        "url": "https://gitlab.com/vauchi/vauchi",
+        "wellKnown": "https://gitlab.com/vauchi/vauchi/-/raw/main/.well-known/funding-manifest-urls"
       },
-      "licenses": [
-        "spdx:GPL-3.0-or-later"
-      ],
+      "licenses": ["spdx:GPL-3.0-or-later"],
       "tags": [
-        "privacy",
-        "encryption",
-        "rust",
-        "contacts",
-        "e2e-encryption",
-        "signal-protocol",
-        "cross-platform",
-        "open-source",
-        "decentralized"
+        "privacy", "encryption", "rust", "contacts", "e2e-encryption",
+        "signal-protocol", "cross-platform", "open-source", "decentralized", "identity"
       ]
     }
   ],
   "funding": {
     "channels": [
+      {
+        "guid": "bank",
+        "type": "bank",
+        "address": "",
+        "description": "Bank transfer (CHF/EUR IBAN, Switzerland). Details provided on request to hello@vauchi.app. Preferred channel for grants and institutional funding."
+      },
       {
         "guid": "github-sponsors",
         "type": "payment-provider",
@@ -55,30 +53,34 @@
     ],
     "plans": [
       {
+        "guid": "development-year",
+        "status": "active",
+        "name": "One year of focused development",
+        "description": "Fund one year of dedicated development: production-ready iOS and Android clients, relay infrastructure hardening, protocol specification, and public beta. Equivalent to the monthly plan, packaged for grant-makers.",
+        "amount": 96000,
+        "currency": "CHF",
+        "frequency": "yearly",
+        "channels": ["bank"]
+      },
+      {
         "guid": "development-monthly",
         "status": "active",
-        "name": "Full-time development",
-        "description": "Fund dedicated development of Vauchi: cross-platform apps, relay infrastructure, protocol specification, and security audits.",
+        "name": "Ongoing development",
+        "description": "Fund dedicated development of Vauchi: cross-platform apps, relay infrastructure, protocol specification.",
         "amount": 8000,
         "currency": "CHF",
         "frequency": "monthly",
-        "channels": [
-          "github-sponsors",
-          "liberapay"
-        ]
+        "channels": ["bank", "github-sponsors", "liberapay"]
       },
       {
         "guid": "security-audit",
         "status": "active",
-        "name": "Security audit",
-        "description": "Fund an external security audit of Vauchi's cryptographic implementation (Signal protocol: X3DH + Double Ratchet in Rust).",
-        "amount": 10000,
+        "name": "Independent security audit",
+        "description": "External audit of Vauchi's cryptographic core (X3DH + Double Ratchet implementation in Rust) by a recognized firm. Scoped to protocol implementation and key management; results published in full.",
+        "amount": 35000,
         "currency": "CHF",
         "frequency": "one-time",
-        "channels": [
-          "github-sponsors",
-          "liberapay"
-        ]
+        "channels": ["bank"]
       },
       {
         "guid": "infrastructure",
@@ -88,10 +90,7 @@
         "amount": 600,
         "currency": "CHF",
         "frequency": "yearly",
-        "channels": [
-          "github-sponsors",
-          "liberapay"
-        ]
+        "channels": ["bank", "github-sponsors", "liberapay"]
       },
       {
         "guid": "any-amount",
@@ -101,10 +100,7 @@
         "amount": 0,
         "currency": "CHF",
         "frequency": "one-time",
-        "channels": [
-          "github-sponsors",
-          "liberapay"
-        ]
+        "channels": ["github-sponsors", "liberapay"]
       }
     ]
   }
