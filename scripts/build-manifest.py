@@ -10,7 +10,8 @@ the manifest.json and output directory structure for deployment.
 Content resolution order (per content type):
   1. Sibling repo (local dev: ../themes/, ../locales/)
   2. GitLab API (CI: fetches from main branch)
-  3. Committed copy in app-files-src/ (offline fallback)
+  3. Committed copy in app-files-src/ (themes only — locales fail loudly
+     instead: a stale committed fork must never reach the CDN)
 
 Usage:
     python scripts/build-manifest.py [--version VERSION] [--output OUTPUT]
@@ -92,8 +93,8 @@ def resolve_themes(src_dir: Path, output_dir: Path) -> Path | None:
     return None
 
 
-def resolve_locales(src_dir: Path, output_dir: Path) -> Path | None:
-    """Resolve locale files: sibling repo → GitLab API → app-files-src/."""
+def resolve_locales(src_dir: Path, output_dir: Path) -> Path:
+    """Resolve locale files: sibling repo → GitLab API → fail loudly."""
     locales_dest = output_dir / "locales"
 
     # 1. Sibling repo (local dev)
@@ -119,17 +120,13 @@ def resolve_locales(src_dir: Path, output_dir: Path) -> Path | None:
             print(f"  locales: GitLab API ({fetched} files from vauchi/locales)")
             return locales_dest
 
-    # 3. Committed copy
-    local = src_dir / "locales"
-    if local.is_dir() and list(local.glob("*.json")):
-        locales_dest.mkdir(exist_ok=True)
-        for f in sorted(local.glob("*.json")):
-            shutil.copy(f, locales_dest / f.name)
-        print(f"  locales: committed copy ({local})")
-        return locales_dest
-
-    print("  locales: NOT FOUND")
-    return None
+    # No committed fallback: the fork that lived here had diverged
+    # (en 985 vs 1217 keys, no Italian) — refusing to build beats
+    # silently deploying stale locales (2026-06-11-locale-fork-divergence)
+    raise SystemExit(
+        "locales: sibling repo missing and GitLab API unreachable — "
+        "refusing to build without locale data"
+    )
 
 
 def build_manifest(

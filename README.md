@@ -154,10 +154,10 @@ The `.gitlab-ci.yml` pipeline:
 
 ### New Locale
 
-1. Create `app-files-src/locales/{lang}.json` following the schema
-2. Run `python scripts/validate-content.py`
-3. Run `python scripts/build-manifest.py`
-4. Commit and push
+1. Add `{lang}.json` in the `locales` repo — the canonical source.
+   This repo carries no locale copies; the build resolves the sibling
+   checkout or the GitLab API and fails loudly otherwise.
+2. Run `python scripts/build-manifest.py` here to verify resolution
 
 ### New Theme
 
