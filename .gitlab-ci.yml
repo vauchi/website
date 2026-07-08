@@ -34,7 +34,7 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - project: 'vauchi/scripts'
-    ref: ci-templates-v2026.07.1
+    ref: ci-templates-v2026.07.2
     file:
       - '/ci-templates/reuse.yml'
       - '/ci-templates/image-lint.yml'
@@ -42,7 +42,7 @@ include:
       - '/ci-templates/github-mirror.yml'
 
 variables:
-  VAUCHI_SCRIPTS_REF: "ci-templates-v2026.07.1"
+  VAUCHI_SCRIPTS_REF: "ci-templates-v2026.07.2"
   VAUCHI_THEMES_REF: "215da2f699ad6ef8354cefb71f9e88fa8062e6bd"
   CS_IMAGE: "registry.gitlab.com/vauchi/website:$CI_COMMIT_SHA"
 
