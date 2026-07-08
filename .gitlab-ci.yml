@@ -34,7 +34,7 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - project: 'vauchi/scripts'
-    ref: main
+    ref: ci-templates-v2026.07.1
     file:
       - '/ci-templates/reuse.yml'
       - '/ci-templates/image-lint.yml'
@@ -42,6 +42,8 @@ include:
       - '/ci-templates/github-mirror.yml'
 
 variables:
+  VAUCHI_SCRIPTS_REF: "ci-templates-v2026.07.1"
+  VAUCHI_THEMES_REF: "215da2f699ad6ef8354cefb71f9e88fa8062e6bd"
   CS_IMAGE: "registry.gitlab.com/vauchi/website:$CI_COMMIT_SHA"
 
 stages:
@@ -75,31 +77,24 @@ lint:html:
         - "public/**/*.html"
     - if: $CI_COMMIT_BRANCH == "main"
 
-# Lint nginx config (validates snippet inside the real nginx:1.27-alpine config)
-lint:nginx:
+# Cross-cutting docker lint checks
+lint:cross-cutting-blocking:
   stage: lint
   tags: [docker]
+  needs: []
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/nginx:1.27-alpine
+  before_script:
+    - apk add --no-cache python3 py3-pip
+    - pip3 install --break-system-packages --quiet jsonschema
   script:
     - cp nginx.conf /etc/nginx/conf.d/default.conf
     - nginx -t
+    - python3 scripts/validate-content.py
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - nginx.conf
         - Dockerfile
-    - if: $CI_COMMIT_BRANCH == "main"
-
-# Validate app-files content against schemas
-lint:content:
-  stage: lint
-  tags: [docker]
-  image: ghcr.io/astral-sh/uv:python3.11-bookworm-slim
-  before_script:
-    - uv pip install --system --quiet jsonschema
-  script:
-    - python scripts/validate-content.py
-  rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - app-files-src/**/*
@@ -121,7 +116,7 @@ test:e2e:
     - pip3 install --break-system-packages --quiet jinja2
     - python3 scripts/build-pages.py
     - mkdir -p public/app-files/themes
-    - curl -fsSL "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
+    - curl -fsSL "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=${VAUCHI_THEMES_REF}"
       -o public/app-files/themes/themes.json
   script:
     - npx playwright test
@@ -214,7 +209,7 @@ build:docker:
     - mkdir -p public/app-files/themes
     - >-
       curl -fsSL
-      "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=main"
+      "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=${VAUCHI_THEMES_REF}"
       -o public/app-files/themes/themes.json
       || echo "WARN: themes.json fetch failed — CDN will be sole source"
     # --pull forces a fresh base-image fetch on every build so upstream
@@ -248,8 +243,9 @@ container_scanning:
   stage: scan
   tags: [docker]
   needs: ["build:docker"]
+  allow_failure: false
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # Smoke test against deployed site
 test:e2e:deployed:
