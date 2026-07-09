@@ -3,13 +3,15 @@
 
 import { test, expect } from "@playwright/test";
 
-const VARIANTS = ["a", "b", "c", "d", "e"];
+const VARIANTS = ["a", "b", "c", "d", "e", "f", "g"];
 const EN_VARIANT_HEADLINES = {
   a: "Your contact card. Your channels. Your rules.",
   b: "No brainrot. No data theft. Just people.",
   c: "Connect on your own terms, across every channel.",
   d: "Exchange contacts, not access to your life.",
   e: "Stop renting your address book.",
+  f: "Meet once. Stay in touch forever.",
+  g: "The address book that fixes itself.",
 };
 
 test.describe("landing-page variant test", () => {

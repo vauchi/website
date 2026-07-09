@@ -174,7 +174,7 @@ See the themes repo README for contributing instructions.
 
 ## Landing-Page Variant Test
 
-The hero section randomly shows one of five messaging variants (A/B/C/D/E)
+The hero section randomly shows one of seven messaging variants (A/B/C/D/E/F/G)
 to visitors and collects anonymous, aggregate feedback:
 
 - **Variant selection** is random, session-scoped (`sessionStorage`), and
@@ -188,7 +188,7 @@ to visitors and collects anonymous, aggregate feedback:
 - **Restricted logs:** raw JSONL log files are created with `0600`
   permissions and owned by the `nginx` user.
 
-Source copy lives in `i18n/{lang}.json` under `hero.variant.{a-e}.*`.
+Source copy lives in `i18n/{lang}.json` under `hero.variant.{a-g}.*`.
 The collector is `metrics-collector/collector.py`:
 
 - `POST /beacon` — public beacon endpoint used by the page. Only POST is

@@ -49,7 +49,7 @@ PUSHGATEWAY_URL = os.environ.get(
 PUSHGATEWAY_JOB = os.environ.get("PUSHGATEWAY_JOB", "vauchi_landing")
 PUSHGATEWAY_INTERVAL_S = int(os.environ.get("PUSHGATEWAY_INTERVAL_S", "30"))
 
-KNOWN_VARIANTS = ["a", "b", "c", "d", "e"]
+KNOWN_VARIANTS = ["a", "b", "c", "d", "e", "f", "g"]
 
 # Simple in-memory rate limit: max 60 beacons per IP hash per minute.
 RATE_LIMIT_WINDOW_SECONDS = 60
