@@ -61,9 +61,32 @@
     };
   }
 
+  function setMetaVariant(id) {
+    var meta = document.querySelector('meta[name="vauchi:variant"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "vauchi:variant");
+      var head = document.head || document.getElementsByTagName("head")[0];
+      if (head) head.appendChild(meta);
+    }
+    meta.setAttribute("content", id);
+  }
+
+  function updateStructuredSlogan(slogan) {
+    var script = document.getElementById("ld-organization");
+    if (!script) return;
+    try {
+      var data = JSON.parse(script.textContent);
+      data.slogan = slogan;
+      script.textContent = JSON.stringify(data, null, 6);
+    } catch (e) {}
+  }
+
   function applyVariant(id, strings) {
     var body = document.body;
     if (body) body.setAttribute("data-variant", id);
+    window.vauchiVariant = id;
+    setMetaVariant(id);
 
     var defaultBlock = document.getElementById("hero-default-points");
     var variantBlock = document.getElementById("hero-variant-block");
@@ -78,6 +101,7 @@
     if (headline) headline.textContent = strings.headline;
     if (sub) sub.textContent = strings.sub;
     if (cta && strings.cta) cta.innerHTML = strings.cta;
+    if (strings.headline) updateStructuredSlogan(strings.headline);
   }
 
   function sendBeacon(payload) {

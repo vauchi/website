@@ -26,12 +26,29 @@ test.describe("landing-page variant test", () => {
     await expect(variantBlock).not.toHaveClass(/hidden/);
     await expect(defaultPoints).toHaveClass(/hidden/);
 
+    const headlineEl = page.locator("#hero-variant-headline");
+    await expect(headlineEl).toHaveCount(1);
+    const tagName = await headlineEl.evaluate((el) =>
+      el.tagName.toLowerCase()
+    );
+    expect(tagName).toBe("h1");
+
     const headline = await page.textContent("#hero-variant-headline");
     const validHeadlines = Object.values(EN_VARIANT_HEADLINES);
     expect(validHeadlines).toContain(headline.trim());
 
     const bodyVariant = await page.getAttribute("body", "data-variant");
     expect(VARIANTS).toContain(bodyVariant);
+
+    const metaVariant = await page.getAttribute(
+      'meta[name="vauchi:variant"]',
+      "content"
+    );
+    expect(metaVariant).toBe(bodyVariant);
+
+    const orgScript = await page.locator("#ld-organization").textContent();
+    const orgJson = JSON.parse(orgScript);
+    expect(orgJson.slogan).toBe(headline.trim());
   });
 
   test("forces a specific variant via sessionStorage", async ({ page }) => {
@@ -43,6 +60,14 @@ test.describe("landing-page variant test", () => {
     await expect(page.locator("body")).toHaveAttribute("data-variant", "b");
     const headline = await page.textContent("#hero-variant-headline");
     expect(headline.trim()).toBe(EN_VARIANT_HEADLINES.b);
+
+    await expect(
+      page.locator('meta[name="vauchi:variant"]')
+    ).toHaveAttribute("content", "b");
+
+    const orgScript = await page.locator("#ld-organization").textContent();
+    const orgJson = JSON.parse(orgScript);
+    expect(orgJson.slogan).toBe(EN_VARIANT_HEADLINES.b);
   });
 
   test("shows variant but does not send beacon when DNT is enabled", async ({ page }) => {

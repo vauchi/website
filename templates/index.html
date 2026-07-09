@@ -17,6 +17,7 @@
     <meta name="description" content="{{ t['meta.description'] }}">
     <meta name="author" content="Vauchi">
     <meta name="theme-color" content="#4fc3f7">
+    <meta name="vauchi:variant" content="a">
     <link
       rel="canonical"
       href="https://vauchi.app/{% if not is_default %}{{ lang }}/{% endif %}"
@@ -56,13 +57,14 @@
     <meta property="og:locale:alternate" content="de">
     <meta property="og:locale:alternate" content="it">
     <!-- Structured Data -->
-    <script type="application/ld+json">
+    <script id="ld-organization" type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Vauchi",
         "url": "https://vauchi.app",
         "logo": "https://vauchi.app/icon-512.png",
+        "slogan": "{{ t['hero.variant.a.headline'] }}",
         "sameAs": ["https://gitlab.com/vauchi", "https://github.com/vauchi"],
         "contactPoint": {
           "@type": "ContactPoint",
@@ -1328,11 +1330,12 @@
                 id="hero-variant-label"
                 data-default=""
               >{{ t['hero.variant.a.label'] }}</div>
-              <div
+              <h1
                 class="v-heading"
                 id="hero-variant-headline"
                 data-default="{{ t['hero.point1'] }}"
-              >{{ t['hero.variant.a.headline'] }}</div>
+                aria-labelledby="hero-variant-label"
+              >{{ t['hero.variant.a.headline'] }}</h1>
               <div
                 class="v-caption"
                 id="hero-variant-sub"
