@@ -389,6 +389,24 @@
         line-height: 1.4;
         text-align: center;
       }
+      .v-hero-variant {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+        text-align: center;
+      }
+      .v-hero-variant .v-label {
+        margin-bottom: 2px;
+      }
+      .v-hero-variant .v-heading {
+        font-family: var(--serif);
+        max-width: 620px;
+      }
+      .v-hero-variant .v-caption {
+        max-width: 520px;
+      }
 
       .v-hero-cta {
         position: absolute;
@@ -1296,9 +1314,30 @@
               </div>
               <div class="v-heading lg">vauchi</div>
             </div>
-            <div class="v-fade v-d2 v-hero-points">
+            <div class="v-fade v-d2 v-hero-points" id="hero-default-points">
               <div class="v-hero-point">{{ t['hero.point1'] }}</div>
               <div class="v-hero-point">{{ t['hero.point2'] }}</div>
+            </div>
+            <div
+              class="v-fade v-d2 v-hero-variant hidden"
+              id="hero-variant-block"
+              aria-live="polite"
+            >
+              <div
+                class="v-label c-accent"
+                id="hero-variant-label"
+                data-default=""
+              >{{ t['hero.variant.a.label'] }}</div>
+              <div
+                class="v-heading"
+                id="hero-variant-headline"
+                data-default="{{ t['hero.point1'] }}"
+              >{{ t['hero.variant.a.headline'] }}</div>
+              <div
+                class="v-caption"
+                id="hero-variant-sub"
+                data-default="{{ t['hero.point2'] }}"
+              >{{ t['hero.variant.a.sub'] }}</div>
             </div>
           </div>
         </div>
@@ -1957,7 +1996,13 @@
         </div>
         <span style="font-size: 1.05rem; opacity: 0.8"
           >Free &#xB7; Open Source &#xB7; {{ t['outro.footer'] }} &#xB7; No
-          Cookies &#xB7; No Tracking</span
+          Cookies &#xB7;
+          <a
+            href="https://docs.vauchi.app/legal/privacy-policy.html"
+            class="c-muted-no-underline"
+            title="We collect anonymous, aggregate metrics to improve the landing page. No cookies, no fingerprinting."
+            >{{ t['footer.metrics'] }}</a
+          ></span
         >
         <div style="display: flex; gap: 16px; font-size: 0.85rem; opacity: 0.6">
           <a
@@ -2157,7 +2202,11 @@
     <script id="player-i18n" type="application/json">
       {{ player_i18n | safe }}
     </script>
+    <script id="variant-i18n" type="application/json">
+      {{ variant_i18n | safe }}
+    </script>
     <script src="/js/player.js" defer></script>
     <script src="/js/theme-picker.js" defer></script>
+    <script src="/js/variant-test.js" defer></script>
   </body>
 </html>

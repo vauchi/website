@@ -132,6 +132,9 @@ docker build -t vauchi-website .
 docker run -p 8080:80 vauchi-website
 ```
 
+The image runs as the unprivileged `nginx` user; nginx logs and the metrics
+JSONL files are written to `/var/log/vauchi`.
+
 ## Deployment
 
 Deployed via Kamal to the same server as vauchi-relay. See [vauchi/infra](https://gitlab.com/vauchi/infra) for deployment config.
@@ -168,6 +171,37 @@ See the themes repo README for contributing instructions.
 
 1. Edit `app-files-src/networks.json`
 2. Validate and build as above
+
+## Landing-Page Variant Test
+
+The hero section randomly shows one of five messaging variants (A/B/C/D/E)
+to visitors and collects anonymous, aggregate feedback:
+
+- **Variant selection** is random, session-scoped (`sessionStorage`), and
+  respects `Do Not Track` / Global Privacy Control.
+- **Metrics collected**: which variant was shown, how many primary CTA
+  clicks occurred, and how long the page was visible (dwell time).
+- **No cookies, no fingerprinting, no third-party scripts.** IP addresses
+  are hashed with a daily salt and discarded; only the hash is stored.
+- **Least-privilege runtime:** the container runs as the unprivileged
+  `nginx` user, not as root.
+- **Restricted logs:** raw JSONL log files are created with `0600`
+  permissions and owned by the `nginx` user.
+
+Source copy lives in `i18n/{lang}.json` under `hero.variant.{a-e}.*`.
+The collector is `metrics-collector/collector.py`:
+
+- `POST /beacon` — public beacon endpoint used by the page. Only POST is
+  allowed; raw metrics are never exposed here.
+- `GET /metrics/summary?days=7` — local debug aggregate stats (JSON), not
+  exposed through nginx.
+- It pushes aggregate gauges to the internal Prometheus Pushgateway
+  (`vauchi-pushgateway:9091`) every 30 seconds.
+- Raw beacon events are written to daily JSONL files
+  (`metrics-YYYY-MM-DD.jsonl`) and auto-deleted after `LOG_RETENTION_DAYS`
+  (default 30).
+
+A provisioned Grafana dashboard is in `_private/infra/monitoring/grafana/provisioning/dashboards/json/landing-variants.json`.
 
 ## Related Repositories
 

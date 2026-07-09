@@ -77,13 +77,14 @@ def validate_translations(en: dict, locales: dict[str, dict]) -> list[str]:
     return errors
 
 
-def build_player_i18n(translations: dict) -> str:
-    """Build the player i18n JSON block from translation keys starting with 'player.'."""
-    player_data = {}
+def build_key_prefix_i18n(translations: dict, prefix: str) -> str:
+    """Build a JSON block from translation keys starting with the given prefix."""
+    data = {}
+    prefix_len = len(prefix)
     for k, v in translations.items():
-        if k.startswith("player."):
-            player_data[k[7:]] = v  # strip "player." prefix
-    return json.dumps(player_data, indent=6, ensure_ascii=False)
+        if k.startswith(prefix):
+            data[k[prefix_len:]] = v
+    return json.dumps(data, indent=6, ensure_ascii=False)
 
 
 def build_page(env: Environment, locale: str, translations: dict) -> str:
@@ -93,7 +94,8 @@ def build_page(env: Environment, locale: str, translations: dict) -> str:
         t=translations,
         lang=locale,
         is_default=(locale == DEFAULT_LOCALE),
-        player_i18n=build_player_i18n(translations),
+        player_i18n=build_key_prefix_i18n(translations, "player."),
+        variant_i18n=build_key_prefix_i18n(translations, "hero.variant."),
     )
 
 
