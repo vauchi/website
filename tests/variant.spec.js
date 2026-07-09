@@ -45,18 +45,36 @@ test.describe("landing-page variant test", () => {
     expect(headline.trim()).toBe(EN_VARIANT_HEADLINES.b);
   });
 
-  test("does not randomize when DNT is enabled", async ({ page }) => {
+  test("shows variant but does not send beacon when DNT is enabled", async ({ page }) => {
     await page.addInitScript(() => {
       Object.defineProperty(navigator, "doNotTrack", { value: "1" });
+      window.__capturedBeacons = [];
+      navigator.sendBeacon = function (url, data) {
+        window.__capturedBeacons.push({ url: String(url), data });
+        return true;
+      };
     });
     await page.goto("/");
 
     const defaultPoints = page.locator("#hero-default-points");
     const variantBlock = page.locator("#hero-variant-block");
 
-    await expect(defaultPoints).not.toHaveClass(/hidden/);
-    await expect(variantBlock).toHaveClass(/hidden/);
-    await expect(page.locator("body")).not.toHaveAttribute("data-variant", /.*/);
+    await expect(defaultPoints).toHaveClass(/hidden/);
+    await expect(variantBlock).not.toHaveClass(/hidden/);
+
+    const bodyVariant = await page.getAttribute("body", "data-variant");
+    expect(VARIANTS).toContain(bodyVariant);
+
+    await page.evaluate(() => {
+      window.dispatchEvent(new Event("pagehide"));
+    });
+
+    const beaconCount = await page.evaluate(() =>
+      window.__capturedBeacons.filter((b) =>
+        String(b.url).endsWith("/beacon")
+      ).length
+    );
+    expect(beaconCount).toBe(0);
   });
 
   test("sends an anonymous metrics beacon on page hide", async ({ page }) => {

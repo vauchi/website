@@ -177,8 +177,10 @@ See the themes repo README for contributing instructions.
 The hero section randomly shows one of seven messaging variants (A/B/C/D/E/F/G)
 to visitors and collects anonymous, aggregate feedback:
 
-- **Variant selection** is random, session-scoped (`sessionStorage`), and
-  respects `Do Not Track` / Global Privacy Control.
+- **Variant selection** is random and session-scoped (`sessionStorage`).
+- **DNT / GPC respected:** when a visitor sends a `Do Not Track` or
+  `Global Privacy Control` signal, the variant is still shown but no
+  anonymous metrics beacon is sent.
 - **Metrics collected**: which variant was shown, how many primary CTA
   clicks occurred, and how long the page was visible (dwell time).
 - **No cookies, no fingerprinting, no third-party scripts.** IP addresses

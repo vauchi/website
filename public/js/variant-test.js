@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // Landing-page variant test.
-// Randomly swaps the hero copy, then sends an anonymous beacon with the
-// chosen variant, CTA click count, and dwell time when the user leaves.
+// Randomly swaps the hero copy. If the user has not sent a DNT/GPC opt-out
+// signal, it also sends an anonymous beacon with the chosen variant, CTA
+// click count, and dwell time when the user leaves.
 // No cookies, no fingerprinting, no third-party requests. Respects DNT/GPC.
 (function () {
   "use strict";
@@ -156,15 +157,16 @@
     var i18n = parseI18n();
     if (!i18n || Object.keys(i18n).length === 0) return;
 
-    if (hasPrivacySignal()) {
-      // Show default copy, do not collect metrics.
-      return;
-    }
-
     var variant = pickVariant();
     var strings = getVariantStrings(i18n, variant);
     applyVariant(variant, strings);
-    initMetrics(variant);
+
+    // Only collect anonymous metrics when the user has not opted out via
+    // DNT or GPC. The variant itself is still shown because it requires no
+    // personal data and uses only session-scoped sessionStorage.
+    if (!hasPrivacySignal()) {
+      initMetrics(variant);
+    }
   }
 
   if (document.readyState === "loading") {
