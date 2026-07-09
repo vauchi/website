@@ -129,4 +129,24 @@ test.describe("landing-page variant test", () => {
     expect(payload.dwell_ms).toBeGreaterThanOrEqual(0);
     expect(payload.path).toBe("/");
   });
+
+  test("serves a static variants.json manifest for crawlers", async ({ request }) => {
+    const res = await request.get("/variants.json");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("application/json");
+
+    const manifest = await res.json();
+    expect(manifest.default_locale).toBe("en");
+    expect(manifest.locales).toHaveProperty("en");
+
+    const en = manifest.locales.en;
+    for (const id of VARIANTS) {
+      expect(en).toHaveProperty(id);
+      expect(en[id]).toHaveProperty("headline");
+      expect(en[id]).toHaveProperty("label");
+      expect(en[id]).toHaveProperty("sub");
+      expect(en[id]).toHaveProperty("cta");
+      expect(en[id].headline).toBe(EN_VARIANT_HEADLINES[id]);
+    }
+  });
 });

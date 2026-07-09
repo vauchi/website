@@ -87,6 +87,37 @@ def build_key_prefix_i18n(translations: dict, prefix: str) -> str:
     return json.dumps(data, indent=6, ensure_ascii=False)
 
 
+def build_variants_manifest(all_translations: dict[str, dict]) -> dict:
+    """Build a machine-readable manifest of all landing-page variants per locale."""
+    manifest = {
+        "default_locale": DEFAULT_LOCALE,
+        "locales": {},
+    }
+    for locale, trans in all_translations.items():
+        variants = {}
+        for k, v in trans.items():
+            if not k.startswith("hero.variant."):
+                continue
+            rest = k[len("hero.variant."):]
+            if "." not in rest:
+                continue
+            variant_id, field = rest.split(".", 1)
+            if variant_id not in variants:
+                variants[variant_id] = {}
+            variants[variant_id][field] = v
+        manifest["locales"][locale] = variants
+    return manifest
+
+
+def write_variants_manifest(manifest: dict):
+    """Write the variants manifest to public/variants.json."""
+    path = os.path.join(PUBLIC_DIR, "variants.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print(f"  variants: {path}")
+
+
 def build_page(env: Environment, locale: str, translations: dict) -> str:
     """Render the template for a given locale."""
     template = env.get_template("index.html")
@@ -164,6 +195,11 @@ def main():
     for locale in targets:
         html = build_page(env, locale, all_translations[locale])
         write_page(locale, html)
+
+    # Always write the full variants manifest (not locale-scoped) so crawlers
+    # can discover every slogan without executing JavaScript.
+    manifest = build_variants_manifest(all_translations)
+    write_variants_manifest(manifest)
 
     print(f"\nDone. {len(targets)} page(s) generated.")
 
