@@ -1211,6 +1211,120 @@
         font-weight: 600;
       }
 
+      /* === Waitlist form === */
+      .waitlist-section {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--bg-tertiary);
+        border-radius: 14px;
+        text-align: center;
+      }
+      .waitlist-heading {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+      .waitlist-caption {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.25rem;
+      }
+      .waitlist-form {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .waitlist-input {
+        flex: 1 1 220px;
+        min-width: 220px;
+        padding: 0.75rem 1rem;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        color: var(--text-primary);
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s ease;
+      }
+      .waitlist-input:focus {
+        border-color: var(--accent);
+      }
+      .waitlist-input::placeholder {
+        color: var(--text-secondary);
+        opacity: 0.6;
+      }
+      .waitlist-button {
+        padding: 0.75rem 1.5rem;
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        color: var(--accent);
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+        border-radius: 100px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+      .waitlist-button:hover {
+        background: color-mix(in srgb, var(--accent) 25%, transparent);
+        border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      }
+      .waitlist-privacy {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: 0.75rem;
+        font-family: var(--mono);
+      }
+      /* Honeypot: hidden from users, visible to naive bots */
+      .waitlist-hp {
+        position: absolute;
+        left: -9999px;
+        opacity: 0;
+        height: 0;
+        width: 0;
+        overflow: hidden;
+      }
+      .waitlist-message {
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        font-size: 0.95rem;
+      }
+      .waitlist-message--joined,
+      .waitlist-message--confirmed {
+        background: color-mix(in srgb, var(--success) 10%, transparent);
+        color: var(--success);
+        border: 1px solid color-mix(in srgb, var(--success) 25%, transparent);
+      }
+      .waitlist-message--already-confirmed {
+        background: color-mix(in srgb, var(--accent) 10%, transparent);
+        color: var(--accent);
+        border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+      }
+      .waitlist-message--invalid,
+      .waitlist-message--invalid-token,
+      .waitlist-message--error {
+        background: color-mix(in srgb, var(--error) 10%, transparent);
+        color: var(--error);
+        border: 1px solid color-mix(in srgb, var(--error) 25%, transparent);
+      }
+      @media (max-width: 600px) {
+        .waitlist-section {
+          padding: 1.25rem 1rem;
+        }
+        .waitlist-form {
+          flex-direction: column;
+        }
+        .waitlist-input,
+        .waitlist-button {
+          width: 100%;
+        }
+      }
+
       /* Utility classes (extracted from inline styles) */
       .c-success {
         color: var(--success);
@@ -1996,6 +2110,53 @@
         <div class="v-dots-nav hidden" id="controls"></div>
       </div>
 
+      <section class="waitlist-section" aria-labelledby="waitlist-heading">
+        <div
+          id="waitlist-message"
+          class="waitlist-message"
+          hidden
+          data-msg-joined="{{ t['waitlist.message.joined'] }}"
+          data-msg-confirmed="{{ t['waitlist.message.confirmed'] }}"
+          data-msg-already-confirmed="{{ t['waitlist.message.already_confirmed'] }}"
+          data-msg-invalid="{{ t['waitlist.message.invalid'] }}"
+          data-msg-invalid-token="{{ t['waitlist.message.invalid_token'] }}"
+          data-msg-error="{{ t['waitlist.message.error'] }}"
+        ></div>
+        <h2 id="waitlist-heading" class="waitlist-heading">
+          {{ t['waitlist.heading'] }}
+        </h2>
+        <p class="waitlist-caption">{{ t['waitlist.caption'] }}</p>
+        <form
+          class="waitlist-form"
+          action="/waitlist/join"
+          method="POST"
+          aria-label="{{ t['waitlist.heading'] }}"
+        >
+          <label class="waitlist-hp" for="waitlist-website">Website</label>
+          <input
+            class="waitlist-hp"
+            id="waitlist-website"
+            type="text"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          >
+          <input
+            class="waitlist-input"
+            type="email"
+            name="email"
+            placeholder="{{ t['waitlist.email_placeholder'] }}"
+            required
+            aria-required="true"
+          >
+          <button class="waitlist-button" type="submit">
+            {{ t['waitlist.button'] }}
+          </button>
+        </form>
+        <p class="waitlist-privacy">{{ t['waitlist.privacy_note'] }}</p>
+      </section>
+
       <footer class="footer" style="flex-direction: column; gap: 14px">
         <div style="font-size: 1.15rem; color: var(--text-secondary)">
           Have ideas?
@@ -2223,5 +2384,6 @@
     <script src="/js/player.js" defer></script>
     <script src="/js/theme-picker.js" defer></script>
     <script src="/js/variant-test.js" defer></script>
+    <script src="/js/waitlist.js" defer></script>
   </body>
 </html>

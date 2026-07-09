@@ -205,6 +205,51 @@ The collector is `metrics-collector/collector.py`:
 
 A provisioned Grafana dashboard is in `_private/infra/monitoring/grafana/provisioning/dashboards/json/landing-variants.json`.
 
+## Waitlist
+
+The landing page includes a self-hosted waitlist with double-opt-in confirmation
+emails. The form posts to `/waitlist/join`; a small Flask app inside the
+container handles storage (SQLite) and sends confirmation mail via the existing
+Vauchi mailserver.
+
+### Configuration
+
+Set these environment variables in the infra deployment (see `vauchi/infra`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `WAITLIST_DB_PATH` | `./waitlist.db` | SQLite database path |
+| `WAITLIST_REDIRECT_BASE_URL` | `https://vauchi.app/` | Base URL for redirect replies |
+| `WAITLIST_ENCRYPTION_KEY` | — | **Required** base64-encoded 32-byte AES-256-GCM key |
+| `WAITLIST_SMTP_HOST` | `mail.vauchi.app` | Outbound SMTP server |
+| `WAITLIST_SMTP_PORT` | `587` | SMTP port |
+| `WAITLIST_SMTP_USER` | `waitlist@vauchi.app` | SMTP auth user |
+| `WAITLIST_SMTP_PASSWORD` | — | **Required** SMTP auth password |
+| `WAITLIST_SMTP_FROM` | `waitlist@vauchi.app` | From address for confirmation emails |
+| `WAITLIST_SMTP_STARTTLS` | `true` | Use STARTTLS |
+| `WAITLIST_ADMIN_API_KEY` | — | **Required** API key for CSV export at `/waitlist/admin/export` |
+
+### Admin export
+
+```bash
+curl -H "Authorization: Bearer $WAITLIST_ADMIN_API_KEY" \
+  https://vauchi.app/waitlist/admin/export
+```
+
+### Security notes
+
+- Emails are encrypted at rest with AES-256-GCM. A deterministic SHA-256 hash is
+  kept for duplicate detection; only the admin export endpoint decrypts.
+- The waitlist API shares the container's unprivileged `nginx` runtime; the
+  SQLite database is stored on a persistent volume owned by `nginx`.
+- Confirmation tokens are stored as SHA-256 hashes; only the emailed link
+  contains the raw token.
+- A hidden honeypot field (`name="website"`) catches naive bots without
+  revealing itself.
+- Audit logs write SHA-256 hashed emails, not plaintext addresses.
+- The admin export endpoint uses constant-time Bearer token comparison.
+- Nginx rate-limits `/waitlist/join` to 5 requests per minute per IP.
+
 ## Related Repositories
 
 | Repository | Description |

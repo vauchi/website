@@ -104,5 +104,16 @@
   "scene8.label_text": "Zero Platform",
   "scene8.open_source": "open source",
   "scene8.profiles": "profiles",
-  "scene8.social_graph": "social graph"
+  "scene8.social_graph": "social graph",
+  "waitlist.button": "Join",
+  "waitlist.caption": "Be the first to know when Vauchi is ready.",
+  "waitlist.email_placeholder": "you@example.com",
+  "waitlist.heading": "Join the waitlist",
+  "waitlist.message.already_confirmed": "You're already on the list.",
+  "waitlist.message.confirmed": "You're on the list. We'll be in touch.",
+  "waitlist.message.error": "Something went wrong. Please try again.",
+  "waitlist.message.invalid": "Please enter a valid email address.",
+  "waitlist.message.invalid_token": "That confirmation link is invalid or expired.",
+  "waitlist.message.joined": "Check your inbox to confirm your email.",
+  "waitlist.privacy_note": "No spam. One confirmation email, then one launch note."
 }
