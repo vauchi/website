@@ -84,8 +84,7 @@ lint:cross-cutting-blocking:
   needs: []
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/nginx:1.27-alpine
   before_script:
-    - apk add --no-cache python3 py3-pip
-    - pip3 install --break-system-packages --quiet jsonschema
+    - apk add --no-cache python3 py3-jsonschema
   script:
     - cp nginx.conf /etc/nginx/conf.d/default.conf
     - nginx -t
