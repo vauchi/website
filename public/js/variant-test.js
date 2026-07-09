@@ -44,6 +44,13 @@
   }
 
   function pickVariant() {
+    // Respect a variant that the server already baked into the page.
+    var body = document.body;
+    if (body) {
+      var bodyVariant = body.getAttribute("data-variant");
+      if (bodyVariant && VARIANT_IDS.indexOf(bodyVariant) !== -1) return bodyVariant;
+    }
+
     var stored = storageGet(STORAGE_KEY);
     if (stored && VARIANT_IDS.indexOf(stored) !== -1) return stored;
     var idx = Math.floor(Math.random() * VARIANT_IDS.length);

@@ -138,6 +138,8 @@ test.describe("landing-page variant test", () => {
     const manifest = await res.json();
     expect(manifest.default_locale).toBe("en");
     expect(manifest.locales).toHaveProperty("en");
+    expect(manifest.variants).toHaveProperty("b");
+    expect(manifest.variants.b.slug).toBe("no-brainrot-no-data-theft-just-people");
 
     const en = manifest.locales.en;
     for (const id of VARIANTS) {
@@ -148,5 +150,59 @@ test.describe("landing-page variant test", () => {
       expect(en[id]).toHaveProperty("cta");
       expect(en[id].headline).toBe(EN_VARIANT_HEADLINES[id]);
     }
+  });
+
+  test("variant landing page has accurate SEO/social meta", async ({ page }) => {
+    const slug = "no-brainrot-no-data-theft-just-people";
+    const headline = EN_VARIANT_HEADLINES.b;
+    const sub = "A contact exchange that respects your attention and your data.";
+    const url = `/landing/${slug}/`;
+
+    await page.goto(url);
+
+    await expect(page).toHaveTitle(`${headline} | Vauchi`);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      sub
+    );
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex"
+    );
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      "content",
+      `https://vauchi.app${url}`
+    );
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+      "content",
+      `${headline} | Vauchi`
+    );
+    await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+      "content",
+      sub
+    );
+
+    const orgScript = await page.locator("#ld-organization").textContent();
+    const orgJson = JSON.parse(orgScript);
+    expect(orgJson.slogan).toBe(headline);
+
+    await expect(page.locator("body")).toHaveAttribute("data-variant", "b");
+    await expect(page.locator("#hero-default-points")).toHaveClass(/hidden/);
+    await expect(page.locator("#hero-variant-block")).not.toHaveClass(/hidden/);
+    const heroHeadline = await page.textContent("#hero-variant-headline");
+    expect(heroHeadline.trim()).toBe(headline);
+  });
+
+  test("variant landing page is not overridden by client-side randomization", async ({ page }) => {
+    const slug = "the-address-book-that-fixes-itself";
+    const url = `/landing/${slug}/`;
+
+    await page.goto(url);
+    await page.evaluate(() => sessionStorage.removeItem("vauchi-variant"));
+    await page.reload();
+
+    await expect(page.locator("body")).toHaveAttribute("data-variant", "g");
+    const heroHeadline = await page.textContent("#hero-variant-headline");
+    expect(heroHeadline.trim()).toBe(EN_VARIANT_HEADLINES.g);
   });
 });

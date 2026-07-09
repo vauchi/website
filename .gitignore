@@ -5,6 +5,8 @@ public/fr/
 public/it/
 public/es/
 public/app-files/
+public/landing/
+public/variants.json
 
 # Python
 __pycache__/

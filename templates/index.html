@@ -6,6 +6,11 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% set page_title = (variant_strings.headline ~ ' | Vauchi') if variant_strings else t['meta.title'] %}
+    {% set page_description = variant_strings.sub if variant_strings else t['meta.description'] %}
+    {% if variant_id %}
+    <meta name="robots" content="noindex">
+    {% endif %}
     <link rel="preconnect" href="https://cdn.vauchi.app" crossorigin>
     <link rel="alternate" hreflang="en" href="https://vauchi.app/">
     <link rel="alternate" hreflang="fr" href="https://vauchi.app/fr/">
@@ -13,11 +18,11 @@
     <link rel="alternate" hreflang="it" href="https://vauchi.app/it/">
     <link rel="alternate" hreflang="es" href="https://vauchi.app/es/">
     <link rel="alternate" hreflang="x-default" href="https://vauchi.app/">
-    <title>{{ t['meta.title'] }}</title>
-    <meta name="description" content="{{ t['meta.description'] }}">
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_description }}">
     <meta name="author" content="Vauchi">
     <meta name="theme-color" content="#4fc3f7">
-    <meta name="vauchi:variant" content="a">
+    <meta name="vauchi:variant" content="{{ variant_id if variant_id else 'a' }}">
     <link
       rel="canonical"
       href="https://vauchi.app/{% if not is_default %}{{ lang }}/{% endif %}"
@@ -28,8 +33,8 @@
     <link rel="manifest" href="/manifest.json">
     <!-- Dublin Core (DCMI Terms) -->
     <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
-    <meta name="dcterms.title" content="{{ t['meta.title'] }}">
-    <meta name="dcterms.description" content="{{ t['meta.description'] }}">
+    <meta name="dcterms.title" content="{{ page_title }}">
+    <meta name="dcterms.description" content="{{ page_description }}">
     <meta name="dcterms.creator" content="Mattia Egloff">
     <meta name="dcterms.publisher" content="Vauchi">
     <meta name="dcterms.type" content="Software">
@@ -45,9 +50,13 @@
    >
     <!-- Open Graph (ogp.me) -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://vauchi.app/">
-    <meta property="og:title" content="{{ t['meta.title'] }}">
-    <meta property="og:description" content="{{ t['meta.description'] }}">
+    {% if variant_slug %}
+    <meta property="og:url" content="https://vauchi.app/landing/{{ variant_slug }}/{% if not is_default %}{{ lang }}/{% endif %}">
+    {% else %}
+    <meta property="og:url" content="https://vauchi.app/{% if not is_default %}{{ lang }}/{% endif %}">
+    {% endif %}
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:description" content="{{ page_description }}">
     <meta property="og:image" content="https://vauchi.app/social-preview.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -64,7 +73,7 @@
         "name": "Vauchi",
         "url": "https://vauchi.app",
         "logo": "https://vauchi.app/icon-512.png",
-        "slogan": "{{ t['hero.variant.a.headline'] }}",
+        "slogan": "{{ variant_strings.headline if variant_strings else t['hero.variant.a.headline'] }}",
         "sameAs": ["https://gitlab.com/vauchi", "https://github.com/vauchi"],
         "contactPoint": {
           "@type": "ContactPoint",
@@ -103,7 +112,7 @@
         }
       }
     </script>
-    {% if is_default %}
+    {% if is_default and not variant_id %}
     <script src="/js/lang-redirect.js"></script>
     {% endif %}
     <style>
@@ -1288,7 +1297,7 @@
       }
     </style>
   </head>
-  <body>
+  <body{% if variant_id %} data-variant="{{ variant_id }}"{% endif %}>
     <main class="page-wrapper">
       <div
         class="v-player"
@@ -1316,12 +1325,15 @@
               </div>
               <div class="v-heading lg">vauchi</div>
             </div>
-            <div class="v-fade v-d2 v-hero-points" id="hero-default-points">
+            <div
+              class="v-fade v-d2 v-hero-points{% if variant_id %} hidden{% endif %}"
+              id="hero-default-points"
+            >
               <div class="v-hero-point">{{ t['hero.point1'] }}</div>
               <div class="v-hero-point">{{ t['hero.point2'] }}</div>
             </div>
             <div
-              class="v-fade v-d2 v-hero-variant hidden"
+              class="v-fade v-d2 v-hero-variant{% if not variant_id %} hidden{% endif %}"
               id="hero-variant-block"
               aria-live="polite"
             >
@@ -1329,18 +1341,18 @@
                 class="v-label c-accent"
                 id="hero-variant-label"
                 data-default=""
-              >{{ t['hero.variant.a.label'] }}</div>
+              >{{ variant_strings.label if variant_id else t['hero.variant.a.label'] }}</div>
               <h1
                 class="v-heading"
                 id="hero-variant-headline"
                 data-default="{{ t['hero.point1'] }}"
                 aria-labelledby="hero-variant-label"
-              >{{ t['hero.variant.a.headline'] }}</h1>
+              >{{ variant_strings.headline if variant_id else t['hero.variant.a.headline'] }}</h1>
               <div
                 class="v-caption"
                 id="hero-variant-sub"
                 data-default="{{ t['hero.point2'] }}"
-              >{{ t['hero.variant.a.sub'] }}</div>
+              >{{ variant_strings.sub if variant_id else t['hero.variant.a.sub'] }}</div>
             </div>
           </div>
         </div>

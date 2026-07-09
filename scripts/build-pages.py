@@ -22,6 +22,7 @@ Writes:
 
 import json
 import os
+import re
 import sys
 
 try:
@@ -36,6 +37,7 @@ TEMPLATE_DIR = os.path.join(ROOT, "templates")
 PUBLIC_DIR = os.path.join(ROOT, "public")
 
 DEFAULT_LOCALE = "en"
+VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g"]
 
 
 def load_translations(locale: str) -> dict:
@@ -87,24 +89,43 @@ def build_key_prefix_i18n(translations: dict, prefix: str) -> str:
     return json.dumps(data, indent=6, ensure_ascii=False)
 
 
+def slugify(text: str) -> str:
+    """Create a URL-safe slug from a headline."""
+    s = text.lower()
+    s = re.sub(r"<[^>]+>", "", s)
+    s = re.sub(r"&[^;]+;", "", s)
+    s = re.sub(r"[^a-z0-9\s-]+", "", s)
+    s = re.sub(r"[\s-]+", "-", s).strip("-")
+    return s or "variant"
+
+
+def get_variant_strings(translations: dict, variant_id: str) -> dict:
+    """Extract label/headline/sub/cta for a single variant."""
+    prefix = f"hero.variant.{variant_id}."
+    return {
+        k[len(prefix):]: v
+        for k, v in translations.items()
+        if k.startswith(prefix)
+    }
+
+
 def build_variants_manifest(all_translations: dict[str, dict]) -> dict:
     """Build a machine-readable manifest of all landing-page variants per locale."""
     manifest = {
         "default_locale": DEFAULT_LOCALE,
+        "variants": {},
         "locales": {},
     }
+    en = all_translations[DEFAULT_LOCALE]
+    for variant_id in VARIANT_IDS:
+        manifest["variants"][variant_id] = {
+            "slug": slugify(get_variant_strings(en, variant_id).get("headline", "")),
+            "default": get_variant_strings(en, variant_id),
+        }
     for locale, trans in all_translations.items():
         variants = {}
-        for k, v in trans.items():
-            if not k.startswith("hero.variant."):
-                continue
-            rest = k[len("hero.variant."):]
-            if "." not in rest:
-                continue
-            variant_id, field = rest.split(".", 1)
-            if variant_id not in variants:
-                variants[variant_id] = {}
-            variants[variant_id][field] = v
+        for variant_id in VARIANT_IDS:
+            variants[variant_id] = get_variant_strings(trans, variant_id)
         manifest["locales"][locale] = variants
     return manifest
 
@@ -118,8 +139,15 @@ def write_variants_manifest(manifest: dict):
     print(f"  variants: {path}")
 
 
-def build_page(env: Environment, locale: str, translations: dict) -> str:
-    """Render the template for a given locale."""
+def build_page(
+    env: Environment,
+    locale: str,
+    translations: dict,
+    variant_id: str | None = None,
+    variant_strings: dict | None = None,
+    variant_slug: str | None = None,
+) -> str:
+    """Render the template for a given locale, optionally pinned to a variant."""
     template = env.get_template("index.html")
     return template.render(
         t=translations,
@@ -127,18 +155,29 @@ def build_page(env: Environment, locale: str, translations: dict) -> str:
         is_default=(locale == DEFAULT_LOCALE),
         player_i18n=build_key_prefix_i18n(translations, "player."),
         variant_i18n=build_key_prefix_i18n(translations, "hero.variant."),
+        variant_id=variant_id,
+        variant_strings=variant_strings,
+        variant_slug=variant_slug,
     )
 
 
-def write_page(locale: str, html: str):
+def write_page(locale: str, html: str, variant_slug: str | None = None):
     """Write generated HTML to the correct public path."""
-    if locale == DEFAULT_LOCALE:
+    if variant_slug:
+        dir_path = os.path.join(PUBLIC_DIR, "landing", variant_slug)
+        if locale != DEFAULT_LOCALE:
+            dir_path = os.path.join(dir_path, locale)
+    elif locale == DEFAULT_LOCALE:
         path = os.path.join(PUBLIC_DIR, "index.html")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"  {locale}: {path} ({len(html):,} bytes)")
+        return
     else:
         dir_path = os.path.join(PUBLIC_DIR, locale)
-        os.makedirs(dir_path, exist_ok=True)
-        path = os.path.join(dir_path, "index.html")
 
+    os.makedirs(dir_path, exist_ok=True)
+    path = os.path.join(dir_path, "index.html")
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"  {locale}: {path} ({len(html):,} bytes)")
@@ -196,12 +235,32 @@ def main():
         html = build_page(env, locale, all_translations[locale])
         write_page(locale, html)
 
+    # Build per-variant landing pages for accurate SEO/social previews.
+    # Each page is pre-rendered with the variant headline/sub in the meta,
+    # Open Graph, and JSON-LD tags so crawlers see the exact slogan.
+    print("\nBuilding variant landing pages...")
+    for locale in targets:
+        trans = all_translations[locale]
+        for variant_id in VARIANT_IDS:
+            strings = get_variant_strings(trans, variant_id)
+            slug = slugify(get_variant_strings(en, variant_id).get("headline", ""))
+            html = build_page(
+                env,
+                locale,
+                trans,
+                variant_id=variant_id,
+                variant_strings=strings,
+                variant_slug=slug,
+            )
+            write_page(locale, html, variant_slug=slug)
+
     # Always write the full variants manifest (not locale-scoped) so crawlers
     # can discover every slogan without executing JavaScript.
     manifest = build_variants_manifest(all_translations)
     write_variants_manifest(manifest)
 
-    print(f"\nDone. {len(targets)} page(s) generated.")
+    total_pages = len(targets) + (len(targets) * len(VARIANT_IDS))
+    print(f"\nDone. {total_pages} page(s) generated.")
 
 
 if __name__ == "__main__":
