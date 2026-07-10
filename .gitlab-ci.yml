@@ -223,6 +223,10 @@ build:docker:
       if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
         echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
         docker push $IMAGE:$CI_COMMIT_SHA
+        # Re-tag from the SHA image before pushing :latest — under dind,
+        # the second -t of a BuildKit build is intermittently missing at
+        # push time ('tag does not exist', 2026-07-09 cdn + 2026-07-10 main).
+        docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
         docker push $IMAGE:latest
       fi
   rules:
@@ -317,6 +321,8 @@ build:cdn-docker:
       if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
         echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
         docker push $CDN_IMAGE:$CI_COMMIT_SHA
+        # Same dind tag-visibility race guard as build:docker above.
+        docker tag $CDN_IMAGE:$CI_COMMIT_SHA $CDN_IMAGE:latest
         docker push $CDN_IMAGE:latest
       fi
   rules:
