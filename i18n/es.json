@@ -106,6 +106,7 @@
   "hero.variant.g.label": "Actualizaciones silenciosas",
   "hero.variant.g.sub": "Tus datos de contacto cambian; los teléfonos de tus amigos simplemente lo saben. Cifrado de extremo a extremo, código abierto, sin nube.",
   "waitlist.button": "Unirme",
+  "waitlist.button_loading": "Enviando…",
   "waitlist.caption": "Sé de los primeros en saber cuando Vauchi esté listo.",
   "waitlist.email_placeholder": "tu@ejemplo.com",
   "waitlist.heading": "Únete a la lista de espera",

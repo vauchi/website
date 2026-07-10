@@ -1269,6 +1269,10 @@
         cursor: pointer;
         transition: background 0.2s ease, border-color 0.2s ease;
       }
+      .waitlist-button[disabled] {
+        opacity: 0.6;
+        cursor: wait;
+      }
       .waitlist-button:hover {
         background: color-mix(in srgb, var(--accent) 25%, transparent);
         border-color: color-mix(in srgb, var(--accent) 50%, transparent);
@@ -2150,7 +2154,11 @@
             required
             aria-required="true"
           >
-          <button class="waitlist-button" type="submit">
+          <button
+            class="waitlist-button"
+            type="submit"
+            data-label-loading="{{ t['waitlist.button_loading'] }}"
+          >
             {{ t['waitlist.button'] }}
           </button>
         </form>

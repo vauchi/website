@@ -106,6 +106,7 @@
   "hero.variant.g.label": "Stille Updates",
   "hero.variant.g.sub": "Ihre Kontaktdaten ändern sich; die Telefone Ihrer Freunde wissen es einfach. Ende-zu-Ende verschlüsselt, Open Source, keine Cloud.",
   "waitlist.button": "Eintragen",
+  "waitlist.button_loading": "Wird gesendet…",
   "waitlist.caption": "Seien Sie die Ersten, die erfahren, wenn Vauchi bereit ist.",
   "waitlist.email_placeholder": "sie@beispiel.de",
   "waitlist.heading": "Auf die Warteliste setzen",

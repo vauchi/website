@@ -106,6 +106,7 @@
   "scene8.profiles": "profiles",
   "scene8.social_graph": "social graph",
   "waitlist.button": "Join",
+  "waitlist.button_loading": "Sending…",
   "waitlist.caption": "Be the first to know when Vauchi is ready.",
   "waitlist.email_placeholder": "you@example.com",
   "waitlist.heading": "Join the waitlist",

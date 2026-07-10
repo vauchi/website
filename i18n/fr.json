@@ -106,6 +106,7 @@
   "hero.variant.g.label": "Mises à jour silencieuses",
   "hero.variant.g.sub": "Vos coordonnées changent; les téléphones de vos amis le savent simplement. Chiffré de bout en bout, open source, pas de cloud.",
   "waitlist.button": "Rejoindre",
+  "waitlist.button_loading": "Envoi en cours…",
   "waitlist.caption": "Soyez informé dès que Vauchi sera prêt.",
   "waitlist.email_placeholder": "vous@exemple.com",
   "waitlist.heading": "Rejoignez la liste d'attente",
