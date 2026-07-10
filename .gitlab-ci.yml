@@ -234,6 +234,12 @@ gemnasium-dependency_scanning:
   tags: [docker]
   allow_failure: false
 
+# The template auto-generates this python variant WITHOUT tags; untagged
+# jobs wait forever when no untagged-accepting runner is online and the
+# pending test stage blocks build+deploy (2026-07-10: main stuck 30min).
+gemnasium-python-dependency_scanning:
+  tags: [docker]
+
 secret_detection:
   tags: [docker]
   allow_failure: false
