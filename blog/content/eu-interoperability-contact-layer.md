@@ -98,6 +98,18 @@ That last part is where the interoperability shows up:
   lack of "clear demand" — because it never needed permission in the
   first place.
 
+There is a happier corollary. The same cards that make leaving cheap
+make arriving less lonely: as friends add their Signal or Mastodon
+handles, you can see — on your own device, visible to nobody else —
+which of your people are already there. The hardest part of joining a
+better platform was never installing it; it is the fear that nobody
+you know is on the other side. A contact layer answers that before
+you jump, one friend at a time — no campaign, no coordinated exodus,
+just individual choices becoming quietly visible to the people who
+already know each other. Lock-in works by hiding your options. A
+graph you hold yourself shows them — which may do more for the
+Signals and Mastodons of the world than any mandate would have.
+
 ## What this doesn't fix
 
 We are not going to oversell this.
