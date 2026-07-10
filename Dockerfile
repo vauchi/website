@@ -13,6 +13,12 @@ COPY scripts/build-pages.py scripts/build-pages.py
 COPY public/ public/
 RUN python3 scripts/build-pages.py
 
+# Blog build stage — official zola image (glibc binary, can't run on
+# alpine, so the build happens here and only the output is copied out)
+FROM ghcr.io/getzola/zola:v0.22.1 AS blogbuild
+COPY blog/ /blog/
+RUN ["/bin/zola", "--root", "/blog", "build", "--output-dir", "/blog-out"]
+
 # Final image — run as non-root nginx user
 FROM base
 
@@ -45,6 +51,7 @@ RUN /opt/venv/bin/pip install --no-cache-dir -r /app/waitlist/requirements.txt \
 
 # Static site and nginx config
 COPY --from=build --chown=nginx:nginx /build/public/ /usr/share/nginx/html/
+COPY --from=blogbuild --chown=nginx:nginx /blog-out/ /usr/share/nginx/html/blog/
 COPY --chown=nginx:nginx ./nginx.conf /etc/nginx/conf.d/default.conf
 
 USER nginx

@@ -72,6 +72,21 @@ path = ["**/*.py"]
 SPDX-FileCopyrightText = "2026 Mattia Egloff <mattia.egloff@pm.me>"
 SPDX-License-Identifier = "GPL-3.0-or-later"
 
+# Blog articles — prose, shared under CC-BY-4.0. No inline headers:
+# Zola requires the +++ front matter to be the first bytes of the file.
+[[annotations]]
+path = ["blog/content/**"]
+SPDX-FileCopyrightText = "2026 Mattia Egloff <mattia.egloff@pm.me>"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# Blog Tera templates — child templates must start with {% extends %}
+# (Tera rejects content before it) and reuse misparses SPDX tags inside
+# Tera comments, so licensing is declared here instead of inline.
+[[annotations]]
+path = ["blog/templates/**"]
+SPDX-FileCopyrightText = "2026 Mattia Egloff <mattia.egloff@pm.me>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
 # Claude Code project instructions
 [[annotations]]
 path = ["**/CLAUDE.md"]

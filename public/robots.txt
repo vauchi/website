@@ -4,3 +4,4 @@ Allow: /
 Disallow: /app-files/
 
 Sitemap: https://vauchi.app/sitemap.xml
+Sitemap: https://vauchi.app/blog/sitemap.xml
