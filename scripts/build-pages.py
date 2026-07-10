@@ -139,6 +139,35 @@ def write_variants_manifest(manifest: dict):
     print(f"  variants: {path}")
 
 
+def write_short_links(manifest: dict):
+    """Write /l/<variant> redirect pages to the variant landing pages.
+
+    Generated from the same slug source as the landing pages, so the
+    short links follow automatically when a headline (and thus its
+    slug) changes.
+    """
+    for variant_id, info in manifest["variants"].items():
+        target = f"/landing/{info['slug']}/"
+        dir_path = os.path.join(PUBLIC_DIR, "l", variant_id)
+        os.makedirs(dir_path, exist_ok=True)
+        html = (
+            "<!DOCTYPE html>\n"
+            '<html lang="en">\n'
+            "<head>\n"
+            '<meta charset="utf-8">\n'
+            f'<meta http-equiv="refresh" content="0; url={target}">\n'
+            f'<link rel="canonical" href="https://vauchi.app{target}">\n'
+            "<title>Vauchi</title>\n"
+            "</head>\n"
+            f'<body><a href="{target}">Continue to Vauchi</a></body>\n'
+            "</html>\n"
+        )
+        with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+    ids = "|".join(manifest["variants"])
+    print(f"  short links: /l/<{ids}>")
+
+
 def build_page(
     env: Environment,
     locale: str,
@@ -258,6 +287,7 @@ def main():
     # can discover every slogan without executing JavaScript.
     manifest = build_variants_manifest(all_translations)
     write_variants_manifest(manifest)
+    write_short_links(manifest)
 
     total_pages = len(targets) + (len(targets) * len(VARIANT_IDS))
     print(f"\nDone. {total_pages} page(s) generated.")
