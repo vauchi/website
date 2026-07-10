@@ -14,9 +14,10 @@ April 2026, the European Commission decided to keep it that way: it
 declined to extend the Digital Markets Act's interoperability mandate
 to social networking. Messaging gatekeepers still have to open up;
 social networks do not, and there is no timeline for revisiting the
-question. The Commission's reasoning was that there is little clear
-demand from users and businesses, and that the technical complexity
-is too high. The [EFF called it what it
+question. The Commission's reasoning, set out in its [first DMA
+review report](https://digital-markets-act.ec.europa.eu/system/files/2026-04/DMA%20Review%20Report_COM_2026_178_1_EN.pdf),
+was that there is little clear demand from users and businesses, and
+that the technical complexity is too high. The [EFF called it what it
 is](https://www.eff.org/deeplinks/2026/07/european-commission-chooses-keep-eu-users-locked-behind-big-techs-gates):
 a decision to keep EU users locked behind Big Tech's gates.
 
@@ -66,6 +67,10 @@ including us. The mechanics are deliberately simple: two people meet,
 scan each other's QR codes, and each keeps a copy of the other's
 contact card. That in-person exchange is the security anchor — you
 verified the person by recognizing them, not by trusting a platform.
+When meeting isn't possible, two people can exchange through a shared
+link instead — and the card's trust level, derived purely from how
+the exchange happened and editable by no one, honestly records the
+weaker verification.
 From then on, the card is a direct, end-to-end encrypted channel
 between the two of you. It carries whatever its owner chooses to
 share: phone numbers, email, and — crucially — where to find them on
@@ -78,7 +83,10 @@ That last part is where the interoperability shows up:
   for Signal: she edits one field, and everyone holding her card sees
   the new handle the next time their app syncs. The update travels
   end-to-end encrypted through a relay that only ever sees
-  ciphertext. WhatsApp is never involved, or even aware.
+  ciphertext — and that routes by anonymous, daily-rotating tokens,
+  so it cannot map who knows whom either (the
+  [threat model](https://docs.vauchi.app/developers/threat-model.html)
+  is public). WhatsApp is never involved, or even aware.
 
 - Migration stops being a network event. Leaving a platform no longer
   means losing people; it means editing one field. The switching cost
@@ -96,8 +104,10 @@ We are not going to oversell this.
 
 A contact layer only connects people who both use it. A regulation
 binds gatekeepers whether or not anyone switched yet; our approach
-helps you exactly as far as it spreads, one in-person exchange at a
-time. That is slower. It is also the only route left standing.
+helps you exactly as far as it spreads, one deliberate exchange at a
+time. That is slower. It is also the only route left standing. And
+there is intentionally no discovery layer: Vauchi connects people who
+already know each other; it doesn't find you an audience.
 
 It does nothing about feeds. Vauchi has no timeline, no recommender,
 no engagement metrics — by design, it is a tool you open when you need
@@ -126,5 +136,6 @@ The more durable answer was never to ask the gatekeepers to open them —
 it is to hold your relationships somewhere no gate can enclose:
 with the people themselves.
 
-That's what we're building. If you want it,
-[join the waitlist](https://vauchi.app/#waitlist).
+That's what we're building — and *building* is the operative word:
+Vauchi is in active development, not yet released. If you want it
+when it ships, [join the waitlist](https://vauchi.app/#waitlist).
