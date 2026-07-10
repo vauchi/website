@@ -55,3 +55,28 @@ for (const { lang, path } of LOCALES.filter((l) => l.lang !== "en")) {
     expect(text.trim()).not.toBe(EN_HEADING);
   });
 }
+
+test("join button shows a pending state while the request is in flight", async ({
+  page,
+}) => {
+  // Answer the POST with 204: browsers discard No-Content main-frame
+  // navigations and stay on the page, leaving the pending button
+  // state assertable. (Holding the route open or aborting it instead
+  // wedges Playwright on the navigation / lands on an error page.)
+  // The state must change at submit time, not after the server
+  // responds — joins block on synchronous SMTP for up to 30s when
+  // mail is degraded.
+  await page.route("**/waitlist/join", (route) =>
+    route.fulfill({ status: 204 })
+  );
+  await page.goto("/");
+  const form = page.locator(".waitlist-form");
+  await form.locator('input[name="email"]').fill("probe@example.com");
+  const button = form.locator(".waitlist-button");
+  // noWaitAfter: the click starts a form navigation our held route
+  // never completes; without it the click itself times out.
+  await button.click({ noWaitAfter: true });
+  await expect(button).toBeDisabled();
+  await expect(button).toHaveText("Sending…");
+  await expect(button).toHaveAttribute("aria-busy", "true");
+});
