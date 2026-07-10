@@ -239,6 +239,12 @@ def _safe_redirect_url(raw: str | None) -> str:
     return urljoin(REDIRECT_BASE, parsed.path or "/")
 
 
+def _waitlist_redirect(redirect_url: str, status: str):
+    """303 back to the landing page, anchored at the waitlist section
+    so the visitor sees the status banner instead of the page top."""
+    return redirect(f"{redirect_url}?waitlist={status}#waitlist", code=303)
+
+
 def _send_confirmation(email: str, token: str) -> None:
     if not SMTP_PASSWORD:
         raise RuntimeError("WAITLIST_SMTP_PASSWORD is not configured")
@@ -278,16 +284,16 @@ def join():
     # Honeypot: hidden field should be left blank by real users.
     if request.form.get("website"):
         _audit("join_honeypot", email=email)
-        return redirect(f"{redirect_url}?waitlist=joined", code=303)
+        return _waitlist_redirect(redirect_url, "joined")
 
     if not email or not _valid_email(email):
         _audit("join_invalid", email=email, status="invalid")
-        return redirect(f"{redirect_url}?waitlist=invalid", code=303)
+        return _waitlist_redirect(redirect_url, "invalid")
 
     if not SMTP_PASSWORD:
         _audit("join_error", email=email, status="smtp_not_configured")
         app.logger.error("WAITLIST_SMTP_PASSWORD is not set; refusing submission")
-        return redirect(f"{redirect_url}?waitlist=error", code=303)
+        return _waitlist_redirect(redirect_url, "error")
 
     token = token_urlsafe(32)
     token_hash = _hash_token(token)
@@ -303,7 +309,7 @@ def join():
         if existing:
             if existing["status"] == "confirmed":
                 _audit("join_duplicate", email=email, status="already_confirmed")
-                return redirect(f"{redirect_url}?waitlist=already-confirmed", code=303)
+                return _waitlist_redirect(redirect_url, "already-confirmed")
             # Pending: update token and resend confirmation.
             conn.execute(
                 "UPDATE waitlist SET token_hash = ?, email_ciphertext = ?, created_at = ? WHERE email_hash = ?",
@@ -322,9 +328,9 @@ def join():
     except Exception as e:
         _audit("join_error", email=email, status="send_failed", extra={"error": type(e).__name__})
         app.logger.error("Failed to send confirmation (email_hash=%s): %s", email_hash, e)
-        return redirect(f"{redirect_url}?waitlist=error", code=303)
+        return _waitlist_redirect(redirect_url, "error")
 
-    return redirect(f"{redirect_url}?waitlist=joined", code=303)
+    return _waitlist_redirect(redirect_url, "joined")
 
 
 @app.route("/waitlist/confirm", methods=["GET"])
@@ -334,7 +340,7 @@ def confirm():
 
     if not token:
         _audit("confirm_invalid", status="missing_token")
-        return redirect(f"{redirect_url}?waitlist=invalid-token", code=303)
+        return _waitlist_redirect(redirect_url, "invalid-token")
 
     token_hash = _hash_token(token)
     now = _now()
@@ -346,11 +352,11 @@ def confirm():
 
         if not row:
             _audit("confirm_invalid", status="unknown_token")
-            return redirect(f"{redirect_url}?waitlist=invalid-token", code=303)
+            return _waitlist_redirect(redirect_url, "invalid-token")
 
         if row["status"] == "confirmed":
             _audit("confirm_duplicate", email_hash=row["email_hash"], status="already_confirmed")
-            return redirect(f"{redirect_url}?waitlist=already-confirmed", code=303)
+            return _waitlist_redirect(redirect_url, "already-confirmed")
 
         conn.execute(
             "UPDATE waitlist SET status = 'confirmed', confirmed_at = ? WHERE id = ?",
@@ -358,7 +364,7 @@ def confirm():
         )
         _audit("confirm_success", email_hash=row["email_hash"], status="confirmed")
 
-    return redirect(f"{redirect_url}?waitlist=confirmed", code=303)
+    return _waitlist_redirect(redirect_url, "confirmed")
 
 
 @app.route("/waitlist/admin/export", methods=["GET"])
