@@ -43,6 +43,20 @@
     } catch (e) {}
   }
 
+  // Unbiased index in [0, n) from the Web Crypto CSPRNG. Bucketing is not
+  // security-sensitive, but there is no reason to use a weak generator;
+  // rejection sampling drops the modulo bias.
+  function randomIndex(n) {
+    var limit = Math.floor(4294967296 / n) * n;
+    var buf = new Uint32Array(1);
+    var x;
+    do {
+      crypto.getRandomValues(buf);
+      x = buf[0];
+    } while (x >= limit);
+    return x % n;
+  }
+
   function pickVariant() {
     // Respect a variant that the server already baked into the page.
     var body = document.body;
@@ -53,7 +67,7 @@
 
     var stored = storageGet(STORAGE_KEY);
     if (stored && VARIANT_IDS.indexOf(stored) !== -1) return stored;
-    var idx = Math.floor(Math.random() * VARIANT_IDS.length);
+    var idx = randomIndex(VARIANT_IDS.length);
     var chosen = VARIANT_IDS[idx];
     storageSet(STORAGE_KEY, chosen);
     return chosen;

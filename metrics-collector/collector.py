@@ -46,6 +46,32 @@ MAX_BODY_BYTES = 4096
 PUSHGATEWAY_URL = os.environ.get(
     "PUSHGATEWAY_URL", "http://vauchi-pushgateway:9091"
 )
+if urlparse(PUSHGATEWAY_URL).scheme not in ("http", "https"):
+    raise SystemExit(
+        f"PUSHGATEWAY_URL must be http(s), got: {PUSHGATEWAY_URL!r}"
+    )
+
+
+def _http_only_opener():
+    # An opener with ONLY http/https handlers — file://, ftp://, data:// are
+    # not installed, so a misconfigured PUSHGATEWAY_URL cannot read local
+    # files or reach unexpected schemes (CWE-939). This is the whole push
+    # sink; there is no other outbound request path.
+    opener = urllib.request.OpenerDirector()
+    for handler in (
+        urllib.request.HTTPHandler,
+        urllib.request.HTTPSHandler,
+        urllib.request.HTTPDefaultErrorHandler,
+        urllib.request.HTTPErrorProcessor,
+        # Any non-http(s) scheme falls through to here and raises a clean
+        # URLError instead of silently returning None.
+        urllib.request.UnknownHandler,
+    ):
+        opener.add_handler(handler())
+    return opener
+
+
+_PUSH_OPENER = _http_only_opener()
 PUSHGATEWAY_JOB = os.environ.get("PUSHGATEWAY_JOB", "vauchi_landing")
 PUSHGATEWAY_INTERVAL_S = int(os.environ.get("PUSHGATEWAY_INTERVAL_S", "30"))
 
@@ -264,7 +290,7 @@ def push_to_gateway():
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with _PUSH_OPENER.open(req, timeout=5) as resp:
             resp.read()
     except urllib.error.URLError as e:
         print(f"WARNING: failed to push metrics to {url}: {e}", file=sys.stderr)
@@ -298,7 +324,7 @@ def schedule_push():
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
                 method="POST",
             )
-            with urllib.request.urlopen(req, timeout=5) as resp:
+            with _PUSH_OPENER.open(req, timeout=5) as resp:
                 resp.read()
         except urllib.error.URLError as e:
             print(f"WARNING: failed to push metrics to {url}: {e}", file=sys.stderr)
