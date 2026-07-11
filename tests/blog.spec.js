@@ -10,7 +10,7 @@ import { test, expect } from "@playwright/test";
 
 const LAUNCH_ARTICLE = {
   slug: "eu-interoperability-contact-layer",
-  title: "Interoperability without permission",
+  title: "Leave any platform without losing your people",
 };
 
 test("blog index lists the launch article with date and link", async ({
