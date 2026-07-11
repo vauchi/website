@@ -11,10 +11,12 @@ slug = "eu-interoperability-contact-layer"
 You don't stay on a social network because its feed is good. You stay
 because the people are there — and leaving means losing them. In
 April 2026, the European Commission decided to keep it that way: it
-declined to extend the Digital Markets Act's interoperability mandate
-to social networking. Messaging apps like WhatsApp still have to open
-up; Facebook, Instagram, and TikTok do not, and there is no timeline
-for revisiting the question. The Commission's reasoning, set out in
+declined to extend the Digital Markets Act's interoperability
+mandate — the rule that forces platforms to connect with their
+competitors — to social networking. Messaging apps like WhatsApp
+still have to open up; Facebook, Instagram, and TikTok do not, and
+there is no timeline for revisiting the question. The Commission's reasoning,
+set out in
 its [first DMA review report](https://digital-markets-act.ec.europa.eu/system/files/2026-04/DMA%20Review%20Report_COM_2026_178_1_EN.pdf),
 was that there is little clear demand from users and businesses, and
 that the technical complexity is too high. The [EFF called it what it
@@ -49,8 +51,9 @@ graph access, no meaningful alternative.
 And that is exactly the access the Commission just declined to mandate.
 
 The graph is the moat — the reason leaving costs you people. Every
-"European alternative" and every federated network runs into the same
-wall: your network doesn't move with you.
+"European alternative" and every federated network — the ones run by
+many independent operators, like Mastodon — runs into the same wall:
+your network doesn't move with you.
 
 ## Interoperability without permission
 
@@ -74,9 +77,10 @@ the exchange happened and editable by no one, honestly records the
 weaker verification. That way you always know which contacts you
 verified face to face and which you added remotely.
 From then on, the card is a direct, end-to-end encrypted channel
-between the two of you. It carries whatever its owner chooses to
-share: phone numbers, email, and — crucially — where to find them on
-any platform.
+between the two of you — meaning only you two can read it. Not the
+relay that carries it, and not us: we hold no key that opens it. It
+carries whatever its owner chooses to share: phone numbers, email,
+and — crucially — where to find them on any platform.
 
 That last part is where the interoperability kicks in:
 
@@ -86,10 +90,12 @@ That last part is where the interoperability kicks in:
   the new handle the next time their app syncs. The update travels
   end-to-end encrypted through a relay. The relay can't read what
   changed, and because it routes by anonymous, daily-changing tokens,
-  it can't see who knows whom either (the full
+  it can't see who knows whom either. What it does still see:
+  that an encrypted update passed through, and when (the
   [threat model](https://docs.vauchi.app/developers/threat-model.html)
-  is public for anyone who wants to verify). WhatsApp is never
-  involved, or even aware.
+  — exactly what we defend against, and what we don't — is public
+  for anyone who wants to verify). WhatsApp is never involved, or
+  even aware.
 
 - Migration stops being a network event. Leaving a platform no longer
   means losing people; it means editing one field. The switching cost
