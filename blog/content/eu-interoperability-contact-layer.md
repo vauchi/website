@@ -1,9 +1,9 @@
 +++
-title = "Interoperability without permission"
+title = "Leave any platform without losing your people"
 description = """
-The EU declined to force social networks to interoperate. What that
-means for the social graph — and why the contact layer can be opened
-without any gatekeeper's permission."""
+The EU declined to force social networks to interoperate. Why your
+relationships — not the feeds — are what the gates lock in, and how
+the contact layer can be opened without any gatekeeper's permission."""
 date = 2026-07-10
 slug = "eu-interoperability-contact-layer"
 +++
@@ -12,10 +12,10 @@ You don't stay on a social network because its feed is good. You stay
 because the people are there — and leaving means losing them. In
 April 2026, the European Commission decided to keep it that way: it
 declined to extend the Digital Markets Act's interoperability mandate
-to social networking. Messaging gatekeepers still have to open up;
-social networks do not, and there is no timeline for revisiting the
-question. The Commission's reasoning, set out in its [first DMA
-review report](https://digital-markets-act.ec.europa.eu/system/files/2026-04/DMA%20Review%20Report_COM_2026_178_1_EN.pdf),
+to social networking. Messaging apps like WhatsApp still have to open
+up; Facebook, Instagram, and TikTok do not, and there is no timeline
+for revisiting the question. The Commission's reasoning, set out in
+its [first DMA review report](https://digital-markets-act.ec.europa.eu/system/files/2026-04/DMA%20Review%20Report_COM_2026_178_1_EN.pdf),
 was that there is little clear demand from users and businesses, and
 that the technical complexity is too high. The [EFF called it what it
 is](https://www.eff.org/deeplinks/2026/07/european-commission-chooses-keep-eu-users-locked-behind-big-techs-gates):
@@ -35,11 +35,12 @@ Platform lock-in decomposes into two assets:
 
 Nearly the entire European regulatory debate is about the second layer.
 The [DSA can audit recommender
-systems](https://dsa-observatory.eu/2026/02/15/reclaiming-the-algorithm-what-the-dsa-can-and-cant-fix-about-recommender-systems/),
-ban manipulative design, and demand transparency, but researchers
-studying it conclude that the structural problem — engagement
-optimization under the private control of a handful of companies —
-survives all of it. The most credible structural remedy on the table,
+systems](https://dsa-observatory.eu/2026/02/15/reclaiming-the-algorithm-what-the-dsa-can-and-cant-fix-about-recommender-systems/)
+(the algorithms that decide what you see), ban manipulative design,
+and demand transparency, but researchers studying it conclude that
+the structural problem — feeds tuned to keep you scrolling, under the
+private control of a handful of companies — survives all of it. The most
+credible structural remedy on the table,
 letting users [swap in independent recommender
 systems](https://dsa-observatory.eu/2026/02/23/reclaiming-the-algorithm-part2/),
 explicitly depends on access to the first layer: the social graph. No
@@ -70,23 +71,25 @@ verified the person by recognizing them, not by trusting a platform.
 When meeting isn't possible, two people can exchange through a shared
 link instead — and the card's trust level, derived purely from how
 the exchange happened and editable by no one, honestly records the
-weaker verification.
+weaker verification. That way you always know which contacts you
+verified face to face and which you added remotely.
 From then on, the card is a direct, end-to-end encrypted channel
 between the two of you. It carries whatever its owner chooses to
 share: phone numbers, email, and — crucially — where to find them on
 any platform.
 
-That last part is where the interoperability shows up:
+That last part is where the interoperability kicks in:
 
 - When someone moves — new messenger, new social network, new email,
   new country — they update their card once. Say Ana leaves WhatsApp
   for Signal: she edits one field, and everyone holding her card sees
   the new handle the next time their app syncs. The update travels
-  end-to-end encrypted through a relay that only ever sees
-  ciphertext — and that routes by anonymous, daily-rotating tokens,
-  so it cannot map who knows whom either (the
+  end-to-end encrypted through a relay. The relay can't read what
+  changed, and because it routes by anonymous, daily-changing tokens,
+  it can't see who knows whom either (the full
   [threat model](https://docs.vauchi.app/developers/threat-model.html)
-  is public). WhatsApp is never involved, or even aware.
+  is public for anyone who wants to verify). WhatsApp is never
+  involved, or even aware.
 
 - Migration stops being a network event. Leaving a platform no longer
   means losing people; it means editing one field. The switching cost
@@ -141,9 +144,9 @@ platforms](https://www.techpolicy.press/europes-w-social-bet-tests-its-vision-of
 Some of these will thrive; most will not; all of them ask you to
 rebuild your network inside their walls, one more time.
 
-Every fragmentation makes a platform-neutral contact layer more
-valuable, because it is the only layer where all of those worlds can
-meet. The Commission has decided the gates stay closed for now. Fine.
+Every new wave makes a platform-neutral contact layer more valuable,
+because it is the only layer where all of those worlds can meet. The
+Commission has decided the gates stay closed for now. Fine.
 The more durable answer was never to ask the gatekeepers to open them —
 it is to hold your relationships somewhere no gate can enclose:
 with the people themselves.
