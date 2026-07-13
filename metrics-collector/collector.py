@@ -290,6 +290,10 @@ def push_to_gateway():
         method="POST",
     )
     try:
+        # _PUSH_OPENER registers only http/https handlers (see _http_only_opener):
+        # file://, ftp://, data:// cannot be reached — the CWE-939 concern B310
+        # flags — and PUSHGATEWAY_URL's scheme is validated at module load.
+        # nosemgrep: bandit.B310-1
         with _PUSH_OPENER.open(req, timeout=5) as resp:
             resp.read()
     except urllib.error.URLError as e:
@@ -324,6 +328,10 @@ def schedule_push():
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
                 method="POST",
             )
+            # _PUSH_OPENER registers only http/https handlers (see _http_only_opener):
+            # file://, ftp://, data:// cannot be reached — the CWE-939 concern B310
+            # flags — and PUSHGATEWAY_URL's scheme is validated at module load.
+            # nosemgrep: bandit.B310-1
             with _PUSH_OPENER.open(req, timeout=5) as resp:
                 resp.read()
         except urllib.error.URLError as e:
