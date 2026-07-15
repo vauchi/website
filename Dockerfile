@@ -54,6 +54,10 @@ COPY --from=build --chown=nginx:nginx /build/public/ /usr/share/nginx/html/
 COPY --from=blogbuild --chown=nginx:nginx /blog-out/ /usr/share/nginx/html/blog/
 COPY --chown=nginx:nginx ./nginx.conf /etc/nginx/conf.d/default.conf
 
+# Service label used by Kamal 2 to verify that the deployed image matches the
+# intended service (prevents cross-service image mix-ups).
+LABEL service="vauchi-landing"
+
 USER nginx
 EXPOSE 80
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
