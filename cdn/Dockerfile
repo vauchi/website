@@ -18,4 +18,8 @@ COPY cdn/nginx-cdn.conf /etc/nginx/conf.d/default.conf
 # Built by CI: build-manifest.py → sign-manifest.py → docker build
 COPY public/app-files/ /usr/share/nginx/html/v1/
 
+# Service label used by Kamal 2 to verify that the deployed image matches the
+# intended service (prevents cross-service image mix-ups).
+LABEL service="vauchi-cdn"
+
 EXPOSE 80
