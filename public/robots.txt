@@ -3,5 +3,8 @@ User-agent: *
 Allow: /
 Disallow: /app-files/
 
+# sitemap.xml is a sitemap index (pages + blog + docs). The docs entry is
+# cross-host, so it is listed here too — robots.txt Sitemap directives are
+# honored across hosts, cross-host sitemap-index entries are not always.
 Sitemap: https://vauchi.app/sitemap.xml
-Sitemap: https://vauchi.app/blog/sitemap.xml
+Sitemap: https://docs.vauchi.app/sitemap.xml

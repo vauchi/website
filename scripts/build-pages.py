@@ -168,6 +168,58 @@ def write_short_links(manifest: dict):
     print(f"  short links: /l/<{ids}>")
 
 
+SITE_URL = "https://vauchi.app"
+
+
+def write_pages_sitemap(locales: list[str]):
+    """Write public/sitemap-pages.xml — the marketing-page child sitemap.
+
+    Referenced by the static sitemap.xml index alongside the Zola blog
+    and docs sitemaps. Generated from the discovered locales so it never
+    drifts when a locale is added or removed. Blog posts and docs pages
+    are NOT listed here — each is carried by its own child sitemap.
+    """
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+        '        xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+    ]
+    non_default = [loc for loc in locales if loc != DEFAULT_LOCALE]
+
+    # Default-locale home carries hreflang alternates for every locale.
+    lines.append("  <url>")
+    lines.append(f"    <loc>{SITE_URL}/</loc>")
+    lines.append(
+        f'    <xhtml:link rel="alternate" hreflang="{DEFAULT_LOCALE}" '
+        f'href="{SITE_URL}/" />'
+    )
+    for loc in non_default:
+        lines.append(
+            f'    <xhtml:link rel="alternate" hreflang="{loc}" '
+            f'href="{SITE_URL}/{loc}/" />'
+        )
+    lines.append(
+        f'    <xhtml:link rel="alternate" hreflang="x-default" '
+        f'href="{SITE_URL}/" />'
+    )
+    lines.append("    <changefreq>monthly</changefreq>")
+    lines.append("    <priority>1.0</priority>")
+    lines.append("  </url>")
+
+    for loc in non_default:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{SITE_URL}/{loc}/</loc>")
+        lines.append("    <changefreq>monthly</changefreq>")
+        lines.append("    <priority>0.8</priority>")
+        lines.append("  </url>")
+
+    lines.append("</urlset>")
+    path = os.path.join(PUBLIC_DIR, "sitemap-pages.xml")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"  sitemap: {path} ({len(locales)} locale page(s))")
+
+
 def build_page(
     env: Environment,
     locale: str,
@@ -288,6 +340,10 @@ def main():
     manifest = build_variants_manifest(all_translations)
     write_variants_manifest(manifest)
     write_short_links(manifest)
+
+    # Child sitemap for the sitemap.xml index (built from all locales,
+    # not the possibly-single-locale build target).
+    write_pages_sitemap(locales)
 
     total_pages = len(targets) + (len(targets) * len(VARIANT_IDS))
     print(f"\nDone. {total_pages} page(s) generated.")
