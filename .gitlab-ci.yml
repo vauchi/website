@@ -56,19 +56,21 @@ stages:
 lint:images:
   extends: .image-lint
 
-# Lint HTML files
+# Lint HTML files — hermetic docker job: the previous self-hosted shell
+# variant depended on host-installed pip3/htmlhint and broke when the
+# runner host env changed (pip3 gone, main pipeline 2700646172,
+# 2026-07-23). Same image + python bootstrap as test:e2e above.
 lint:html:
   stage: lint
-  tags:
-    - self-hosted
-    - node
+  tags: [docker]
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/node:22-bookworm
   needs: []
   before_script:
-    - pip3 install --break-system-packages --quiet jinja2 2>/dev/null
-      || pip3 install --quiet jinja2
+    - apt-get update -qq && apt-get install -y -qq python3 python3-pip > /dev/null
+    - pip3 install --break-system-packages --quiet jinja2
     - python3 scripts/build-pages.py
   script:
-    - htmlhint --rulesdir scripts/htmlhint-svg-tag-pair.js public/**/*.html
+    - npx --yes htmlhint --rulesdir scripts/htmlhint-svg-tag-pair.js "public/**/*.html"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
