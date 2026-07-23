@@ -188,21 +188,24 @@ sign:content:
 
 # Build and push docker image
 #
-# On MRs: builds the image to validate the Dockerfile (local tag only).
+# On MRs: builds the image to validate the Dockerfile (--no-push).
 # On main: builds and pushes to GitLab Container Registry.
 #
-# Note: CI_REGISTRY_IMAGE may be empty if the project container registry
-# is not enabled, so we fall back to a local tag for validation builds.
-build:docker:
+# Split into prep (alpine — curl available) + kaniko build: the CI docker
+# runners run a rootless, unprivileged dockerd since the 2026-07-20
+# reinstall, so docker:dind (needs --privileged) cannot start. kaniko's
+# busybox image has no curl, hence the separate prep job. Same daemonless
+# pattern as ohttp-relay's .kaniko-build (5c625d2b). kaniko always pulls
+# base images fresh from the registry (no daemon cache), which preserves
+# the old --pull behavior of picking up upstream security patches.
+build:docker-prep:
   stage: build
   tags: [docker]
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27
-  services:
-    - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27-dind
-  variables:
-    DOCKER_BUILDKIT: "1"
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine:3.21
+  needs: []
+  before_script:
+    - apk add --no-cache curl
   script:
-    - IMAGE="${CI_REGISTRY_IMAGE:-vauchi-website}"
     - >-
       printf '{"sha":"%s","short_sha":"%s","ref":"%s","built":"%s","pipeline":"%s"}\n'
       "$CI_COMMIT_SHA" "$CI_COMMIT_SHORT_SHA" "$CI_COMMIT_REF_NAME"
@@ -216,19 +219,43 @@ build:docker:
       "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=${VAUCHI_THEMES_REF}"
       -o public/app-files/themes/themes.json
       || echo "WARN: themes.json fetch failed — CDN will be sole source"
-    # --pull forces a fresh base-image fetch on every build so upstream
-    # Alpine/zlib/etc. security patches land in the next image.
-    - docker build --pull -t $IMAGE:$CI_COMMIT_SHA -t $IMAGE:latest .
+  artifacts:
+    paths:
+      - public/build-info.json
+      - public/app-files/themes/
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+build:docker:
+  stage: build
+  tags: [docker]
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  needs:
+    - build:docker-prep
+  before_script:
+    - mkdir -p /kaniko/.docker
     - |
-      if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
-        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-        docker push $IMAGE:$CI_COMMIT_SHA
-        # Re-tag from the SHA image before pushing :latest — under dind,
-        # the second -t of a BuildKit build is intermittently missing at
-        # push time ('tag does not exist', 2026-07-09 cdn + 2026-07-10 main).
-        docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
-        docker push $IMAGE:latest
+      cat > /kaniko/.docker/config.json <<JSON
+      {"auths":{
+        "${CI_REGISTRY}":{"auth":"$(printf '%s:%s' "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')"},
+        "${CI_DEPENDENCY_PROXY_SERVER}":{"auth":"$(printf '%s:%s' "$CI_DEPENDENCY_PROXY_USER" "$CI_DEPENDENCY_PROXY_PASSWORD" | base64 | tr -d '\n')"}
+      }}
+      JSON
+  script:
+    - |
+      if [ "$CI_PIPELINE_SOURCE" = "merge_request_event" ]; then
+        PUSH_ARGS="--no-push"
+      else
+        PUSH_ARGS="--destination $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE:latest"
       fi
+      /kaniko/executor \
+        --context "$CI_PROJECT_DIR" \
+        --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
+        $PUSH_ARGS
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
@@ -300,31 +327,34 @@ deploy:trigger:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-# Build and push CDN Docker image (content baked in)
+# Build and push CDN Docker image (content baked in) — kaniko, same
+# daemonless rationale as build:docker above.
 build:cdn-docker:
   stage: build
   tags: [docker]
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27
-  services:
-    - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27-dind
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
   needs:
     - job: sign:content
       optional: true
     - job: build:content
-  variables:
-    DOCKER_BUILDKIT: "1"
-  script:
-    - CDN_IMAGE="${CI_REGISTRY_IMAGE}/cdn"
-    # --pull mirrors the main site build — pick up upstream base-image patches.
-    - docker build --pull -f cdn/Dockerfile -t $CDN_IMAGE:$CI_COMMIT_SHA -t $CDN_IMAGE:latest .
+  before_script:
+    - mkdir -p /kaniko/.docker
     - |
-      if [ -n "$CI_REGISTRY_PASSWORD" ] && [ -n "$CI_REGISTRY_IMAGE" ]; then
-        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-        docker push $CDN_IMAGE:$CI_COMMIT_SHA
-        # Same dind tag-visibility race guard as build:docker above.
-        docker tag $CDN_IMAGE:$CI_COMMIT_SHA $CDN_IMAGE:latest
-        docker push $CDN_IMAGE:latest
-      fi
+      cat > /kaniko/.docker/config.json <<JSON
+      {"auths":{
+        "${CI_REGISTRY}":{"auth":"$(printf '%s:%s' "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')"},
+        "${CI_DEPENDENCY_PROXY_SERVER}":{"auth":"$(printf '%s:%s' "$CI_DEPENDENCY_PROXY_USER" "$CI_DEPENDENCY_PROXY_PASSWORD" | base64 | tr -d '\n')"}
+      }}
+      JSON
+  script:
+    - |
+      /kaniko/executor \
+        --context "$CI_PROJECT_DIR" \
+        --dockerfile "$CI_PROJECT_DIR/cdn/Dockerfile" \
+        --destination "$CI_REGISTRY_IMAGE/cdn:$CI_COMMIT_SHA" \
+        --destination "$CI_REGISTRY_IMAGE/cdn:latest"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
