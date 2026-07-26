@@ -351,10 +351,14 @@ build:cdn-docker:
       }}
       JSON
   script:
+    # Bake the commit provenance into the image (same shape as landing's
+    # public/build-info.json and the relay/ohttp BUILD_INFO build-arg).
+    - export BUILD_INFO="{\"sha\":\"$CI_COMMIT_SHA\",\"short_sha\":\"$CI_COMMIT_SHORT_SHA\",\"ref\":\"$CI_COMMIT_REF_NAME\",\"built\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"pipeline\":\"$CI_PIPELINE_URL\"}"
     - |
       /kaniko/executor \
         --context "$CI_PROJECT_DIR" \
         --dockerfile "$CI_PROJECT_DIR/cdn/Dockerfile" \
+        --build-arg BUILD_INFO="$BUILD_INFO" \
         --destination "$CI_REGISTRY_IMAGE/cdn:$CI_COMMIT_SHA" \
         --destination "$CI_REGISTRY_IMAGE/cdn:latest"
   rules:
