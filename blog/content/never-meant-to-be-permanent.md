@@ -67,13 +67,18 @@ than smuggle it in as a technical fact.
 
 ## Who is collecting this
 
-"Data brokers" sounds abstract, so: California requires them to
-register, and more than six hundred companies are on the public list.
-From 2026 they must also declare whether they have sold or shared what
-they hold with generative-AI developers — a question regulators only
-bother to ask once the answer matters. People do object when given the
-chance: more than three hundred thousand Californians used the state's
-deletion portal in its first months.
+"Data brokers" sounds abstract, so here is something you can check
+rather than take from us. California makes them register, and publishes
+[the register](https://cppa.ca.gov/data_brokers/): companies whose
+business is holding details about people they have never met, listed by
+name. The state also runs a
+[deletion portal](https://privacy.ca.gov/drop-for-data-brokers) that
+brokers must start honouring in August 2026.
+
+The same rules require brokers to declare whether they have shared what
+they hold with law enforcement, foreign actors, or — in the regulator's
+own words — "developers of generative AI systems". That question only
+gets written into law once the answer matters.
 
 Vauchi fixes none of that. We cannot remove you from a broker's
 database, and anyone who claims they can is worth doubting. What we can
