@@ -65,6 +65,21 @@ We think it starts to look like something you ought to be able to
 expect. That is a value judgement, and we would rather label it as one
 than smuggle it in as a technical fact.
 
+## Who is collecting this
+
+"Data brokers" sounds abstract, so: California requires them to
+register, and more than six hundred companies are on the public list.
+From 2026 they must also declare whether they have sold or shared what
+they hold with generative-AI developers — a question regulators only
+bother to ask once the answer matters. People do object when given the
+chance: more than three hundred thousand Californians used the state's
+deletion portal in its first months.
+
+Vauchi fixes none of that. We cannot remove you from a broker's
+database, and anyone who claims they can is worth doubting. What we can
+do is not add to the pile: no account, no profile, and nothing legible
+on our side to sell.
+
 ## The reframe
 
 Here is a different way to think about the ordinary act of swapping
