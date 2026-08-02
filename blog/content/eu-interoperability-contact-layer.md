@@ -92,7 +92,7 @@ That last part is where the interoperability kicks in:
   changed, and because it routes by anonymous, daily-changing tokens,
   it can't see who knows whom either. What it does still see:
   that an encrypted update passed through, and when (the
-  [threat model](https://docs.vauchi.app/developers/threat-model.html)
+  [threat model](https://vauchi.app/docs/developers/threat-model.html)
   — exactly what we defend against, and what we don't — is public
   for anyone who wants to verify). WhatsApp is never involved, or
   even aware.
