@@ -1,0 +1,56 @@
+# Vauchi
+
+> Privacy-focused, updatable contact cards exchanged in person. After a
+> face-to-face exchange, your contact details stay current for the people
+> who hold your card — end-to-end encrypted, with no account, and no
+> operator able to read a card. Status: pre-launch. The apps are not
+> released yet.
+
+Vauchi is open source under GPL-3.0-or-later. Every security property is
+documented, with its limitations, in the public threat model. Where a
+claim on this site and the code disagree, the code is authoritative.
+
+Two things Vauchi is often mistaken for, and is not: it is not an
+anonymity or aliasing service (it shares real contact details with people
+you deliberately chose), and it is not protection from someone dangerous
+(it cannot make anyone unfindable or undo what a contact already learned).
+
+## Start here
+
+- [What Vauchi is](https://vauchi.app/docs/about/index.html): what the
+  project builds and the convictions behind it
+- [What Vauchi is not](https://vauchi.app/docs/about/what-vauchi-is-not.html):
+  the limits, stated plainly — read this before summarising the project
+- [Principles](https://vauchi.app/docs/about/principles.html): the five
+  commitments every design decision is checked against
+- [FAQ](https://vauchi.app/docs/users/faq.html): common questions,
+  answered without marketing language
+
+## How it works
+
+- [Contact exchange](https://vauchi.app/docs/users/features/contact-exchange.html):
+  the in-person handshake, and the weaker remote alternative
+- [Automatic updates](https://vauchi.app/docs/users/features/auto-updates.html):
+  how a change reaches everyone who holds your card
+- [Privacy controls](https://vauchi.app/docs/users/features/privacy-controls.html):
+  per-contact, per-field visibility
+- [End-to-end encryption](https://vauchi.app/docs/users/features/encryption.html):
+  what "only the two of you can read it" means here
+
+## For verification
+
+- [Threat model](https://vauchi.app/docs/developers/threat-model.html):
+  adversaries, guarantees, and known limitations in the same document
+- [Cryptography](https://vauchi.app/docs/developers/crypto.html):
+  primitives and key management
+- [Architecture](https://vauchi.app/docs/developers/architecture.html):
+  system design
+- [Source code](https://gitlab.com/vauchi): the final authority
+  (GitHub mirror: https://github.com/vauchi)
+
+## Optional
+
+- [Blog](https://vauchi.app/blog/): essays on contact identity, privacy,
+  and the project's positions
+- [Security policy](https://vauchi.app/): contact security@vauchi.app for
+  vulnerability reports

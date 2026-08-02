@@ -1,10 +1,65 @@
 # https://www.robotstxt.org/
+#
+# Vauchi's position on automated crawlers.
+#
+# Answer engines are welcome. A crawler that indexes these pages to
+# answer someone's question, and sends that person here, is doing what
+# search engines have always done. We want to be findable.
+#
+# Bulk training crawlers are not. Harvesting the whole site to build a
+# commercial model is a different bargain, and one we are not making by
+# default.
+#
+# Two honest caveats. First, robots.txt is a request, not a fence: it
+# only works for crawlers that read and honour it, and a user-agent
+# string can claim to be anything. Second, this is a stated position
+# rather than a secrecy measure — everything here is public, and our
+# source code is public under GPL-3.0-or-later regardless of what this
+# file says.
+
 User-agent: *
 Allow: /
 Disallow: /app-files/
 
-# sitemap.xml is a sitemap index (pages + blog + docs). The docs entry is
-# cross-host, so it is listed here too — robots.txt Sitemap directives are
-# honored across hosts, cross-host sitemap-index entries are not always.
+# --- Answer engines and user-triggered fetches: allowed ---
+# These build a live index or fetch a page because a person asked for
+# it. Same bargain as a search engine.
+
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+User-agent: Applebot
+Allow: /
+Disallow: /app-files/
+
+# --- Bulk training and dataset crawlers: not allowed ---
+# Note that disallowing Google-Extended opts out of Gemini training and
+# grounding only. It does not remove these pages from Google's AI
+# Overviews, which are served from the ordinary Googlebot index.
+
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: AI2Bot
+User-agent: Diffbot
+User-agent: Omgilibot
+User-agent: ImagesiftBot
+Disallow: /
+
+# sitemap.xml is a sitemap index (pages + blog + docs). Every child is on
+# this host now that the docs moved from docs.vauchi.app to /docs, so the
+# old cross-host workaround — a second Sitemap line for the docs — is gone.
+# This file is also authoritative for /docs: only a host-root robots.txt
+# counts, so the one shipped inside the book is inert.
 Sitemap: https://vauchi.app/sitemap.xml
-Sitemap: https://docs.vauchi.app/sitemap.xml
