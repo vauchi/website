@@ -3,7 +3,7 @@
 
 import { test, expect } from "@playwright/test";
 
-const VARIANTS = ["a", "b", "c", "d", "e", "f", "g"];
+const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
 const EN_VARIANT_HEADLINES = {
   a: "Your contact card. Your channels. Your rules.",
   b: "No brainrot. No data theft. Just people.",
@@ -12,6 +12,8 @@ const EN_VARIANT_HEADLINES = {
   e: "Stop renting your address book.",
   f: "Meet once. Stay in touch forever.",
   g: "The address book that fixes itself.",
+  h: "Stay reachable. On your own terms.",
+  i: "Nobody should own the way you reach people.",
 };
 
 test.describe("landing-page variant test", () => {

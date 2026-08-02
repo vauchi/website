@@ -11,7 +11,7 @@
 
   var STORAGE_KEY = "vauchi-variant";
   var BEACON_URL = "/beacon";
-  var VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g"];
+  var VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
 
   function parseI18n() {
     var el = document.getElementById("variant-i18n");

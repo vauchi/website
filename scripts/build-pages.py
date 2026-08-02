@@ -37,7 +37,7 @@ TEMPLATE_DIR = os.path.join(ROOT, "templates")
 PUBLIC_DIR = os.path.join(ROOT, "public")
 
 DEFAULT_LOCALE = "en"
-VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g"]
+VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 
 
 def load_translations(locale: str) -> dict:

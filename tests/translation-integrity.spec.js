@@ -5,9 +5,9 @@ import { test, expect } from "@playwright/test";
 
 // English reference strings — if these appear in non-EN pages, translation is missing.
 // Update these if the EN i18n values change.
-const EN_TITLE = "Vauchi - Stay in touch, for good";
+const EN_TITLE = "Vauchi — stay reachable, on your own terms";
 const EN_DESCRIPTION =
-  "Swap details once, in person — they keep themselves current, forever. End-to-end encrypted, no accounts, open source.";
+  "Your number, email and job will change. Vauchi keeps the people you chose to meet up to date — no account, no company in the middle, end-to-end encrypted.";
 const EN_SCENE1_HEADING =
   "Your address book is a graveyard of dead contacts.";
 // NB: not "Auditable" — that is a true EN/ES cognate (the Spanish footer
