@@ -327,6 +327,12 @@ deploy:trigger:
     DEPLOY_SERVICE: landing
     DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
   rules:
+    # VCI04: exclude schedules before matching the default branch. The
+    # workflow block admits `$CI_PIPELINE_SOURCE == "schedule"`, so without
+    # this a scheduled pipeline on main fires a production landing deploy
+    # nobody asked for.
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # Build and push CDN Docker image (content baked in) — kaniko, same
