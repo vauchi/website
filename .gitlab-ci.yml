@@ -173,9 +173,21 @@ sign:content:
     - uv pip install --system --quiet PyNaCl
   script:
     - |
+      # Fail closed. This job's rules restrict it to `main`, where the
+      # protected variable is always available — so there is no branch on
+      # which CONTENT_SIGNING_KEY is legitimately absent, and the previous
+      # `exit 0` could only ever mean "shipped unsigned content quietly".
+      #
+      # Skip-on-absent is safe only where the code can distinguish
+      # "legitimately absent here" from "should be here and isn't"
+      # (validate-deploy-secrets.sh in _private does this correctly, by
+      # skipping a protected variable on unprotected refs). Here it cannot,
+      # so it must not skip.
       if [ -z "${CONTENT_SIGNING_KEY:-}" ]; then
-        echo "CONTENT_SIGNING_KEY not set — skipping signing"
-        exit 0
+        echo "CONTENT_SIGNING_KEY is not set, and this job only runs on main."
+        echo "Refusing to publish unsigned content. Check the protected"
+        echo "CI/CD variable rather than re-running."
+        exit 1
       fi
     - echo "$CONTENT_SIGNING_KEY" > /tmp/signing.key
     - python scripts/sign-manifest.py --manifest public/app-files/manifest.json
