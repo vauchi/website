@@ -3,7 +3,7 @@
 
 > **Mirror:** This repo is a read-only mirror of [gitlab.com/vauchi/website](https://gitlab.com/vauchi/website). Please open issues and merge requests there.
 
-[![Pipeline](https://img.shields.io/endpoint?url=https://vauchi.gitlab.io/website/badges/pipeline.json&label=pipeline)](https://gitlab.com/vauchi/website/-/pipelines)
+[![Pipeline](https://img.shields.io/endpoint?url=https://vauchi.gitlab.io/website/badges/pipeline.json&label=pipeline)](https://gitlab.com/vauchi/website)
 [![REUSE](https://api.reuse.software/badge/gitlab.com/vauchi/website)](https://api.reuse.software/info/gitlab.com/vauchi/website)
 
 # Vauchi Website
