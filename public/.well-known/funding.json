@@ -8,7 +8,8 @@
     "email": "hello@vauchi.app",
     "description": "Creator and maintainer of Vauchi — privacy-focused updatable contact cards via in-person QR exchange. E2E encrypted using Signal protocol primitives (X3DH + Double Ratchet), decentralized, no accounts required. Built in Rust with iOS (SwiftUI), Android (Kotlin/Compose), macOS, Windows, Linux (GTK/Qt), CLI, and TUI clients.",
     "webpageUrl": {
-      "url": "https://vauchi.app"
+      "url": "https://vauchi.app",
+      "wellKnown": "https://vauchi.app/.well-known/funding-manifest-urls"
     }
   },
   "projects": [
@@ -17,7 +18,8 @@
       "name": "Vauchi",
       "description": "Privacy-focused updatable contact cards. Exchange contact information in person via QR code, with end-to-end encryption. When you update your phone number or email, everyone who has your card sees the change — without any central server having access to your data. Uses Signal protocol cryptography (X3DH + Double Ratchet) with an oblivious privacy-preserving relay. Self-hostable; no accounts, no phone number, no social graph.",
       "webpageUrl": {
-        "url": "https://vauchi.app"
+        "url": "https://vauchi.app",
+        "wellKnown": "https://vauchi.app/.well-known/funding-manifest-urls"
       },
       "repositoryUrl": {
         "url": "https://gitlab.com/vauchi/vauchi",
