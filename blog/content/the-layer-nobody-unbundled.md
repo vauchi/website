@@ -21,8 +21,8 @@ serious attempts at it. But there is a piece of the stack that keeps
 falling out of the diagram, and it is the piece that holds your
 actual people.
 
-We built something for that layer. The cost is worth stating up
-front: it only works with people who also use it.
+We are building something for that layer. The cost is worth stating
+up front: it only works with people who also use it.
 
 ## What gets unbundled, and what does not
 
