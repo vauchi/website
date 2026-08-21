@@ -14,19 +14,27 @@ const LAUNCH_ARTICLE = {
   date: "July 10, 2026",
 };
 
-// Newest post. The index is sorted by date descending, so this one leads.
-const LATEST_ARTICLE = {
+const MISSION_ARTICLE = {
   slug: "never-meant-to-be-permanent",
   title: "Your contact details were never meant to be permanent",
   date: "August 02, 2026",
 };
 
-test("blog index lists both articles with dates and links", async ({
+// Newest post. The index is sorted by date descending, so this one leads.
+const LATEST_ARTICLE = {
+  slug: "the-layer-nobody-unbundled",
+  title: "The layer nobody unbundled",
+  date: "August 21, 2026",
+};
+
+const ALL_ARTICLES = [LAUNCH_ARTICLE, MISSION_ARTICLE, LATEST_ARTICLE];
+
+test("blog index lists every article with dates and links", async ({
   page,
 }) => {
   await page.goto("/blog/");
   await expect(page).toHaveTitle("Vauchi Blog");
-  for (const article of [LAUNCH_ARTICLE, LATEST_ARTICLE]) {
+  for (const article of ALL_ARTICLES) {
     const link = page.locator(`a[href*="${article.slug}"]`);
     await expect(link).toHaveText(article.title);
     // Scope the date to its own row rather than asserting on .first() —
