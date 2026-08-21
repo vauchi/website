@@ -7,7 +7,9 @@ date = 2026-08-21
 slug = "the-layer-nobody-unbundled"
 +++
 
-There is a long-running argument about how to take social media apart.
+There is a
+[long-running argument](https://www.aei.org/technology-and-innovation/decentralization-portability-reimagining-social-media-platforms/)
+about how to take social media apart.
 
 It goes like this. A platform is not one thing. It is a stack of
 separate jobs glued together: who you are, who you know, what gets
@@ -28,17 +30,20 @@ up front: it only works with people who also use it.
 
 Read the serious writing on this and you can watch it happen.
 
-One widely shared taxonomy from Tech Policy Press sorts the whole
-problem into five areas: speech, business models, privacy,
-competition, and whether any of it is technically buildable. Careful
-work. It never once discusses your contacts.
+One widely shared
+[taxonomy from Tech Policy Press](https://www.techpolicy.press/unbundling-social-media-a-taxonomy-of-problem-areas/)
+sorts the whole problem into five areas: speech, business models,
+privacy, competition, and whether any of it is technically buildable.
+Careful work. It never once discusses your contacts.
 
-A Project Liberty interview lays out the layers cleanly — the
-protocol, the apps on top, the community rules, the money. Wendy
-Seltzer puts the stakes plainly: "If we don't have open protocols or
-access to our own data, it's harder to take our input elsewhere and
-rebuild on a new foundation." She is right. But the data she means is
-posts and profiles — the address book never comes up.
+A
+[Project Liberty interview](https://www.projectliberty.io/news/unbundling-the-social-media-stack-could-a-decentralized-protocol-bring-real-choice-and-control/)
+lays out the layers cleanly — the protocol, the apps on top, the
+community rules, the money. Wendy Seltzer puts the stakes plainly:
+"If we don't have open protocols or access to our own data, it's
+harder to take our input elsewhere and rebuild on a new foundation."
+She is right. But the data she means is posts and profiles — the
+address book never comes up.
 
 The list of connections gets treated as a detail of the identity
 problem. It is the one layer whose loss you actually feel. You can
@@ -56,10 +61,13 @@ portability and it solves a real problem.
 
 But look at what portability requires. For a second app to read your
 connections, your connections have to be readable. On Bluesky your
-follows are public records. On Nostr your contact list is published
-as an ordinary event that anyone can fetch. Some blockchain-based
-projects state the pitch outright: your followers become permanent
-public entries in a shared ledger, tied to your account.
+follows are
+[records in a public repository](https://docs.bsky.app/blog/repo-export)
+that anyone can download. On Nostr your contact list is
+[published as an ordinary event](https://github.com/nostr-protocol/nips/blob/master/02.md)
+that any relay will hand out. Some blockchain-based projects state
+the pitch outright: your followers become permanent public entries in
+a shared ledger, tied to your account.
 
 This is sold as ownership, and in one sense it is. Nobody can delete
 your list. But "who you're connected to" — what researchers call your
@@ -160,17 +168,3 @@ or a company. It needs to be on your phone, and on theirs, and
 nowhere in between.
 
 That's not a feature we added. It's the one we left out.
-
-## Sources
-
-- Tech Policy Press, "Unbundling Social Media: A Taxonomy of Problem
-  Areas":
-  <https://www.techpolicy.press/unbundling-social-media-a-taxonomy-of-problem-areas/>
-- Project Liberty, "Unbundling the Social Media Stack" (Wendy Seltzer
-  interview):
-  <https://www.projectliberty.io/news/unbundling-the-social-media-stack-could-a-decentralized-protocol-bring-real-choice-and-control/>
-- AEI, "Decentralization & Portability: Reimagining Social Media
-  Platforms":
-  <https://www.aei.org/technology-and-innovation/decentralization-portability-reimagining-social-media-platforms/>
-- Vauchi threat model — what the relay sees and what it does not:
-  <https://vauchi.app/docs/developers/threat-model.html>
