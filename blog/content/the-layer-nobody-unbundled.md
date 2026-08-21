@@ -106,7 +106,8 @@ that follows from all of the above is this: there is no list.
 There is no account, no public handle, and no company holding the
 record of who you know — not even an encrypted one we promise never
 to open. Your contacts live on your phone. When you meet Ana and swap
-cards, that fact exists on your device and hers, and nowhere else.
+cards, that happens directly between your two phones. No server is
+told and no account is created.
 
 Updates still have to travel. When Ana changes her number, the new
 number reaches you through a relay server — a machine in the middle
@@ -164,7 +165,8 @@ But it assumes every layer, once separated, needs a home somewhere.
 
 Some layers are better with nobody running them. The list of people
 you know is the clearest case. It doesn't need a protocol, a chain,
-or a company. It needs to be on your phone, and on theirs, and
-nowhere in between.
+or a company. Updates still have to cross the gap between two phones,
+and ours cross a relay. But the list itself belongs on your phone and
+on theirs, and should be assembled nowhere in between.
 
 That's not a feature we added. It's the one we left out.
