@@ -152,7 +152,9 @@ test:scripts:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:3.12-slim
   needs: []
   before_script:
-    - pip install --quiet PyNaCl
+    # Both are hard imports in the scripts under test: sign-manifest.py
+    # and validate-content.py each sys.exit(1) when theirs is missing.
+    - pip install --quiet PyNaCl jsonschema
   script:
     - python -m unittest discover -s scripts/tests -t scripts/tests -v
   rules:
