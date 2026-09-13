@@ -157,10 +157,13 @@ test:scripts:
     - pip install --quiet PyNaCl jsonschema
   script:
     - python -m unittest discover -s scripts/tests -t scripts/tests -v
+    - pip install --quiet -r waitlist/requirements.txt
+    - python -m unittest discover -s waitlist/tests -t waitlist/tests -v
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - "scripts/**/*"
+        - "waitlist/**/*"
     - if: $CI_COMMIT_BRANCH == "main"
 
 # Build app-files manifest and output
