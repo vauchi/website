@@ -95,7 +95,7 @@ def sign_manifest(manifest_path: Path, private_key_path: Path) -> None:
     signing_key = SigningKey(key_bytes)
 
     # Load manifest
-    with open(manifest_path) as f:
+    with open(manifest_path, encoding="utf-8") as f:
         manifest = json.load(f)
 
     # Remove any existing signature for signing
@@ -112,7 +112,10 @@ def sign_manifest(manifest_path: Path, private_key_path: Path) -> None:
     manifest["signature"] = sig_hex
 
     # Write updated manifest with signature
-    with open(manifest_path, "w") as f:
+    # canonical_json signs UTF-8 bytes with ensure_ascii=False, so the file
+    # IO is pinned to UTF-8 too; escaping on write is left as it was, to
+    # keep the output byte-identical to build-manifest.py's.
+    with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
     print(f"Signed: {manifest_path}")
@@ -128,7 +131,7 @@ def verify_signature(manifest_path: Path, public_key_path: Path) -> None:
     verify_key = VerifyKey(key_bytes)
 
     # Load manifest
-    with open(manifest_path) as f:
+    with open(manifest_path, encoding="utf-8") as f:
         manifest = json.load(f)
 
     # Extract and remove signature

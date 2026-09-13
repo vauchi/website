@@ -241,7 +241,7 @@ def main():
     manifest = build_manifest(src_dir, output_dir, args.version, args.base_url)
 
     manifest_path = output_dir / "manifest.json"
-    with open(manifest_path, "w") as f:
+    with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
     print(f"\nGenerated manifest:")

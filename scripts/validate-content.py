@@ -21,7 +21,7 @@ except ImportError:
 
 def load_json(path: Path) -> dict:
     """Load and parse a JSON file."""
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
