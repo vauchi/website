@@ -159,11 +159,14 @@ test:scripts:
     - python -m unittest discover -s scripts/tests -t scripts/tests -v
     - pip install --quiet -r waitlist/requirements.txt
     - python -m unittest discover -s waitlist/tests -t waitlist/tests -v
+    - sh ci/tests/deploy-pin-contract.test.sh
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
         - "scripts/**/*"
         - "waitlist/**/*"
+        - "ci/**/*"
+        - .gitlab-ci.yml
     - if: $CI_COMMIT_BRANCH == "main"
 
 # Build app-files manifest and output
@@ -283,15 +286,26 @@ build:docker:
       JSON
   script:
     - |
-      if [ "$CI_PIPELINE_SOURCE" = "merge_request_event" ]; then
-        PUSH_ARGS="--no-push"
-      else
-        PUSH_ARGS="--destination $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE:latest"
-      fi
+      PUSH_ARGS="--destination $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+      # Only a push (or a deliberate web run) advances :latest. An API
+      # rebuild of the same commit (themes are pinned by VAUCHI_THEMES_REF)
+      # changes nothing but the base image and timestamp.
+      case "$CI_PIPELINE_SOURCE" in
+        merge_request_event) PUSH_ARGS="--no-push" ;;
+        push|web) PUSH_ARGS="$PUSH_ARGS --destination $CI_REGISTRY_IMAGE:latest" ;;
+      esac
       /kaniko/executor \
         --context "$CI_PROJECT_DIR" \
         --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
+        --digest-file "$CI_PROJECT_DIR/image.digest" \
         $PUSH_ARGS
+    # deploy:trigger forwards this so production can refuse the :$SHA tag
+    # once a later rebuild re-pushes it (private problems/done/
+    # 2026-09-26-deploy-sha-tags-are-mutable).
+    - printf 'LANDING_IMAGE_DIGEST=%s\n' "$(cat "$CI_PROJECT_DIR/image.digest")" > landing-image.env
+  artifacts:
+    reports:
+      dotenv: landing-image.env
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
@@ -360,12 +374,16 @@ deploy:trigger:
   variables:
     DEPLOY_SERVICE: landing
     DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+    DEPLOY_IMAGE_DIGEST: $LANDING_IMAGE_DIGEST
   rules:
     # VCI04: exclude schedules before matching the default branch. The
     # workflow block admits `$CI_PIPELINE_SOURCE == "schedule"`, so without
     # this a scheduled pipeline on main fires a production landing deploy
     # nobody asked for.
     - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    # A rebuild of an unchanged commit has nothing new to deploy.
+    - if: $CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger" || $CI_PIPELINE_SOURCE == "api"
       when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
@@ -395,12 +413,20 @@ build:cdn-docker:
     # public/build-info.json and the relay/ohttp BUILD_INFO build-arg).
     - export BUILD_INFO="{\"sha\":\"$CI_COMMIT_SHA\",\"short_sha\":\"$CI_COMMIT_SHORT_SHA\",\"ref\":\"$CI_COMMIT_REF_NAME\",\"built\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"pipeline\":\"$CI_PIPELINE_URL\"}"
     - |
+      PUSH_ARGS="--destination $CI_REGISTRY_IMAGE/cdn:$CI_COMMIT_SHA"
+      case "$CI_PIPELINE_SOURCE" in
+        push|web) PUSH_ARGS="$PUSH_ARGS --destination $CI_REGISTRY_IMAGE/cdn:latest" ;;
+      esac
       /kaniko/executor \
         --context "$CI_PROJECT_DIR" \
         --dockerfile "$CI_PROJECT_DIR/cdn/Dockerfile" \
         --build-arg BUILD_INFO="$BUILD_INFO" \
-        --destination "$CI_REGISTRY_IMAGE/cdn:$CI_COMMIT_SHA" \
-        --destination "$CI_REGISTRY_IMAGE/cdn:latest"
+        --digest-file "$CI_PROJECT_DIR/cdn-image.digest" \
+        $PUSH_ARGS
+    - printf 'CDN_IMAGE_DIGEST=%s\n' "$(cat "$CI_PROJECT_DIR/cdn-image.digest")" > cdn-image.env
+  artifacts:
+    reports:
+      dotenv: cdn-image.env
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
@@ -415,7 +441,14 @@ deploy:cdn:
   variables:
     DEPLOY_SERVICE: cdn
     DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE/cdn:$CI_COMMIT_SHA"
+    DEPLOY_IMAGE_DIGEST: $CDN_IMAGE_DIGEST
   rules:
+    # VCI04: a scheduled pipeline must not fire a production deploy, and a
+    # rebuild of an unchanged commit has nothing new to deploy.
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger" || $CI_PIPELINE_SOURCE == "api"
+      when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # ============================================================
