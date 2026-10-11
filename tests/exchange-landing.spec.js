@@ -77,3 +77,16 @@ test("iOS universal links claim /x and nothing else", async ({ request }) => {
     },
   ]);
 });
+
+test("a scanned exchange QR asks to scan again from the app", async ({
+  page,
+}) => {
+  // The QR form carries a live, in-person exchange that expires in about a
+  // minute; vauchi://exchange cannot take it, so there is no app link.
+  await page.goto(`/x#q=${"C".repeat(232)}`);
+  await expect(page.locator("h1")).toHaveText(
+    "Someone wants to share their contact card with you"
+  );
+  await expect(page.locator("#open-app")).toBeHidden();
+  await expect(page.locator("#scan-hint")).toBeVisible();
+});
