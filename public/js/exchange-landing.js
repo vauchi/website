@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// Exchange-link landing (vauchi/private#277). Reads pk, n and the optional
-// sender name (nm, base64url UTF-8) from the URL fragment — never sent to
-// any server — and makes no network request. The name is written as text
-// only.
+// Exchange-link landing (vauchi/private#277). Reads the exchange from the
+// URL fragment — never sent to any server — and makes no network request:
+// a link carries pk, n and the optional sender name (nm, base64url UTF-8),
+// a scanned QR carries q. The name is written as text only.
 (function () {
   "use strict";
 
@@ -34,6 +34,15 @@
   if (name) {
     document.getElementById("headline").textContent =
       name + " wants to share their contact card with you";
+  }
+
+  // A scanned exchange QR (q=) is a live in-person exchange that expires
+  // within minutes; only the app's own scanner can take it.
+  if (params.q !== undefined) {
+    document.getElementById("open-app").hidden = true;
+    document.getElementById("link-hint").hidden = true;
+    document.getElementById("scan-hint").hidden = false;
+    return;
   }
 
   // The installed apps already open this form; it carries only the

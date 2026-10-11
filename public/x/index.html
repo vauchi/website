@@ -23,6 +23,7 @@
     .primary { background: #4a5bd4; color: #fff; }
     .secondary { background: #fff; color: #4a5bd4; border: 1px solid #c9cdf3; }
     small { display: block; margin-top: 2rem; color: #6b6b80; }
+    [hidden] { display: none !important; }
     @media (prefers-color-scheme: dark) {
       body { background: #15151f; color: #ececf3; }
       p, small { color: #a9a9bd; }
@@ -41,9 +42,11 @@
       <a class="primary" id="open-app" href="/">Open in Vauchi</a>
       <a class="secondary" href="/#waitlist">Get Vauchi</a>
     </div>
-    <small>Already have Vauchi? “Open in Vauchi” continues the exchange.
+    <small id="link-hint">Already have Vauchi? “Open in Vauchi” continues the exchange.
       Otherwise, join the waitlist and open this link again once you have
       the app — it stays valid for 7 days.</small>
+    <small id="scan-hint" hidden>This code is for exchanging in person. Get
+      Vauchi, then scan it again from the app while you are together.</small>
   </main>
   <script src="/js/exchange-landing.js"></script>
 </body>
