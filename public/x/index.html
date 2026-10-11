@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Exchange-link landing (vauchi/private#277). The exchange travels in the
+     URL fragment, which the browser never sends to this server; the script
+     reads it locally and makes no requests. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>A contact card for you — Vauchi</title>
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #f7f7fb; color: #1d1d2b; }
+    main { max-width: 32rem; margin: 0 auto; padding: 3rem 1.5rem; text-align: center; }
+    img { width: 72px; height: 72px; }
+    h1 { font-size: 1.5rem; line-height: 1.3; margin: 1.5rem 0 1rem; overflow-wrap: anywhere; }
+    p { line-height: 1.5; color: #4a4a5e; }
+    .actions { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem; }
+    .actions a { display: block; padding: 0.9rem 1rem; border-radius: 12px; text-decoration: none; font-weight: 600; }
+    .primary { background: #4a5bd4; color: #fff; }
+    .secondary { background: #fff; color: #4a5bd4; border: 1px solid #c9cdf3; }
+    small { display: block; margin-top: 2rem; color: #6b6b80; }
+    @media (prefers-color-scheme: dark) {
+      body { background: #15151f; color: #ececf3; }
+      p, small { color: #a9a9bd; }
+      .secondary { background: #1f1f2c; color: #a9b3ff; border-color: #343454; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="/icon-192.png" alt="Vauchi">
+    <h1 id="headline">Someone wants to share their contact card with you</h1>
+    <p>Vauchi keeps contact cards up to date between the people who
+      exchanged them, end-to-end encrypted. Nothing about this exchange
+      has been sent to us.</p>
+    <div class="actions">
+      <a class="primary" id="open-app" href="/">Open in Vauchi</a>
+      <a class="secondary" href="/#waitlist">Get Vauchi</a>
+    </div>
+    <small>Already have Vauchi? “Open in Vauchi” continues the exchange.
+      Otherwise, join the waitlist and open this link again once you have
+      the app — it stays valid for 7 days.</small>
+  </main>
+  <script src="/js/exchange-landing.js"></script>
+</body>
+</html>

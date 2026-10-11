@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["L2853TNSJ4.app.vauchi.ios"],
+        "components": [{ "/": "/x" }, { "/": "/x/" }]
+      }
+    ]
+  }
+}
