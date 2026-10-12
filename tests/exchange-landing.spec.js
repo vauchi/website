@@ -90,3 +90,25 @@ test("a scanned exchange QR asks to scan again from the app", async ({
   await expect(page.locator("#open-app")).toBeHidden();
   await expect(page.locator("#scan-hint")).toBeVisible();
 });
+
+test("Android app links claim the app signing key and nothing else", async ({
+  request,
+}) => {
+  const response = await request.get("/.well-known/assetlinks.json", {
+    maxRedirects: 0,
+  });
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("application/json");
+  expect(await response.json()).toEqual([
+    {
+      relation: ["delegate_permission/common.handle_all_urls"],
+      target: {
+        namespace: "android_app",
+        package_name: "app.vauchi",
+        sha256_cert_fingerprints: [
+          "C3:CE:40:97:F5:93:95:A9:DA:1C:08:BD:BC:82:24:33:5F:07:74:EA:95:EF:F7:4C:FC:58:89:6B:72:DC:32:59",
+        ],
+      },
+    },
+  ]);
+});
