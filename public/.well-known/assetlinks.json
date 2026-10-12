@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vauchi",
+      "sha256_cert_fingerprints": [
+        "C3:CE:40:97:F5:93:95:A9:DA:1C:08:BD:BC:82:24:33:5F:07:74:EA:95:EF:F7:4C:FC:58:89:6B:72:DC:32:59"
+      ]
+    }
+  }
+]
