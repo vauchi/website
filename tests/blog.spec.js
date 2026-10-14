@@ -20,14 +20,25 @@ const MISSION_ARTICLE = {
   date: "August 02, 2026",
 };
 
-// Newest post. The index is sorted by date descending, so this one leads.
-const LATEST_ARTICLE = {
+const UNBUNDLED_ARTICLE = {
   slug: "the-layer-nobody-unbundled",
   title: "The layer nobody unbundled",
   date: "August 21, 2026",
 };
 
-const ALL_ARTICLES = [LAUNCH_ARTICLE, MISSION_ARTICLE, LATEST_ARTICLE];
+// Newest post. The index is sorted by date descending, so this one leads.
+const LATEST_ARTICLE = {
+  slug: "your-address-book-is-political",
+  title: "Your address book is political",
+  date: "October 14, 2026",
+};
+
+const ALL_ARTICLES = [
+  LAUNCH_ARTICLE,
+  MISSION_ARTICLE,
+  UNBUNDLED_ARTICLE,
+  LATEST_ARTICLE,
+];
 
 test("blog index lists every article with dates and links", async ({
   page,
@@ -55,9 +66,9 @@ test("the newest article renders in full", async ({ page }) => {
   await expect(page.locator("article .meta").first()).toContainText(
     LATEST_ARTICLE.date
   );
-  // The mutual-adoption limit is the one a reader must not miss.
+  // The residual trust in us is the limit a reader must not miss.
   await expect(page.locator("article")).toContainText(
-    "It only works with people who also use it"
+    "You still have to trust us a little"
   );
 });
 
