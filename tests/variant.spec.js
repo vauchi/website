@@ -104,7 +104,7 @@ test.describe("landing-page variant test", () => {
     expect(beaconCount).toBe(0);
   });
 
-  test("sends an anonymous metrics beacon on page hide", async ({ page }) => {
+  test("does not send behavior beacons in an ordinary session", async ({ page }) => {
     await page.addInitScript(() => {
       window.__capturedBeacons = [];
       navigator.sendBeacon = function (url, data) {
@@ -118,18 +118,7 @@ test.describe("landing-page variant test", () => {
       window.dispatchEvent(new Event("pagehide"));
     });
 
-    const payload = await page.evaluate(() => {
-      const beacon = window.__capturedBeacons.find((b) =>
-        String(b.url).endsWith("/beacon")
-      );
-      if (!beacon) return null;
-      return beacon.data.text().then((text) => JSON.parse(text));
-    });
-    expect(VARIANTS).toContain(payload.v);
-    expect(typeof payload.clicks).toBe("number");
-    expect(typeof payload.dwell_ms).toBe("number");
-    expect(payload.dwell_ms).toBeGreaterThanOrEqual(0);
-    expect(payload.path).toBe("/");
+    expect(await page.evaluate(() => window.__capturedBeacons)).toEqual([]);
   });
 
   test("serves a static variants.json manifest for crawlers", async ({ request }) => {
