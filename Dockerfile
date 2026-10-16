@@ -35,13 +35,11 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Redirect nginx pid and logs to paths writable by the nginx user.
 RUN sed -i -E 's|^[[:space:]]*pid[[:space:]]+/[^;]+;|pid /tmp/nginx.pid;|' /etc/nginx/nginx.conf && \
     sed -i -E 's|^[[:space:]]*error_log[[:space:]]+/var/log/nginx/error\.log[^;]*;|error_log /var/log/vauchi/nginx.log warn;|' /etc/nginx/nginx.conf && \
-    sed -i -E 's|^[[:space:]]*access_log[[:space:]]+/var/log/nginx/access\.log[^;]*;|access_log /var/log/vauchi/nginx-access.log main;|' /etc/nginx/nginx.conf
+    sed -i -E 's|^[[:space:]]*access_log[[:space:]]+/var/log/nginx/access\.log[^;]*;|access_log off;|' /etc/nginx/nginx.conf
 
 WORKDIR /app
 
-# Metrics collector (variant test)
-COPY --chown=nginx:nginx metrics-collector/collector.py /app/collector.py
-COPY --chown=nginx:nginx metrics-collector/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --chown=nginx:nginx supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Waitlist API
 COPY --chown=nginx:nginx waitlist /app/waitlist

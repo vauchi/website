@@ -132,8 +132,8 @@ docker build -t vauchi-website .
 docker run -p 8080:80 vauchi-website
 ```
 
-The image runs as the unprivileged `nginx` user; nginx logs and the metrics
-JSONL files are written to `/var/log/vauchi`.
+The image runs as the unprivileged `nginx` user. Technical error and
+waitlist service logs are written to `/var/log/vauchi`.
 
 ## Deployment
 
@@ -172,38 +172,27 @@ See the themes repo README for contributing instructions.
 1. Edit `app-files-src/networks.json`
 2. Validate and build as above
 
-## Landing-Page Variant Test
+## Landing-page copy variants
 
-The hero section randomly shows one of seven messaging variants (A/B/C/D/E/F/G)
-to visitors and collects anonymous, aggregate feedback:
+The opening shows one of nine versions of the copy (A–I). A random
+letter is kept in the current browser tab so that the copy stays the
+same while browsing. Static preview links select a specific version.
+Source copy lives in `i18n/{lang}.json` under `hero.variant.{a-i}.*`.
 
-- **Variant selection** is random and session-scoped (`sessionStorage`).
-- **DNT / GPC respected:** when a visitor sends a `Do Not Track` or
-  `Global Privacy Control` signal, the variant is still shown but no
-  anonymous metrics beacon is sent.
-- **Metrics collected**: which variant was shown, how many primary CTA
-  clicks occurred, and how long the page was visible (dwell time).
-- **No cookies, no fingerprinting, no third-party scripts.** IP addresses
-  are hashed with a daily salt and discarded; only the hash is stored.
-- **Least-privilege runtime:** the container runs as the unprivileged
-  `nginx` user, not as root.
-- **Restricted logs:** raw JSONL log files are created with `0600`
-  permissions and owned by the `nginx` user.
+Choosing copy does not send click counts, time on page or other behavior
+reports. This applies to all visitors, including browsers without privacy
+signals. The old `/beacon` endpoint returns HTTP 410 for cached clients.
+The website image has no analytics collector and disables Nginx access logs.
 
-Source copy lives in `i18n/{lang}.json` under `hero.variant.{a-g}.*`.
-The collector is `metrics-collector/collector.py`:
+The servers still receive connection details needed to serve a page,
+such as an IP address. Technical error logs can contain request details.
+The waitlist handles email addresses separately and keeps its own service
+logs. For example, signing up gives the waitlist your email even though
+viewing a copy variant sends no behavior report. See the
+[privacy policy](https://vauchi.app/docs/legal/privacy-policy.html).
 
-- `POST /beacon` — public beacon endpoint used by the page. Only POST is
-  allowed; raw metrics are never exposed here.
-- `GET /metrics/summary?days=7` — local debug aggregate stats (JSON), not
-  exposed through nginx.
-- It pushes aggregate gauges to the internal Prometheus Pushgateway
-  (`vauchi-pushgateway:9091`) every 30 seconds.
-- Raw beacon events are written to daily JSONL files
-  (`metrics-YYYY-MM-DD.jsonl`) and auto-deleted after `LOG_RETENTION_DAYS`
-  (default 30).
-
-A provisioned Grafana dashboard is in `_private/infra/monitoring/grafana/provisioning/dashboards/json/landing-variants.json`.
+These statements describe this source version. Existing containers can
+retain older analytics files; an upgrade does not prove their erasure.
 
 ## Waitlist
 
