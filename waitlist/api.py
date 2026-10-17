@@ -20,7 +20,7 @@ Security notes:
     - Emails are encrypted at rest with AES-256-GCM using a key from
       WAITLIST_ENCRYPTION_KEY.
     - A deterministic SHA-256 email hash is stored for duplicate detection.
-    - Audit logs use SHA-256 hashed emails, never plaintext addresses.
+    - Service logs contain no request identities or mail exception contents.
     - A hidden honeypot field catches naive bots without revealing itself.
     - The admin export key is compared in constant time.
 
@@ -44,7 +44,6 @@ import base64
 import csv
 import hashlib
 import io
-import json
 import os
 import re
 import smtplib
@@ -193,36 +192,8 @@ def _hash_token(token: str) -> str:
 
 
 def _hash_email(email: str) -> str:
-    """Hash a normalized email for lookup and privacy-preserving audit logs."""
+    """Hash a normalized email for active-record duplicate lookup."""
     return _hash(email.strip().lower())
-
-
-def _client_ip() -> str:
-    """Best-guess client IP, preferring the last X-Forwarded-For entry."""
-    forwarded = request.headers.get("X-Forwarded-For", "")
-    if forwarded:
-        return forwarded.split(",")[-1].strip()
-    return request.remote_addr or "unknown"
-
-
-def _audit(
-    action: str,
-    email: str | None = None,
-    email_hash: str | None = None,
-    status: str | None = None,
-    extra: dict | None = None,
-) -> None:
-    """Write a privacy-preserving audit log entry (hashed email, no plaintext)."""
-    event = {
-        "ts": _now(),
-        "action": action,
-        "ip": _client_ip(),
-        "email_hash": _hash_email(email) if email else email_hash,
-        "status": status,
-    }
-    if extra:
-        event.update(extra)
-    app.logger.info("waitlist_audit %s", json.dumps(event, separators=(",", ":"), default=str))
 
 
 def _valid_email(email: str) -> bool:
@@ -283,15 +254,12 @@ def join():
 
     # Honeypot: hidden field should be left blank by real users.
     if request.form.get("website"):
-        _audit("join_honeypot", email=email)
         return _waitlist_redirect(redirect_url, "joined")
 
     if not email or not _valid_email(email):
-        _audit("join_invalid", email=email, status="invalid")
         return _waitlist_redirect(redirect_url, "invalid")
 
     if not SMTP_PASSWORD:
-        _audit("join_error", email=email, status="smtp_not_configured")
         app.logger.error("WAITLIST_SMTP_PASSWORD is not set; refusing submission")
         return _waitlist_redirect(redirect_url, "error")
 
@@ -308,26 +276,22 @@ def join():
 
         if existing:
             if existing["status"] == "confirmed":
-                _audit("join_duplicate", email=email, status="already_confirmed")
                 return _waitlist_redirect(redirect_url, "already-confirmed")
             # Pending: update token and resend confirmation.
             conn.execute(
                 "UPDATE waitlist SET token_hash = ?, email_ciphertext = ?, created_at = ? WHERE email_hash = ?",
                 (token_hash, email_ciphertext, now, email_hash),
             )
-            _audit("join_resend", email=email, status="pending")
         else:
             conn.execute(
                 "INSERT INTO waitlist (email_hash, email_ciphertext, status, token_hash, created_at) VALUES (?, ?, ?, ?, ?)",
                 (email_hash, email_ciphertext, "pending", token_hash, now),
             )
-            _audit("join_accepted", email=email, status="pending")
 
     try:
         _send_confirmation(email, token)
-    except Exception as e:
-        _audit("join_error", email=email, status="send_failed", extra={"error": type(e).__name__})
-        app.logger.error("Failed to send confirmation (email_hash=%s): %s", email_hash, e)
+    except Exception:
+        app.logger.error("Waitlist confirmation delivery failed")
         return _waitlist_redirect(redirect_url, "error")
 
     return _waitlist_redirect(redirect_url, "joined")
@@ -339,7 +303,6 @@ def confirm():
     redirect_url = _safe_redirect_url(request.args.get("redirect"))
 
     if not token:
-        _audit("confirm_invalid", status="missing_token")
         return _waitlist_redirect(redirect_url, "invalid-token")
 
     token_hash = _hash_token(token)
@@ -351,18 +314,15 @@ def confirm():
         ).fetchone()
 
         if not row:
-            _audit("confirm_invalid", status="unknown_token")
             return _waitlist_redirect(redirect_url, "invalid-token")
 
         if row["status"] == "confirmed":
-            _audit("confirm_duplicate", email_hash=row["email_hash"], status="already_confirmed")
             return _waitlist_redirect(redirect_url, "already-confirmed")
 
         conn.execute(
             "UPDATE waitlist SET status = 'confirmed', confirmed_at = ? WHERE id = ?",
             (now, row["id"]),
         )
-        _audit("confirm_success", email_hash=row["email_hash"], status="confirmed")
 
     return _waitlist_redirect(redirect_url, "confirmed")
 
@@ -374,10 +334,7 @@ def export():
 
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer ") or not compare_digest(auth[7:], ADMIN_API_KEY):
-        _audit("export_denied", status="invalid_key")
         abort(401)
-
-    _audit("export")
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -408,4 +365,4 @@ def _ensure_db() -> None:
 
 if __name__ == "__main__":
     init_db()
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    app.run(host="127.0.0.1", port=8080, debug=False)

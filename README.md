@@ -235,7 +235,9 @@ curl -H "Authorization: Bearer $WAITLIST_ADMIN_API_KEY" \
   contains the raw token.
 - A hidden honeypot field (`name="website"`) catches naive bots without
   revealing itself.
-- Audit logs write SHA-256 hashed emails, not plaintext addresses.
+- The service does not write request audit or access logs. Delivery errors
+  use fixed messages without addresses, IPs, tokens or SMTP exception text.
+  Existing logs and mail-server records have a separate retention lifecycle.
 - The admin export endpoint uses constant-time Bearer token comparison.
 - Nginx rate-limits `/waitlist/join` to 5 requests per minute per IP.
 
