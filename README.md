@@ -201,6 +201,10 @@ emails. The form posts to `/waitlist/join`; a small Flask app inside the
 container handles storage (SQLite) and sends confirmation mail via the existing
 Vauchi mailserver.
 
+This optional email list is separate from Vauchi identities. It creates no app
+account. Both the site form and mail/removal pages support English, German,
+French, Italian and Spanish.
+
 ### Configuration
 
 Set these environment variables in the infra deployment (see `vauchi/infra`):
@@ -217,29 +221,71 @@ Set these environment variables in the infra deployment (see `vauchi/infra`):
 | `WAITLIST_SMTP_FROM` | `waitlist@vauchi.app` | From address for confirmation emails |
 | `WAITLIST_SMTP_STARTTLS` | `true` | Use STARTTLS |
 | `WAITLIST_ADMIN_API_KEY` | — | **Required** API key for CSV export at `/waitlist/admin/export` |
+| `WAITLIST_PENDING_DAYS` | `7` | Pending entry lifetime, 1–30 days from first submission |
+| `WAITLIST_CONFIRMED_DAYS` | `365` | Confirmed entry lifetime, 1–365 days from confirmation |
+| `WAITLIST_CLEANUP_SECONDS` | `300` | Supervised cleanup interval, 60–3600 seconds |
+| `WAITLIST_CONFIRMATION_SUBJECT` | localized | Optional subject override for confirmation mail |
+
+### Leaving and expiration
+
+The confirmation email also contains a removal link. Existing subscribers can
+request one at `/waitlist/manage`. Opening the link displays a form; removal
+requires its explicit POST action, so a mail preview does not remove an entry.
+Invalid, expired and replayed removal links receive the same generic response.
+Requests for removal mail also receive the same response for known and unknown
+addresses; a valid address receives mail in either case.
+
+Leaving removes the active email record, its lookup hash and its confirmation
+and removal capabilities. It cannot recall mail already being sent, or erase
+previous CSV exports, mail-server records or backups. Operators must manage
+those copies separately. Restoring an old database can restore withdrawn
+entries; do not use a restored campaign for mailing without reconciling
+removals.
+
+Expired entries are excluded from new exports. Each API request performs expiry,
+and the supervised cleanup process also runs without incoming requests. An
+outage can delay physical removal. Resending a pending confirmation does not
+extend its original expiry. Existing dated entries are subject to these periods
+on migration; the defaults are reviewable policy choices, not a readiness claim.
 
 ### Admin export
+
+Only confirmed, unexpired entries are exported. Keep any export only as long as
+needed to send the launch note; removal cannot update an exported copy.
 
 ```bash
 curl -H "Authorization: Bearer $WAITLIST_ADMIN_API_KEY" \
   https://vauchi.app/waitlist/admin/export
 ```
 
+An authenticated `POST /waitlist/admin/close` persistently closes the campaign
+and deletes its active entries. Repeating it is safe, and closure survives a
+service restart. New submissions then receive a closed response. It does not
+remove earlier exports or backups.
+
 ### Security notes
 
 - Emails are encrypted at rest with AES-256-GCM. A deterministic SHA-256 hash is
-  kept for duplicate detection; only the admin export endpoint decrypts.
+  kept for duplicate detection; it can be guessed from a known email address.
+  The operator holds the encryption key and can read the addresses. Management
+  mail and the admin export decrypt them; this is not end-to-end encryption.
 - The waitlist API shares the container's unprivileged `nginx` runtime; the
   SQLite database is stored on a persistent volume owned by `nginx`.
 - Confirmation tokens are stored as SHA-256 hashes; only the emailed link
-  contains the raw token.
+  contains the raw token. Reusable removal links are stored encrypted, with a
+  hash for lookup, so a requested reminder can reuse the same link. A reminder
+  does not invalidate an earlier removal link. Treat both link types as secrets.
 - A hidden honeypot field (`name="website"`) catches naive bots without
   revealing itself.
 - The service does not write request audit or access logs. Delivery errors
   use fixed messages without addresses, IPs, tokens or SMTP exception text.
   Existing logs and mail-server records have a separate retention lifecycle.
+  The outer TLS proxy has its own logging configuration; application settings
+  do not disable that layer or delete historical records.
 - The admin export endpoint uses constant-time Bearer token comparison.
-- Nginx rate-limits `/waitlist/join` to 5 requests per minute per IP.
+- Nginx rate-limits `/waitlist/join` and `/waitlist/manage` to a shared allowance
+  of 5 requests per minute per IP, with a burst of 3. The transient in-memory
+  limiter is separate from durable request logging.
 
 ## Related Repositories
 
