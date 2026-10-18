@@ -155,7 +155,7 @@ def _require_admin():
     if not ADMIN_API_KEY:
         abort(404)
     auth = request.headers.get("Authorization", "")
-    if not auth.startswith("Bearer ") or not compare_digest(auth[7:], ADMIN_API_KEY):
+    if not auth.startswith("Bearer ") or not compare_digest(auth[7:].encode("utf-8"), ADMIN_API_KEY.encode("utf-8")):
         abort(401)
 
 
