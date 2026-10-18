@@ -14,3 +14,7 @@ extend-exclude = ["public/index.html", "public/de/", "public/fr/", "public/it/"]
 
 [type.json]
 check-file = false
+
+[default.extend-words]
+# Correct French/German address label used in localization regression tests.
+Adresse = "Adresse"
