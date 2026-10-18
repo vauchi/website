@@ -22,6 +22,7 @@ import unittest
 from pathlib import Path
 
 WAITLIST_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(WAITLIST_DIR))
 
 TEST_KEY = base64.b64encode(bytes(range(32))).decode("ascii")
 REDIRECT_BASE = "https://vauchi.app/"
