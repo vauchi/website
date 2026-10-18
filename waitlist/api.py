@@ -1,63 +1,34 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
-#
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-"""Self-hosted waitlist API with double-opt-in confirmation emails.
+"""Optional double-opt-in mail campaign, separate from app identities.
 
-Emails are encrypted at rest with AES-256-GCM. A deterministic SHA-256 hash
-of each email is stored alongside the ciphertext so duplicates can be detected
-and lookups performed without decrypting.
-
-Endpoints:
-    POST /waitlist/join       - submit email, store as pending, send confirmation
-    GET  /waitlist/confirm    - confirm email via token
-    GET  /waitlist/health     - health check
-    GET  /waitlist/admin/export - CSV export (Bearer token required)
-
-Security notes:
-    - Confirmation tokens are stored as SHA-256 hashes, never plaintext.
-    - Emails are encrypted at rest with AES-256-GCM using a key from
-      WAITLIST_ENCRYPTION_KEY.
-    - A deterministic SHA-256 email hash is stored for duplicate detection.
-    - Service logs contain no request identities or mail exception contents.
-    - A hidden honeypot field catches naive bots without revealing itself.
-    - The admin export key is compared in constant time.
-
-Environment:
-    WAITLIST_DB_PATH          - SQLite path (default: ./waitlist.db)
-    WAITLIST_REDIRECT_BASE_URL- Redirect target base (default: https://vauchi.app/)
-    WAITLIST_ENCRYPTION_KEY   - Base64-encoded 32-byte AES-256-GCM key (required)
-    WAITLIST_SMTP_HOST        - SMTP server (default: mail.vauchi.app)
-    WAITLIST_SMTP_PORT        - SMTP port (default: 587)
-    WAITLIST_SMTP_USER        - SMTP auth user (default: waitlist@vauchi.app)
-    WAITLIST_SMTP_PASSWORD    - SMTP auth password (required to send mail)
-    WAITLIST_SMTP_FROM        - From address (default: waitlist@vauchi.app)
-    WAITLIST_SMTP_STARTTLS    - Use STARTTLS (default: true)
-    WAITLIST_ADMIN_API_KEY    - API key for /admin/export
-    WAITLIST_CONFIRMATION_SUBJECT - Optional custom subject line
+Addresses and reusable withdrawal capabilities are encrypted at rest with
+the operator's AES-GCM key. Confirmation tokens are stored only as hashes.
+The operator can read/export eligible addresses; this is not end-to-end
+encryption. Deleting active records cannot recall mail or old snapshots.
 """
-
-from __future__ import annotations
 
 import base64
 import csv
-import hashlib
+from datetime import datetime, timezone
+from email.message import EmailMessage
 import io
 import os
 import re
 import smtplib
-import sqlite3
-from datetime import datetime, timezone
-from email.message import EmailMessage
 from secrets import compare_digest, token_urlsafe
 from urllib.parse import urljoin, urlparse
 
-from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from flask import Flask, abort, redirect, request
+from flask import Flask, abort, redirect, render_template_string, request
+from werkzeug.exceptions import HTTPException
+
+from storage import WaitlistStore, retention_days
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024
 
 DB_PATH = os.environ.get("WAITLIST_DB_PATH", "./waitlist.db")
 REDIRECT_BASE = os.environ.get("WAITLIST_REDIRECT_BASE_URL", "https://vauchi.app/").rstrip("/") + "/"
@@ -68,18 +39,14 @@ SMTP_PASSWORD = os.environ.get("WAITLIST_SMTP_PASSWORD", "")
 SMTP_FROM = os.environ.get("WAITLIST_SMTP_FROM", "waitlist@vauchi.app")
 SMTP_STARTTLS = os.environ.get("WAITLIST_SMTP_STARTTLS", "true").lower() in ("1", "true", "yes")
 ADMIN_API_KEY = os.environ.get("WAITLIST_ADMIN_API_KEY", "")
-CONFIRMATION_SUBJECT = os.environ.get(
-    "WAITLIST_CONFIRMATION_SUBJECT", "Confirm your spot on the Vauchi waitlist"
-)
-
-# Simple regex for email validation; final delivery is handled by the MTA.
+CONFIRMATION_SUBJECT = os.environ.get("WAITLIST_CONFIRMATION_SUBJECT", "Confirm your spot on the Vauchi waitlist")
+PENDING_DAYS = retention_days(os.environ.get("WAITLIST_PENDING_DAYS", "7"), 30)
+CONFIRMED_DAYS = retention_days(os.environ.get("WAITLIST_CONFIRMED_DAYS", "365"), 365)
 EMAIL_RE = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-
 AESGCM_NONCE_SIZE = 12
 
 
-def _load_encryption_key() -> bytes:
-    """Load and validate the AES-256-GCM key from environment."""
+def _load_encryption_key():
     raw = os.environ.get("WAITLIST_ENCRYPTION_KEY", "")
     if not raw:
         raise RuntimeError("WAITLIST_ENCRYPTION_KEY is required")
@@ -95,113 +62,35 @@ def _load_encryption_key() -> bytes:
 ENCRYPTION_KEY = _load_encryption_key()
 
 
-def _db() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    return conn
-
-
-def _encrypt(plaintext: str) -> str:
-    """Encrypt a string with AES-256-GCM; return base64(nonce || ciphertext)."""
+def _encrypt(plaintext):
     nonce = os.urandom(AESGCM_NONCE_SIZE)
     ciphertext = AESGCM(ENCRYPTION_KEY).encrypt(nonce, plaintext.encode("utf-8"), None)
     return base64.b64encode(nonce + ciphertext).decode("ascii")
 
 
-def _decrypt(token: str) -> str:
-    """Decrypt a value produced by _encrypt. Raises InvalidTag on tampering."""
+def _decrypt(token):
     data = base64.b64decode(token)
-    nonce = data[:AESGCM_NONCE_SIZE]
-    ciphertext = data[AESGCM_NONCE_SIZE:]
-    return AESGCM(ENCRYPTION_KEY).decrypt(nonce, ciphertext, None).decode("utf-8")
+    return AESGCM(ENCRYPTION_KEY).decrypt(data[:AESGCM_NONCE_SIZE], data[AESGCM_NONCE_SIZE:], None).decode("utf-8")
 
 
-def _create_tables(conn: sqlite3.Connection) -> None:
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS waitlist (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email_hash TEXT NOT NULL UNIQUE,
-            email_ciphertext TEXT NOT NULL,
-            status TEXT NOT NULL CHECK(status IN ('pending', 'confirmed')),
-            token_hash TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            confirmed_at TEXT
-        )
-        """
-    )
-    conn.execute("CREATE INDEX IF NOT EXISTS idx_waitlist_status ON waitlist(status)")
-    conn.execute("CREATE INDEX IF NOT EXISTS idx_waitlist_token ON waitlist(token_hash)")
-    conn.execute("CREATE INDEX IF NOT EXISTS idx_waitlist_email_hash ON waitlist(email_hash)")
+def _hash_email(email):
+    return WaitlistStore.email_hash(email)
 
 
-def _migrate_plaintext_table(conn: sqlite3.Connection) -> None:
-    """Migrate an older plaintext 'email' column to encrypted storage."""
-    app.logger.warning("Migrating waitlist table from plaintext to encrypted storage")
-    conn.execute("ALTER TABLE waitlist RENAME TO waitlist_old")
-    _create_tables(conn)
-    for row in conn.execute(
-        "SELECT email, status, token_hash, created_at, confirmed_at FROM waitlist_old"
-    ):
-        conn.execute(
-            """
-            INSERT INTO waitlist
-                (email_hash, email_ciphertext, status, token_hash, created_at, confirmed_at)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """,
-            (
-                _hash_email(row["email"]),
-                _encrypt(row["email"]),
-                row["status"],
-                row["token_hash"],
-                row["created_at"],
-                row["confirmed_at"],
-            ),
-        )
-    conn.execute("DROP TABLE waitlist_old")
-
-
-def init_db() -> None:
-    os.makedirs(os.path.dirname(DB_PATH) or ".", exist_ok=True)
-    with _db() as conn:
-        old = conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='waitlist'"
-        ).fetchone()
-        if old:
-            columns = {
-                row[1] for row in conn.execute("PRAGMA table_info(waitlist)")
-            }
-            if "email" in columns and "email_hash" not in columns:
-                _migrate_plaintext_table(conn)
-                return
-        _create_tables(conn)
-
-
-def _now() -> str:
+def _now():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def _hash(value: str) -> str:
-    """Return a stable SHA-256 hex digest of a UTF-8 string."""
-    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+def store():
+    return WaitlistStore(DB_PATH, _encrypt, _decrypt,
+        clock=lambda: datetime.fromisoformat(_now()), pending_days=PENDING_DAYS, confirmed_days=CONFIRMED_DAYS)
 
 
-def _hash_token(token: str) -> str:
-    return _hash(token)
+def _valid_email(email):
+    return len(email) <= 254 and bool(EMAIL_RE.fullmatch(email))
 
 
-def _hash_email(email: str) -> str:
-    """Hash a normalized email for active-record duplicate lookup."""
-    return _hash(email.strip().lower())
-
-
-def _valid_email(email: str) -> bool:
-    return bool(EMAIL_RE.match(email))
-
-
-def _safe_redirect_url(raw: str | None) -> str:
-    """Return a redirect URL that stays under REDIRECT_BASE."""
+def _safe_redirect_url(raw):
     if not raw:
         return REDIRECT_BASE
     parsed = urlparse(raw)
@@ -210,159 +99,170 @@ def _safe_redirect_url(raw: str | None) -> str:
     return urljoin(REDIRECT_BASE, parsed.path or "/")
 
 
-def _waitlist_redirect(redirect_url: str, status: str):
-    """303 back to the landing page, anchored at the waitlist section
-    so the visitor sees the status banner instead of the page top."""
+def _waitlist_redirect(redirect_url, status):
     return redirect(f"{redirect_url}?waitlist={status}#waitlist", code=303)
 
 
-def _send_confirmation(email: str, token: str) -> None:
+def _send_mail(email, subject, body):
     if not SMTP_PASSWORD:
         raise RuntimeError("WAITLIST_SMTP_PASSWORD is not configured")
-
-    confirm_url = urljoin(REDIRECT_BASE, f"/waitlist/confirm?token={token}")
-    msg = EmailMessage()
-    msg["Subject"] = CONFIRMATION_SUBJECT
-    msg["From"] = SMTP_FROM
-    msg["To"] = email
-    msg.set_content(
-        f"Hi,\n\n"
-        f"Thanks for your interest in Vauchi.\n\n"
-        f"Confirm your spot on the waitlist by opening this link:\n"
-        f"{confirm_url}\n\n"
-        f"If you did not request this, you can ignore this email.\n\n"
-        f"— Vauchi\n"
-        f"https://vauchi.app/\n"
-    )
-
+    message = EmailMessage()
+    message["Subject"] = subject
+    message["From"] = SMTP_FROM
+    message["To"] = email
+    message.set_content(body)
     with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=30) as server:
         if SMTP_STARTTLS:
             server.starttls()
         server.login(SMTP_USER, SMTP_PASSWORD)
-        server.send_message(msg)
+        server.send_message(message)
 
 
-@app.route("/waitlist/health", methods=["GET"])
-def health() -> str:
-    return "OK"
+def _withdrawal_mail(email, token):
+    link = urljoin(REDIRECT_BASE, f"/waitlist/withdraw?token={token}")
+    _send_mail(email, "Manage your Vauchi waitlist request",
+        f"You requested a link to leave the Vauchi waitlist.\n\n"
+        f"Open this link, then confirm removal:\n{link}\n\n"
+        "If you did not request this email, you can ignore it.\n\n— Vauchi\n")
 
 
-@app.route("/waitlist/join", methods=["POST"])
-def join():
-    email = (request.form.get("email") or "").strip().lower()
-    redirect_url = _safe_redirect_url(request.form.get("redirect"))
-
-    # Honeypot: hidden field should be left blank by real users.
-    if request.form.get("website"):
-        return _waitlist_redirect(redirect_url, "joined")
-
-    if not email or not _valid_email(email):
-        return _waitlist_redirect(redirect_url, "invalid")
-
-    if not SMTP_PASSWORD:
-        app.logger.error("WAITLIST_SMTP_PASSWORD is not set; refusing submission")
-        return _waitlist_redirect(redirect_url, "error")
-
-    token = token_urlsafe(32)
-    token_hash = _hash_token(token)
-    email_hash = _hash_email(email)
-    email_ciphertext = _encrypt(email)
-    now = _now()
-
-    with _db() as conn:
-        existing = conn.execute(
-            "SELECT status, token_hash FROM waitlist WHERE email_hash = ?", (email_hash,)
-        ).fetchone()
-
-        if existing:
-            if existing["status"] == "confirmed":
-                return _waitlist_redirect(redirect_url, "already-confirmed")
-            # Pending: update token and resend confirmation.
-            conn.execute(
-                "UPDATE waitlist SET token_hash = ?, email_ciphertext = ?, created_at = ? WHERE email_hash = ?",
-                (token_hash, email_ciphertext, now, email_hash),
-            )
-        else:
-            conn.execute(
-                "INSERT INTO waitlist (email_hash, email_ciphertext, status, token_hash, created_at) VALUES (?, ?, ?, ?, ?)",
-                (email_hash, email_ciphertext, "pending", token_hash, now),
-            )
-
-    try:
-        _send_confirmation(email, token)
-    except Exception:
-        app.logger.error("Waitlist confirmation delivery failed")
-        return _waitlist_redirect(redirect_url, "error")
-
-    return _waitlist_redirect(redirect_url, "joined")
+def _confirmation_mail(email, confirmation, withdrawal):
+    confirm = urljoin(REDIRECT_BASE, f"/waitlist/confirm?token={confirmation}")
+    leave = urljoin(REDIRECT_BASE, f"/waitlist/withdraw?token={withdrawal}")
+    _send_mail(email, CONFIRMATION_SUBJECT,
+        f"Thanks for your interest in Vauchi.\n\nConfirm your spot:\n{confirm}\n\n"
+        f"To leave instead, open this link and confirm removal:\n{leave}\n\n"
+        "If you did not request this email, you can ignore it.\n\n— Vauchi\n")
 
 
-@app.route("/waitlist/confirm", methods=["GET"])
-def confirm():
-    token = request.args.get("token", "")
-    redirect_url = _safe_redirect_url(request.args.get("redirect"))
-
-    if not token:
-        return _waitlist_redirect(redirect_url, "invalid-token")
-
-    token_hash = _hash_token(token)
-    now = _now()
-
-    with _db() as conn:
-        row = conn.execute(
-            "SELECT id, status, email_hash FROM waitlist WHERE token_hash = ?", (token_hash,)
-        ).fetchone()
-
-        if not row:
-            return _waitlist_redirect(redirect_url, "invalid-token")
-
-        if row["status"] == "confirmed":
-            return _waitlist_redirect(redirect_url, "already-confirmed")
-
-        conn.execute(
-            "UPDATE waitlist SET status = 'confirmed', confirmed_at = ? WHERE id = ?",
-            (now, row["id"]),
-        )
-
-    return _waitlist_redirect(redirect_url, "confirmed")
+def _management_page(*, token=None, done=False):
+    return render_template_string("""<!doctype html><html lang="en"><head>
+        <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Vauchi waitlist</title></head><body><main><h1>Vauchi waitlist</h1>
+        {% if done %}<p>If this request matches an active entry, it has been processed.</p>
+        {% elif token is not none %}<p>Confirm that you want to leave the waitlist.</p>
+        <form method="post" action="/waitlist/withdraw"><input type="hidden" name="token" value="{{ token }}">
+        <button type="submit">Leave the waitlist</button></form>
+        {% else %}<p>Enter your email to request a removal link.</p>
+        <form method="post" action="/waitlist/manage"><label for="waitlist-email">Email address</label>
+        <input id="waitlist-email" type="email" name="email" required maxlength="254">
+        <button type="submit">Send removal link</button></form>{% endif %}
+        <p><a href="{{ home }}">Back to Vauchi</a></p></main></body></html>""",
+        token=token, done=done, home=REDIRECT_BASE)
 
 
-@app.route("/waitlist/admin/export", methods=["GET"])
-def export():
+def _require_admin():
     if not ADMIN_API_KEY:
         abort(404)
-
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer ") or not compare_digest(auth[7:], ADMIN_API_KEY):
         abort(401)
 
+
+@app.get("/waitlist/health")
+def health():
+    return "OK"
+
+
+@app.post("/waitlist/join")
+def join():
+    email = (request.form.get("email") or "").strip().lower()
+    destination = _safe_redirect_url(request.form.get("redirect"))
+    if request.form.get("website"):
+        return _waitlist_redirect(destination, "joined")
+    if not _valid_email(email):
+        return _waitlist_redirect(destination, "invalid")
+    if not SMTP_PASSWORD:
+        app.logger.error("WAITLIST_SMTP_PASSWORD is not set; refusing submission")
+        return _waitlist_redirect(destination, "error")
+    confirmation, withdrawal = token_urlsafe(32), token_urlsafe(32)
+    status, withdrawal = store().enroll(email, confirmation, withdrawal)
+    if status == "closed":
+        return _waitlist_redirect(destination, "closed")
+    try:
+        if status == "confirmed":
+            _withdrawal_mail(email, withdrawal)
+        else:
+            _confirmation_mail(email, confirmation, withdrawal)
+    except Exception:
+        app.logger.error("Waitlist confirmation delivery failed")
+        return _waitlist_redirect(destination, "error")
+    return _waitlist_redirect(destination, "joined")
+
+
+@app.get("/waitlist/confirm")
+def confirm():
+    successful = store().confirm(request.args.get("token") or "")
+    return _waitlist_redirect(_safe_redirect_url(request.args.get("redirect")),
+        "confirmed" if successful else "invalid-token")
+
+
+@app.route("/waitlist/withdraw", methods=["GET", "POST"])
+def withdraw():
+    if request.method == "GET":
+        return _management_page(token=request.args.get("token", ""))
+    store().withdraw(request.form.get("token") or "")
+    return _management_page(done=True)
+
+
+@app.route("/waitlist/manage", methods=["GET", "POST"])
+def manage():
+    if request.method == "GET":
+        return _management_page()
+    email = (request.form.get("email") or "").strip().lower()
+    if _valid_email(email) and not request.form.get("website"):
+        token = token_urlsafe(32)
+        details = store().management(email, token)
+        recipient, token = details if details else (email, token)
+        try:
+            _withdrawal_mail(recipient, token)
+        except Exception:
+            app.logger.error("Waitlist management delivery failed")
+    return _management_page(done=True)
+
+
+@app.get("/waitlist/admin/export")
+def export():
+    _require_admin()
     output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(["email", "status", "created_at", "confirmed_at"])
-
-    with _db() as conn:
-        for row in conn.execute(
-            "SELECT email_ciphertext, status, created_at, confirmed_at FROM waitlist ORDER BY created_at"
-        ):
-            try:
-                email = _decrypt(row["email_ciphertext"])
-            except InvalidTag:
-                app.logger.error("Failed to decrypt waitlist entry (database tampered or wrong key)")
-                continue
-            writer.writerow([email, row["status"], row["created_at"], row["confirmed_at"]])
-
+    writer = csv.DictWriter(output, fieldnames=["email", "status", "created_at", "confirmed_at"])
+    writer.writeheader()
+    writer.writerows(store().export_confirmed())
     response = app.make_response(output.getvalue())
     response.headers["Content-Type"] = "text/csv; charset=utf-8"
     response.headers["Content-Disposition"] = "attachment; filename=vauchi-waitlist.csv"
     return response
 
 
+@app.post("/waitlist/admin/close")
+def close():
+    _require_admin()
+    store().close_campaign()
+    return "", 204
+
+
 @app.before_request
-def _ensure_db() -> None:
-    # Lazy-init on first request so the volume is mounted before creating the DB.
-    init_db()
+def _ensure_db():
+    store()
+
+
+@app.after_request
+def _privacy_headers(response):
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Content-Security-Policy"] = "default-src 'none'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    return response
+
+
+@app.errorhandler(Exception)
+def _service_error(error):
+    if isinstance(error, HTTPException):
+        return error
+    app.logger.error("Waitlist request failed")
+    return "The waitlist request could not be completed. Please try again.", 503
 
 
 if __name__ == "__main__":
-    init_db()
+    store()
     app.run(host="127.0.0.1", port=8080, debug=False)
