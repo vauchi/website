@@ -118,7 +118,7 @@ test:e2e:
     - npm ci
     - npx playwright install --with-deps chromium
     - apt-get update -qq && apt-get install -y -qq python3 python3-pip > /dev/null
-    - pip3 install --break-system-packages --quiet jinja2
+    - pip3 install --break-system-packages --quiet jinja2 -r waitlist/requirements.txt
     - python3 scripts/build-pages.py
     - curl -fsSL https://github.com/getzola/zola/releases/download/v0.22.1/zola-v0.22.1-x86_64-unknown-linux-gnu.tar.gz
       | tar -xz -C /usr/local/bin
@@ -143,6 +143,7 @@ test:e2e:
         - "i18n/**/*"
         - "public/**/*"
         - "tests/**/*"
+        - "waitlist/**/*"
         - "blog/**/*"
         - "playwright.config.js"
         - "scripts/build-pages.py"

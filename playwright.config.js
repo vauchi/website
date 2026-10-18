@@ -23,10 +23,17 @@ export default defineConfig({
   ...(isExternal
     ? {}
     : {
-        webServer: {
-          command: "npx serve public -l 3000 --no-clipboard",
-          port: 3000,
-          reuseExistingServer: !process.env.CI,
-        },
+        webServer: [
+          {
+            command: "npx serve public -l 3000 --no-clipboard",
+            port: 3000,
+            reuseExistingServer: !process.env.CI,
+          },
+          {
+            command: "python3 tests/fixtures/waitlist-server.py",
+            url: "http://127.0.0.1:3002/waitlist/health",
+            reuseExistingServer: false,
+          },
+        ],
       }),
 });

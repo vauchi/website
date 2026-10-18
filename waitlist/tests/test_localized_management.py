@@ -57,3 +57,13 @@ class LocalizedManagement(ServiceTestCase):
         response = self.client.get("/waitlist/manage?lang=../../untrusted")
         self.assertEqual(response.status_code, 200)
         self.assertIn('<html lang="en">', response.get_data(as_text=True))
+
+    def test_untrusted_removal_link_is_escaped_and_does_not_enable_scripts(self):
+        payload = '\"><script>alert("synthetic")</script>'
+        response = self.client.get("/waitlist/withdraw", query_string={"token": payload})
+        self.assertEqual(response.status_code, 200)
+        html = response.get_data(as_text=True)
+        self.assertNotIn("<script>", html)
+        self.assertIn("&lt;script&gt;", html)
+        self.assertIn("default-src 'none'", response.headers["Content-Security-Policy"])
+        self.assertNotIn("script-src", response.headers["Content-Security-Policy"])
