@@ -22,10 +22,11 @@ from secrets import compare_digest, token_urlsafe
 from urllib.parse import urljoin, urlparse
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from flask import Flask, abort, redirect, render_template_string, request
+from flask import Flask, abort, redirect, request
 from werkzeug.exceptions import HTTPException
 
 from storage import WaitlistStore, retention_days
+from presentation import home, language, management_page, translations
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024
@@ -39,7 +40,7 @@ SMTP_PASSWORD = os.environ.get("WAITLIST_SMTP_PASSWORD", "")
 SMTP_FROM = os.environ.get("WAITLIST_SMTP_FROM", "waitlist@vauchi.app")
 SMTP_STARTTLS = os.environ.get("WAITLIST_SMTP_STARTTLS", "true").lower() in ("1", "true", "yes")
 ADMIN_API_KEY = os.environ.get("WAITLIST_ADMIN_API_KEY", "")
-CONFIRMATION_SUBJECT = os.environ.get("WAITLIST_CONFIRMATION_SUBJECT", "Confirm your spot on the Vauchi waitlist")
+CONFIRMATION_SUBJECT = os.environ.get("WAITLIST_CONFIRMATION_SUBJECT", "")
 PENDING_DAYS = retention_days(os.environ.get("WAITLIST_PENDING_DAYS", "7"), 30)
 CONFIRMED_DAYS = retention_days(os.environ.get("WAITLIST_CONFIRMED_DAYS", "365"), 365)
 EMAIL_RE = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
@@ -119,36 +120,28 @@ def _send_mail(email, subject, body):
 
 
 def _withdrawal_mail(email, token):
-    link = urljoin(REDIRECT_BASE, f"/waitlist/withdraw?token={token}")
-    _send_mail(email, "Manage your Vauchi waitlist request",
-        f"You requested a link to leave the Vauchi waitlist.\n\n"
-        f"Open this link, then confirm removal:\n{link}\n\n"
-        "If you did not request this email, you can ignore it.\n\n— Vauchi\n")
+    locale = language()
+    text = translations(locale)
+    link = urljoin(REDIRECT_BASE, f"/waitlist/withdraw?token={token}&lang={locale}")
+    _send_mail(email, text["waitlist.mail.management_subject"],
+        f"{text['waitlist.mail.management_intro']}\n\n"
+        f"{text['waitlist.mail.withdraw_intro']}\n{link}\n\n"
+        f"{text['waitlist.mail.ignore']}\n\n— Vauchi\n")
 
 
 def _confirmation_mail(email, confirmation, withdrawal):
-    confirm = urljoin(REDIRECT_BASE, f"/waitlist/confirm?token={confirmation}")
-    leave = urljoin(REDIRECT_BASE, f"/waitlist/withdraw?token={withdrawal}")
-    _send_mail(email, CONFIRMATION_SUBJECT,
-        f"Thanks for your interest in Vauchi.\n\nConfirm your spot:\n{confirm}\n\n"
-        f"To leave instead, open this link and confirm removal:\n{leave}\n\n"
-        "If you did not request this email, you can ignore it.\n\n— Vauchi\n")
+    locale = language()
+    text = translations(locale)
+    confirm = urljoin(REDIRECT_BASE, f"/waitlist/confirm?token={confirmation}&lang={locale}")
+    leave = urljoin(REDIRECT_BASE, f"/waitlist/withdraw?token={withdrawal}&lang={locale}")
+    _send_mail(email, CONFIRMATION_SUBJECT or text["waitlist.mail.confirm_subject"],
+        f"{text['waitlist.mail.confirm_intro']}\n{confirm}\n\n"
+        f"{text['waitlist.mail.withdraw_intro']}\n{leave}\n\n"
+        f"{text['waitlist.mail.ignore']}\n\n— Vauchi\n")
 
 
-def _management_page(*, token=None, done=False):
-    return render_template_string("""<!doctype html><html lang="en"><head>
-        <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Vauchi waitlist</title></head><body><main><h1>Vauchi waitlist</h1>
-        {% if done %}<p>If this request matches an active entry, it has been processed.</p>
-        {% elif token is not none %}<p>Confirm that you want to leave the waitlist.</p>
-        <form method="post" action="/waitlist/withdraw"><input type="hidden" name="token" value="{{ token }}">
-        <button type="submit">Leave the waitlist</button></form>
-        {% else %}<p>Enter your email to request a removal link.</p>
-        <form method="post" action="/waitlist/manage"><label for="waitlist-email">Email address</label>
-        <input id="waitlist-email" type="email" name="email" required maxlength="254">
-        <button type="submit">Send removal link</button></form>{% endif %}
-        <p><a href="{{ home }}">Back to Vauchi</a></p></main></body></html>""",
-        token=token, done=done, home=REDIRECT_BASE)
+def _management_page(**kwargs):
+    return management_page(REDIRECT_BASE, PENDING_DAYS, CONFIRMED_DAYS, **kwargs)
 
 
 def _require_admin():
@@ -167,7 +160,7 @@ def health():
 @app.post("/waitlist/join")
 def join():
     email = (request.form.get("email") or "").strip().lower()
-    destination = _safe_redirect_url(request.form.get("redirect"))
+    destination = _safe_redirect_url(request.form.get("redirect") or home(REDIRECT_BASE, language()))
     if request.form.get("website"):
         return _waitlist_redirect(destination, "joined")
     if not _valid_email(email):
@@ -193,7 +186,7 @@ def join():
 @app.get("/waitlist/confirm")
 def confirm():
     successful = store().confirm(request.args.get("token") or "")
-    return _waitlist_redirect(_safe_redirect_url(request.args.get("redirect")),
+    return _waitlist_redirect(_safe_redirect_url(request.args.get("redirect") or home(REDIRECT_BASE, language())),
         "confirmed" if successful else "invalid-token")
 
 
@@ -202,7 +195,7 @@ def withdraw():
     if request.method == "GET":
         return _management_page(token=request.args.get("token", ""))
     store().withdraw(request.form.get("token") or "")
-    return _management_page(done=True)
+    return _management_page(result="done")
 
 
 @app.route("/waitlist/manage", methods=["GET", "POST"])
@@ -218,7 +211,7 @@ def manage():
             _withdrawal_mail(recipient, token)
         except Exception:
             app.logger.error("Waitlist management delivery failed")
-    return _management_page(done=True)
+    return _management_page(result="requested")
 
 
 @app.get("/waitlist/admin/export")
@@ -251,7 +244,7 @@ def _privacy_headers(response):
     response.headers["Cache-Control"] = "no-store"
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["Content-Security-Policy"] = "default-src 'none'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    response.headers["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
     return response
 
 

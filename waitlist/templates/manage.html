@@ -1,0 +1,51 @@
+<!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ t['waitlist.manage.heading'] }} · Vauchi</title>
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 2rem 1rem; line-height: 1.6; }
+      main { max-width: 40rem; margin: auto; overflow-wrap: anywhere; }
+      form { display: grid; gap: .75rem; margin: 1.5rem 0; }
+      input, button { font: inherit; padding: .75rem; width: 100%; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 3px solid Highlight; outline-offset: 3px; }
+      aside { border-top: 1px solid GrayText; margin-top: 2rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{{ t['waitlist.manage.heading'] }}</h1>
+      {% if result %}
+      <p role="status">{{ t['waitlist.manage.' ~ result] }}</p>
+      {% elif token is not none %}
+      <p>{{ t['waitlist.manage.confirm'] }}</p>
+      <form method="post" action="/waitlist/withdraw">
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="lang" value="{{ lang }}">
+        <button type="submit">{{ t['waitlist.manage.remove'] }}</button>
+      </form>
+      {% else %}
+      <p>{{ t['waitlist.manage.request'] }}</p>
+      <form method="post" action="/waitlist/manage">
+        <label for="waitlist-email">{{ t['waitlist.email_label'] }}</label>
+        <input id="waitlist-email" type="email" name="email" required maxlength="254" autocomplete="email">
+        <input type="hidden" name="lang" value="{{ lang }}">
+        <button type="submit">{{ t['waitlist.manage.send'] }}</button>
+      </form>
+      {% endif %}
+      <p><a href="{{ home }}">{{ t['waitlist.manage.back'] }}</a></p>
+      <aside aria-label="{{ t['waitlist.manage.privacy'] }}">
+        <p>{{ retention }}</p>
+        <p>{{ t['waitlist.manage.cleanup'] }}</p>
+        <p>{{ t['waitlist.manage.limits'] }}</p>
+        <p><a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['waitlist.manage.privacy'] }}</a></p>
+      </aside>
+    </main>
+  </body>
+</html>

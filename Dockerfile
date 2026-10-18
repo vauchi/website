@@ -43,6 +43,7 @@ COPY --chown=nginx:nginx supervisord.conf /etc/supervisor/conf.d/supervisord.con
 
 # Waitlist API
 COPY --chown=nginx:nginx waitlist /app/waitlist
+COPY --chown=nginx:nginx i18n /app/waitlist/i18n
 COPY --chown=nginx:nginx waitlist/supervisord.conf /etc/supervisor/conf.d/waitlist.conf
 RUN /opt/venv/bin/pip install --no-cache-dir -r /app/waitlist/requirements.txt \
     && chown -R nginx:nginx /opt/venv

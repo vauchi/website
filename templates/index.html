@@ -1250,6 +1250,11 @@
         justify-content: center;
         flex-wrap: wrap;
       }
+      .waitlist-label {
+        width: 100%;
+        font-weight: 600;
+        text-align: left;
+      }
       .waitlist-input {
         flex: 1 1 220px;
         min-width: 220px;
@@ -2288,6 +2293,7 @@
           data-msg-invalid="{{ t['waitlist.message.invalid'] }}"
           data-msg-invalid-token="{{ t['waitlist.message.invalid_token'] }}"
           data-msg-error="{{ t['waitlist.message.error'] }}"
+          data-msg-closed="{{ t['waitlist.message.closed'] }}"
         ></div>
         <h2 id="waitlist-heading" class="waitlist-heading">
           {{ t['waitlist.heading'] }}
@@ -2309,14 +2315,20 @@
             autocomplete="off"
             aria-hidden="true"
           >
+          <label class="waitlist-label" for="waitlist-email">{{ t['waitlist.email_label'] }}</label>
           <input
             class="waitlist-input"
+            id="waitlist-email"
             type="email"
             name="email"
+            autocomplete="email"
+            maxlength="254"
             placeholder="{{ t['waitlist.email_placeholder'] }}"
             required
             aria-required="true"
           >
+          <input type="hidden" name="lang" value="{{ lang }}">
+          <input type="hidden" name="redirect" value="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}">
           <button
             class="waitlist-button"
             type="submit"
@@ -2326,6 +2338,7 @@
           </button>
         </form>
         <p class="waitlist-privacy">{{ t['waitlist.privacy_note'] }}</p>
+        <p><a href="/waitlist/manage?lang={{ lang }}">{{ t['waitlist.leave_link'] }}</a></p>
       </section>
 
       <footer class="footer" style="flex-direction: column; gap: 14px">
