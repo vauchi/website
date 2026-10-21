@@ -6,24 +6,70 @@
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["id", "name", "url"],
+    "required": [
+      "id",
+      "name",
+      "url"
+    ],
     "properties": {
       "id": {
         "type": "string",
         "pattern": "^[a-z][a-z0-9]*$",
-        "description": "Unique lowercase identifier"
+        "description": "Unique lowercase identifier",
+        "maxLength": 32
       },
       "name": {
         "type": "string",
         "minLength": 1,
-        "description": "Human-readable display name"
+        "description": "Human-readable display name",
+        "maxLength": 64
       },
       "url": {
         "type": "string",
-        "pattern": "^https?://.*\\{username\\}.*$",
-        "description": "URL template with {username} placeholder"
+        "pattern": "^https://.*\\{username\\}.*$",
+        "description": "https:// URL template with {username}. Core's validation (core validate:content-contracts) also requires one {username} and a plain ASCII host with no userinfo or port (vauchi/private#734 D3).",
+        "maxLength": 256
+      },
+      "aliases": {
+        "type": "array",
+        "maxItems": 8,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{1,32}$"
+        },
+        "description": "Other names the network is known by"
+      },
+      "username": {
+        "type": "object",
+        "required": [
+          "max_len",
+          "charset",
+          "strip_at"
+        ],
+        "properties": {
+          "max_len": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 256
+          },
+          "charset": {
+            "enum": [
+              "any",
+              "alnum_underscore",
+              "alnum_hyphen_inner"
+            ]
+          },
+          "strip_at": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Username rule; charset names one Core implements, never a pattern"
       }
     },
     "additionalProperties": false
-  }
+  },
+  "minItems": 1,
+  "maxItems": 200
 }
