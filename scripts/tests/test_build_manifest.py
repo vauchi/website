@@ -300,5 +300,36 @@ class ManifestShape(unittest.TestCase):
         self.assertIn("themes", manifest["content"])
 
 
+
+class LocaleNames(unittest.TestCase):
+    """Settings names a language before its file is fetched, from the
+    signed manifest (vauchi/private#733 D7)."""
+
+    def build(self, locales: dict) -> dict:
+        workspace = Workspace(self, themes=[{"id": "dark"}], locales=locales)
+        NetworkStub(self)
+        return builder.build_manifest(
+            workspace.src_dir, workspace.output_dir, "1.0.0", "https://x.invalid"
+        )
+
+    def test_a_locale_entry_carries_the_names_of_its_meta(self):
+        meta = {"locale": "pt", "name": "Português", "english_name": "Portuguese", "is_rtl": False}
+        manifest = self.build({"en.json": {"a": "A"}, "pt.json": {"_meta": meta, "a": "B"}})
+
+        entry = manifest["content"]["locales"]["files"]["pt"]
+
+        self.assertEqual(
+            (entry["name"], entry["english_name"], entry["is_rtl"]),
+            ("Português", "Portuguese", False),
+        )
+
+    def test_a_locale_without_meta_carries_no_names(self):
+        manifest = self.build({"en.json": {"a": "A"}})
+
+        entry = manifest["content"]["locales"]["files"]["en"]
+
+        self.assertEqual(sorted(entry), ["checksum", "path", "size_bytes"])
+
+
 if __name__ == "__main__":
     unittest.main()
