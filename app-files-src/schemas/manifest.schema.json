@@ -104,6 +104,24 @@
               "size_bytes": {
                 "type": "integer",
                 "minimum": 0
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[^\\u0000-\\u001F\\u007F-\\u009F]+$",
+                "description": "The language's name in itself, from its _meta (vauchi/private#733 D7)"
+              },
+              "english_name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[^\\u0000-\\u001F\\u007F-\\u009F]+$",
+                "description": "The language's name in English, from its _meta"
+              },
+              "is_rtl": {
+                "type": "boolean",
+                "description": "Whether the language is written right to left"
               }
             }
           }
