@@ -129,6 +129,19 @@ def resolve_locales(src_dir: Path, output_dir: Path) -> Path:
     )
 
 
+def locale_names(locale_file: Path) -> dict:
+    """The names a locale's `_meta` gives, so the app can name a language
+    before fetching its file (vauchi/private#733 D7). Core re-checks them."""
+    meta = json.loads(locale_file.read_text(encoding="utf-8")).get("_meta")
+    if not isinstance(meta, dict):
+        return {}
+    return {
+        key: meta[key]
+        for key in ("name", "english_name", "is_rtl")
+        if key in meta
+    }
+
+
 def build_manifest(
     src_dir: Path, output_dir: Path, version: str, base_url: str
 ) -> dict:
@@ -167,6 +180,7 @@ def build_manifest(
                 "path": locale_file.name,
                 "checksum": compute_checksum(locale_file),
                 "size_bytes": locale_file.stat().st_size,
+                **locale_names(locale_file),
             }
         if files:
             manifest["content"]["locales"] = {
