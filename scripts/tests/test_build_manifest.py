@@ -125,45 +125,69 @@ class Checksums(unittest.TestCase):
         self.assertNotEqual(one, other)
 
 
+FLAT_THEME = {"id": "dark", "colors": {"bg-primary": "#000000"}}
+SOURCE_THEME = {"id": "dark", "primitives": {"base": "#000000"}, "semantic": {}}
+
+GENERATOR = """
+import json, pathlib, sys
+root = pathlib.Path(__file__).resolve().parent.parent
+source = json.loads((root / "themes.json").read_text())
+flat = [{"id": t["id"], "colors": {"bg-primary": t["primitives"]["base"]}} for t in source]
+(root / "generated").mkdir(exist_ok=True)
+(root / "generated" / "themes.json").write_text(json.dumps(flat))
+"""
+
+
 class ThemeResolution(unittest.TestCase):
-    def test_a_sibling_repo_is_preferred_and_no_api_call_is_made(self):
-        workspace = Workspace(self, themes=[{"id": "dark"}])
+    """Core parses only the generated catalog, where each theme carries
+    `colors`; the themes repo's own themes.json is the source it is
+    generated from (vauchi/private#733 D14: the CDN served the source, so
+    no device ever loaded a CDN theme)."""
+
+    def _generated(self, workspace, catalog):
+        generated = workspace.root / "themes" / "generated"
+        generated.mkdir(parents=True, exist_ok=True)
+        (generated / "themes.json").write_text(json.dumps(catalog), encoding="utf-8")
+
+    def test_the_generated_catalog_is_published_and_no_api_call_is_made(self):
+        workspace = Workspace(self, themes=[SOURCE_THEME])
+        self._generated(workspace, [FLAT_THEME])
         network = NetworkStub(self)
 
         resolved = builder.resolve_themes(workspace.src_dir, workspace.output_dir)
 
-        self.assertIsNotNone(resolved)
-        self.assertEqual(json.loads(resolved.read_text()), [{"id": "dark"}])
+        self.assertEqual(json.loads(resolved.read_text()), [FLAT_THEME])
         self.assertEqual(network.fetch_calls, [], "sibling tier must not hit GitLab")
 
-    def test_the_committed_copy_is_used_when_the_api_is_unreachable(self):
-        workspace = Workspace(self)
-        NetworkStub(self, fetch_succeeds=False)
-        committed = workspace.src_dir / "themes"
-        committed.mkdir()
-        (committed / "themes.json").write_text('[{"id":"committed"}]', encoding="utf-8")
+    def test_the_themes_generator_runs_when_nothing_is_generated_yet(self):
+        workspace = Workspace(self, themes=[SOURCE_THEME])
+        scripts = workspace.root / "themes" / "scripts"
+        scripts.mkdir()
+        (scripts / "generate.py").write_text(GENERATOR, encoding="utf-8")
+        NetworkStub(self)
 
         resolved = builder.resolve_themes(workspace.src_dir, workspace.output_dir)
 
-        self.assertIsNotNone(resolved)
-        self.assertEqual(json.loads(resolved.read_text()), [{"id": "committed"}])
+        self.assertEqual(json.loads(resolved.read_text()), [FLAT_THEME])
 
-    def test_the_api_is_used_when_there_is_no_sibling(self):
+    def test_a_catalog_core_cannot_parse_is_never_published(self):
+        workspace = Workspace(self, themes=[SOURCE_THEME])
+        self._generated(workspace, [SOURCE_THEME])
+        NetworkStub(self)
+
+        with self.assertRaises(SystemExit):
+            builder.resolve_themes(workspace.src_dir, workspace.output_dir)
+
+        self.assertFalse((workspace.output_dir / "themes" / "themes.json").exists())
+
+    def test_without_the_themes_repo_nothing_is_published_and_gitlab_is_not_asked(self):
         workspace = Workspace(self)
         network = NetworkStub(self, fetch_succeeds=True)
 
         resolved = builder.resolve_themes(workspace.src_dir, workspace.output_dir)
 
-        self.assertIsNotNone(resolved)
-        self.assertEqual(network.fetch_calls, [("vauchi/themes", "themes.json")])
-
-    def test_no_source_at_all_yields_nothing_and_leaves_no_empty_directory(self):
-        workspace = Workspace(self)
-        NetworkStub(self, fetch_succeeds=False)
-
-        resolved = builder.resolve_themes(workspace.src_dir, workspace.output_dir)
-
         self.assertIsNone(resolved)
+        self.assertEqual(network.fetch_calls, [])
         self.assertFalse((workspace.output_dir / "themes").exists())
 
 
