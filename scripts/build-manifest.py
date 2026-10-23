@@ -9,9 +9,11 @@ the manifest.json and output directory structure for deployment.
 
 Content resolution order (per content type):
   1. Sibling repo (local dev: ../themes/, ../locales/)
-  2. GitLab API (CI: fetches from main branch)
-  3. Committed copy in app-files-src/ (themes only — locales fail loudly
-     instead: a stale committed fork must never reach the CDN)
+  2. GitLab API (CI: fetches from main branch; locales only)
+
+Themes come only from a themes checkout beside this repo: Core parses the
+generated catalog (themes/generated/themes.json, made by the themes repo's
+scripts/generate.py), never the themes source, and CI clones the repo.
 
 Usage:
     python scripts/build-manifest.py [--version VERSION] [--output OUTPUT]
@@ -21,6 +23,8 @@ import argparse
 import hashlib
 import json
 import shutil
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import URLError
@@ -63,34 +67,34 @@ def list_gitlab_files(project: str, path: str = "", ref: str = "main") -> list[s
 
 
 def resolve_themes(src_dir: Path, output_dir: Path) -> Path | None:
-    """Resolve themes.json: sibling repo → GitLab API → app-files-src/."""
+    """Publish the generated theme catalog from the themes checkout beside
+    this repo, generating it first when needed; `None` without a checkout.
+
+    Exits when the catalog is not one Core parses (vauchi/private#733 D14):
+    the CDN served the themes source, so no device ever loaded a CDN theme.
+    """
+    themes_repo = src_dir.parent.parent / "themes"
+    generated = themes_repo / "generated" / "themes.json"
+    generator = themes_repo / "scripts" / "generate.py"
+    if not generated.exists() and generator.exists():
+        subprocess.run([sys.executable, str(generator)], cwd=themes_repo, check=True)
+    if not generated.exists():
+        print(f"  themes: NOT FOUND (no generated catalog under {themes_repo})")
+        return None
+
+    catalog = json.loads(generated.read_text(encoding="utf-8"))
+    if not isinstance(catalog, list) or not all(
+        isinstance(theme, dict) and isinstance(theme.get("colors"), dict)
+        for theme in catalog
+    ):
+        sys.exit(f"ERROR: {generated} is not a catalog Core parses (a theme lacks colors)")
+
     themes_dest_dir = output_dir / "themes"
-    themes_dest = themes_dest_dir / "themes.json"
-
-    # 1. Sibling repo (local dev)
-    sibling = src_dir.parent.parent / "themes" / "themes.json"
-    if sibling.exists():
-        themes_dest_dir.mkdir(exist_ok=True)
-        shutil.copy(sibling, themes_dest)
-        print(f"  themes: sibling repo ({sibling})")
-        return themes_dest
-
-    # 2. GitLab API (CI)
     themes_dest_dir.mkdir(exist_ok=True)
-    if fetch_gitlab_file("vauchi/themes", "themes.json", themes_dest):
-        print("  themes: GitLab API (vauchi/themes)")
-        return themes_dest
-
-    # 3. Committed copy
-    local = src_dir / "themes" / "themes.json"
-    if local.exists():
-        shutil.copy(local, themes_dest)
-        print(f"  themes: committed copy ({local})")
-        return themes_dest
-
-    print("  themes: NOT FOUND (no sibling, API, or committed copy)")
-    themes_dest_dir.rmdir()
-    return None
+    themes_dest = themes_dest_dir / "themes.json"
+    shutil.copy(generated, themes_dest)
+    print(f"  themes: generated catalog ({generated})")
+    return themes_dest
 
 
 def resolve_locales(src_dir: Path, output_dir: Path) -> Path:

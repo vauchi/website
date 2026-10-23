@@ -29,7 +29,9 @@ class Workspace:
     sits between the source directory and the sibling repos.
     """
 
-    def __init__(self, test_case, *, themes=None, locales=None, networks=None):
+    def __init__(
+        self, test_case, *, themes=None, generated_themes=None, locales=None, networks=None
+    ):
         tmp = tempfile.TemporaryDirectory()
         test_case.addCleanup(tmp.cleanup)
         self.root = Path(tmp.name)
@@ -48,6 +50,12 @@ class Workspace:
             sibling = self.root / "themes"
             sibling.mkdir()
             (sibling / "themes.json").write_text(json.dumps(themes), encoding="utf-8")
+        if generated_themes is not None:
+            generated = self.root / "themes" / "generated"
+            generated.mkdir(parents=True)
+            (generated / "themes.json").write_text(
+                json.dumps(generated_themes), encoding="utf-8"
+            )
         if locales is not None:
             sibling = self.root / "locales"
             sibling.mkdir()
@@ -255,7 +263,7 @@ class ManifestShape(unittest.TestCase):
         self.workspace = Workspace(
             self,
             networks={"networks": []},
-            themes=[{"id": "dark"}],
+            generated_themes=[FLAT_THEME],
             locales={"en.json": {"a": "A"}, "de.json": {"a": "B"}},
         )
         NetworkStub(self)
@@ -313,7 +321,7 @@ class ManifestShape(unittest.TestCase):
         self.assertEqual(manifest["content"]["themes"]["path"], "themes/themes.json")
 
     def test_absent_content_is_omitted_rather_than_recorded_as_empty(self):
-        workspace = Workspace(self, themes=[{"id": "dark"}], locales={"en.json": {}})
+        workspace = Workspace(self, generated_themes=[FLAT_THEME], locales={"en.json": {}})
         NetworkStub(self)
 
         manifest = builder.build_manifest(
@@ -330,7 +338,7 @@ class LocaleNames(unittest.TestCase):
     signed manifest (vauchi/private#733 D7)."""
 
     def build(self, locales: dict) -> dict:
-        workspace = Workspace(self, themes=[{"id": "dark"}], locales=locales)
+        workspace = Workspace(self, generated_themes=[FLAT_THEME], locales=locales)
         NetworkStub(self)
         return builder.build_manifest(
             workspace.src_dir, workspace.output_dir, "1.0.0", "https://x.invalid"
