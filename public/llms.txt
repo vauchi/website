@@ -6,7 +6,8 @@
 > operator able to read a card. Status: pre-launch. The apps are not
 > released yet.
 
-Vauchi is open source under GPL-3.0-or-later. Every security property is
+Vauchi is open source: the core library and relays under AGPL-3.0-or-later,
+the apps under GPL-3.0-or-later. Every security property is
 documented, with its limitations, in the public threat model. Where a
 claim on this site and the code disagree, the code is authoritative.
 

@@ -14,8 +14,8 @@
 # only works for crawlers that read and honour it, and a user-agent
 # string can claim to be anything. Second, this is a stated position
 # rather than a secrecy measure — everything here is public, and our
-# source code is public under GPL-3.0-or-later regardless of what this
-# file says.
+# source code is public under AGPL-3.0-or-later and GPL-3.0-or-later
+# regardless of what this file says.
 
 User-agent: *
 Allow: /

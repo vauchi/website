@@ -25,7 +25,7 @@
         "url": "https://gitlab.com/vauchi/vauchi",
         "wellKnown": "https://gitlab.com/vauchi/vauchi/-/raw/main/.well-known/funding-manifest-urls"
       },
-      "licenses": ["spdx:GPL-3.0-or-later"],
+      "licenses": ["spdx:AGPL-3.0-or-later", "spdx:GPL-3.0-or-later"],
       "tags": [
         "privacy", "encryption", "rust", "contacts", "e2e-encryption",
         "signal-protocol", "cross-platform", "open-source", "decentralized", "identity"
