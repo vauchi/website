@@ -49,8 +49,9 @@ variables:
   # Every content type's manifest version. Core fetches a type again only
   # when its version rises, so raise this whenever published content must
   # reach devices that already cached a manifest. 1.1.0: the themes Core
-  # can parse (vauchi/private#733 D14).
-  CONTENT_VERSION: "1.1.0"
+  # can parse (vauchi/private#733 D14). 1.2.0: Twitter becomes X
+  # (vauchi/private#734 T3.3).
+  CONTENT_VERSION: "1.2.0"
   CS_IMAGE: "registry.gitlab.com/vauchi/website:$CI_COMMIT_SHA"
 
 stages:

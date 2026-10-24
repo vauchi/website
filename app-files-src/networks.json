@@ -1,5 +1,5 @@
 [
-  {"id": "twitter", "name": "Twitter / X", "url": "https://twitter.com/{username}", "aliases": ["x"], "username": {"max_len": 15, "charset": "alnum_underscore", "strip_at": true}},
+  {"id": "twitter", "name": "X", "url": "https://x.com/{username}", "aliases": ["x"], "username": {"max_len": 15, "charset": "alnum_underscore", "strip_at": true}},
   {"id": "instagram", "name": "Instagram", "url": "https://instagram.com/{username}", "aliases": ["ig"], "username": {"max_len": 256, "charset": "any", "strip_at": true}},
   {"id": "facebook", "name": "Facebook", "url": "https://facebook.com/{username}"},
   {"id": "linkedin", "name": "LinkedIn", "url": "https://linkedin.com/in/{username}"},
