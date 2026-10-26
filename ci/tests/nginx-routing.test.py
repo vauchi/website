@@ -178,6 +178,16 @@ class PrivacyRedirectTests(unittest.TestCase):
         self.assertNotIn("gitlab.com", site["content-security-policy"])
         self.assertIn("require-trusted-types-for 'script'", site["content-security-policy"])
 
+    def test_cms_admin_login_popup_keeps_its_opener(self):
+        # Sveltia's GitLab popup returns to /blog/admin/ from gitlab.com and
+        # hands the token over via window.opener. Any COOP other than
+        # unsafe-none there makes Chromium sever the opener on that
+        # cross-origin return, and the popup loops back to the login screen.
+        _, admin = self.get_headers("/blog/admin/")
+        self.assertEqual(admin["cross-origin-opener-policy"], "unsafe-none")
+        _, site = self.get_headers("/")
+        self.assertEqual(site["cross-origin-opener-policy"], "same-origin")
+
     def test_cms_admin_keeps_the_site_security_headers(self):
         for path in ("/blog/admin/", "/blog/admin/sveltia-cms.js"):
             with self.subTest(path=path):
