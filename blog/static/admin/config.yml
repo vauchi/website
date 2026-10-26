@@ -9,7 +9,7 @@ backend:
   repo: vauchi/website
   branch: main
   auth_type: pkce
-  app_id: REPLACE_WITH_GITLAB_OAUTH_APPLICATION_ID
+  app_id: ca8c1082c823931202a804ac41b3713fba3a41f3ab28e3a0dcdc50305bd0665c
   auth_methods: [oauth]
   commit_messages:
     create: 'docs: publish "{{slug}}"'
