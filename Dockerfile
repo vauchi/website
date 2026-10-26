@@ -19,6 +19,19 @@ FROM ghcr.io/getzola/zola:v0.22.1 AS blogbuild
 COPY blog/ /blog/
 RUN ["/bin/zola", "--root", "/blog", "build", "--output-dir", "/blog-out"]
 
+# Blog CMS bundle (vauchi/private#822). Served from this image, not a
+# CDN, so the admin page's CSP stays script-src 'self'. The tarball is the
+# npm one; its sha512 matched the registry's integrity field when pinned.
+FROM base AS cms
+ARG SVELTIA_VERSION=0.237.0
+ARG SVELTIA_SHA256=562ff1cda6003b3265a5d5ed429347d4e52b344e5954ef09e8849ec786c5c887
+RUN wget -q -O /tmp/cms.tgz "https://registry.npmjs.org/@sveltia/cms/-/cms-${SVELTIA_VERSION}.tgz" \
+    && echo "${SVELTIA_SHA256}  /tmp/cms.tgz" | sha256sum -c - \
+    && tar -xzf /tmp/cms.tgz -C /tmp \
+    && mkdir -p /cms/chunks \
+    && cp /tmp/package/dist/sveltia-cms.js /cms/ \
+    && cp /tmp/package/dist/chunks/*.js /cms/chunks/
+
 # Final image — run as non-root nginx user
 FROM base
 
@@ -51,6 +64,7 @@ RUN /opt/venv/bin/pip install --no-cache-dir -r /app/waitlist/requirements.txt \
 # Static site and nginx config
 COPY --from=build --chown=nginx:nginx /build/public/ /usr/share/nginx/html/
 COPY --from=blogbuild --chown=nginx:nginx /blog-out/ /usr/share/nginx/html/blog/
+COPY --from=cms --chown=nginx:nginx /cms/ /usr/share/nginx/html/blog/admin/
 COPY --chown=nginx:nginx ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # Service label used by Kamal 2 to verify that the deployed image matches the

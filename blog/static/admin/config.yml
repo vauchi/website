@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Published posts. Drafts live in vauchi/private (just blog drafts);
+# every save here opens a merge request, so CI and review still gate
+# what reaches vauchi.app/blog.
+backend:
+  name: gitlab
+  repo: vauchi/website
+  branch: main
+  auth_type: pkce
+  app_id: REPLACE_WITH_GITLAB_OAUTH_APPLICATION_ID
+  auth_methods: [oauth]
+  commit_messages:
+    create: 'docs: publish "{{slug}}"'
+    update: 'docs: edit "{{slug}}"'
+    delete: 'docs: remove "{{slug}}"'
+    uploadMedia: 'docs: add blog image "{{path}}"'
+    deleteMedia: 'docs: remove blog image "{{path}}"'
+
+publish_mode: editorial_workflow
+site_url: https://vauchi.app/blog
+media_folder: blog/static/images
+public_folder: /blog/images
+
+collections:
+  - name: posts
+    label: Posts
+    folder: blog/content
+    # _index.md is Zola's section page, not a post, and has no title.
+    filter: { field: title, pattern: "." }
+    create: true
+    format: toml-frontmatter
+    frontmatter_delimiter: "+++"
+    extension: md
+    slug: "{{fields.slug}}"
+    preview_path: "{{slug}}/"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text }
+      - { name: date, label: Date, widget: datetime, time_format: false, format: YYYY-MM-DD }
+      - { name: slug, label: Slug, widget: string }
+      - { name: body, label: Body, widget: markdown }
