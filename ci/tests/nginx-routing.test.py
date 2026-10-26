@@ -19,6 +19,10 @@ class PrivacyRedirectTests(unittest.TestCase):
         cls.addClassCleanup(cls.directory.cleanup)
         root = Path(cls.directory.name)
         root.chmod(0o755)
+        (root / "blog" / "admin").mkdir(parents=True)
+        (root / "blog" / "admin" / "index.html").write_text("<!doctype html>")
+        (root / "blog" / "admin" / "sveltia-cms.js").write_text("")
+        (root / "index.html").write_text("<!doctype html>")
         cls.access_log = root / "access.log"
         cls.request_log = root / "request-errors.log"
         cls.collected = Queue()
@@ -152,6 +156,37 @@ class PrivacyRedirectTests(unittest.TestCase):
             response.read()
         finally:
             connection.close()
+
+    def get_headers(self, path):
+        connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        try:
+            connection.request("GET", path, headers={"Host": "vauchi.app"})
+            response = connection.getresponse()
+            response.read()
+            return response.status, {name.lower(): value for name, value in response.getheaders()}
+        finally:
+            connection.close()
+
+    def test_cms_admin_may_reach_gitlab_but_the_site_may_not(self):
+        status, admin = self.get_headers("/blog/admin/")
+        self.assertEqual(status, 200)
+        policy = admin["content-security-policy"]
+        self.assertIn("connect-src 'self' https://gitlab.com", policy)
+        self.assertIn("script-src 'self';", policy)
+        self.assertIn("frame-ancestors 'none'", policy)
+        _, site = self.get_headers("/")
+        self.assertNotIn("gitlab.com", site["content-security-policy"])
+        self.assertIn("require-trusted-types-for 'script'", site["content-security-policy"])
+
+    def test_cms_admin_keeps_the_site_security_headers(self):
+        for path in ("/blog/admin/", "/blog/admin/sveltia-cms.js"):
+            with self.subTest(path=path):
+                _, headers = self.get_headers(path)
+                self.assertEqual(headers["referrer-policy"], "no-referrer")
+                self.assertEqual(headers["x-content-type-options"], "nosniff")
+                self.assertIn("max-age=63072000", headers["strict-transport-security"])
+                self.assertIn("connect-src 'self' https://gitlab.com", headers["content-security-policy"])
+                self.assertEqual(headers["cache-control"], "no-store")
 
     def test_management_requests_use_transient_rate_limiting(self):
         statuses = []

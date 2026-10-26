@@ -85,6 +85,45 @@ test("article page renders title, date, and license note", async ({
   ).toHaveText("CC BY 4.0");
 });
 
+// EU AI Act Art. 50(4): AI-assisted public-interest text needs a
+// disclosure unless a named person holds editorial responsibility.
+test("every article names its responsible editor and AI assistance", async ({
+  page,
+}) => {
+  for (const article of ALL_ARTICLES) {
+    await page.goto(`/blog/${article.slug}/`);
+    const byline = page.locator("article .byline");
+    await expect(byline).toContainText(
+      "Reviewed, fact-checked and published by Mattia Egloff"
+    );
+    await expect(byline).toContainText("Drafted with AI assistance");
+  }
+});
+
+test("the CMS admin loads its pinned bundle from this site only", async ({
+  page,
+  request,
+}) => {
+  const response = await request.get("/blog/admin/");
+  expect(response.status()).toBe(200);
+  const html = await response.text();
+  const scripts = [...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map(
+    (match) => match[1]
+  );
+  expect(scripts).toEqual(["sveltia-cms.js"]);
+});
+
+test("the CMS edits blog posts through merge requests", async ({
+  request,
+}) => {
+  const config = await (await request.get("/blog/admin/config.yml")).text();
+  expect(config).toContain("repo: vauchi/website");
+  expect(config).toContain("auth_type: pkce");
+  expect(config).toContain("publish_mode: editorial_workflow");
+  expect(config).toContain("folder: blog/content");
+  expect(config).toContain("format: toml-frontmatter");
+});
+
 test("atom feed is served and contains the launch article", async ({
   request,
 }) => {
