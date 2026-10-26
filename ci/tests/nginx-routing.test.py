@@ -171,7 +171,7 @@ class PrivacyRedirectTests(unittest.TestCase):
         status, admin = self.get_headers("/blog/admin/")
         self.assertEqual(status, 200)
         policy = admin["content-security-policy"]
-        self.assertIn("connect-src 'self' https://gitlab.com", policy)
+        self.assertIn("connect-src 'self' data: https://gitlab.com", policy)
         self.assertIn("script-src 'self';", policy)
         self.assertIn("frame-ancestors 'none'", policy)
         _, site = self.get_headers("/")
@@ -185,7 +185,7 @@ class PrivacyRedirectTests(unittest.TestCase):
                 self.assertEqual(headers["referrer-policy"], "no-referrer")
                 self.assertEqual(headers["x-content-type-options"], "nosniff")
                 self.assertIn("max-age=63072000", headers["strict-transport-security"])
-                self.assertIn("connect-src 'self' https://gitlab.com", headers["content-security-policy"])
+                self.assertIn("connect-src 'self' data: https://gitlab.com", headers["content-security-policy"])
                 self.assertEqual(headers["cache-control"], "no-store")
 
     def test_management_requests_use_transient_rate_limiting(self):
