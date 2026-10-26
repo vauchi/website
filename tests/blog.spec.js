@@ -132,6 +132,19 @@ test.describe("CMS interface language in an en-GB browser", () => {
     expect(await readPrefs(page)).toEqual({ locale: "en-US" });
   });
 
+  // Sveltia stores "auto" on its first load, so a browser that opened the
+  // admin before this default existed carries "auto", not an empty choice.
+  test("replaces the stored browser-following choice", async ({ page }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        "sveltia-cms.prefs",
+        JSON.stringify({ locale: "auto", theme: "dark" })
+      )
+    );
+    await page.goto("/blog/admin/");
+    expect(await readPrefs(page)).toEqual({ locale: "en-US", theme: "dark" });
+  });
+
   test("keeps a language the editor chose", async ({ page }) => {
     await page.addInitScript(() =>
       localStorage.setItem(
