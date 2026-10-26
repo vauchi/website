@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // Sveltia CMS builds in only US English and fetches every other interface
-// language from unpkg.com, which this page's CSP blocks on purpose. Without
-// a stored choice it follows the browser (en-GB, de, ...) and fails, so
-// start editors on en-US; a language chosen in Settings is kept.
+// language from unpkg.com, which this page's CSP blocks on purpose. Left on
+// "auto", which it stores on first load, it follows the browser (en-GB,
+// de, ...) and fails, so start editors on en-US; a language chosen in
+// Settings is kept.
 try {
   const key = "sveltia-cms.prefs";
   const prefs = JSON.parse(localStorage.getItem(key) || "{}") || {};
-  if (!prefs.locale) {
+  if (!prefs.locale || prefs.locale === "auto") {
     localStorage.setItem(key, JSON.stringify({ ...prefs, locale: "en-US" }));
   }
 } catch {
