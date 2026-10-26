@@ -110,7 +110,38 @@ test("the CMS admin loads its pinned bundle from this site only", async ({
   const scripts = [...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map(
     (match) => match[1]
   );
-  expect(scripts).toEqual(["sveltia-cms.js"]);
+  expect(scripts).toEqual(["locale.js", "sveltia-cms.js"]);
+});
+
+test.describe("CMS interface language in an en-GB browser", () => {
+  test.use({ locale: "en-GB" });
+
+  const readPrefs = (page) =>
+    page.evaluate(() =>
+      JSON.parse(localStorage.getItem("sveltia-cms.prefs") || "null")
+    );
+
+  test.beforeEach(async ({ page }) => {
+    await page.route(/sveltia-cms\.js$/, (route) =>
+      route.fulfill({ contentType: "text/javascript", body: "" })
+    );
+  });
+
+  test("defaults to the US English built into the bundle", async ({ page }) => {
+    await page.goto("/blog/admin/");
+    expect(await readPrefs(page)).toEqual({ locale: "en-US" });
+  });
+
+  test("keeps a language the editor chose", async ({ page }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        "sveltia-cms.prefs",
+        JSON.stringify({ locale: "de", theme: "dark" })
+      )
+    );
+    await page.goto("/blog/admin/");
+    expect(await readPrefs(page)).toEqual({ locale: "de", theme: "dark" });
+  });
 });
 
 test("the CMS edits blog posts through merge requests", async ({
