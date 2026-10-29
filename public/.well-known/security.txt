@@ -5,6 +5,8 @@
 # https://securitytxt.org/ | RFC 9116
 
 Contact: mailto:security@vauchi.app
+Encryption: https://vauchi.app/.well-known/pgp-key.txt
+Encryption: openpgp4fpr:4347b1c657a397e5206e4709a84e1aabd7830274
 Expires: 2027-02-01T00:00:00.000Z
 Preferred-Languages: en, de, fr, it
 Canonical: https://vauchi.app/.well-known/security.txt
