@@ -237,7 +237,10 @@ addresses; a valid address receives mail in either case.
 
 Leaving removes the active email record, its lookup hash and its confirmation
 and removal capabilities. It cannot recall mail already being sent, or erase
-previous CSV exports, mail-server records or backups. Operators must manage
+previous CSV exports, mail-server records or backups. The nightly backup
+includes the database and keeps 7 daily, 8 weekly and 12 monthly snapshots,
+so a removed address can stay in a backup for up to about a year. Operators
+must manage
 those copies separately. Restoring an old database can restore withdrawn
 entries; do not use a restored campaign for mailing without reconciling
 removals.

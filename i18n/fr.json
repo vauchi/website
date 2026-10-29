@@ -149,7 +149,7 @@
   "waitlist.manage.confirm": "Confirmez que vous souhaitez quitter la liste d’attente.",
   "waitlist.manage.done": "Si le lien correspondait à une inscription active, celle-ci a été supprimée.",
   "waitlist.manage.heading": "Quitter la liste d’attente",
-  "waitlist.manage.limits": "Vauchi peut lire votre adresse e-mail sur la liste d’attente. Quitter la liste supprime l’inscription active. Un e-mail déjà en cours d’envoi peut encore arriver, et les listes exportées ou les sauvegardes peuvent en conserver une copie.",
+  "waitlist.manage.limits": "Vauchi peut lire votre adresse e-mail sur la liste d’attente. Quitter la liste supprime l’inscription active. Un e-mail déjà en cours d’envoi peut encore arriver, les listes exportées peuvent en conserver une copie, et les sauvegardes la gardent jusqu’à un an environ.",
   "waitlist.manage.privacy": "Politique de confidentialité",
   "waitlist.manage.remove": "Supprimer mon adresse",
   "waitlist.manage.request": "Saisissez votre adresse e-mail pour recevoir un lien permettant de quitter la liste.",

@@ -149,7 +149,7 @@
   "waitlist.manage.confirm": "Confirm that you want to leave the waitlist.",
   "waitlist.manage.done": "If the link matched an active entry, that entry has been removed.",
   "waitlist.manage.heading": "Leave the waitlist",
-  "waitlist.manage.limits": "Vauchi can read your waitlist address. Leaving removes the active entry. Mail already being sent can still arrive, and exported lists or backups may keep a copy.",
+  "waitlist.manage.limits": "Vauchi can read your waitlist address. Leaving removes the active entry. Mail already being sent can still arrive, exported lists may keep a copy, and backups keep one for up to about a year.",
   "waitlist.manage.privacy": "Privacy policy",
   "waitlist.manage.remove": "Remove my address",
   "waitlist.manage.request": "Enter your email to get a link to leave.",

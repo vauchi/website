@@ -149,7 +149,7 @@
   "waitlist.manage.confirm": "Conferma di voler uscire dalla lista d’attesa.",
   "waitlist.manage.done": "Se il link corrispondeva a un’iscrizione attiva, questa è stata rimossa.",
   "waitlist.manage.heading": "Esci dalla lista d’attesa",
-  "waitlist.manage.limits": "Vauchi può leggere il tuo indirizzo nella lista d’attesa. Uscire rimuove l’iscrizione attiva. Le email già in fase di invio possono ancora arrivare, e gli elenchi esportati o le copie di backup possono conservarne una copia.",
+  "waitlist.manage.limits": "Vauchi può leggere il tuo indirizzo nella lista d’attesa. Uscire rimuove l’iscrizione attiva. Le email già in fase di invio possono ancora arrivare, gli elenchi esportati possono conservarne una copia e le copie di backup la conservano fino a circa un anno.",
   "waitlist.manage.privacy": "Informativa sulla privacy",
   "waitlist.manage.remove": "Rimuovi il mio indirizzo",
   "waitlist.manage.request": "Inserisci la tua email per ricevere un link per uscire.",

@@ -149,7 +149,7 @@
   "waitlist.manage.confirm": "Bestätigen Sie, dass Sie sich von der Warteliste abmelden möchten.",
   "waitlist.manage.done": "Falls der Link zu einem aktiven Eintrag gehörte, wurde dieser Eintrag entfernt.",
   "waitlist.manage.heading": "Von der Warteliste abmelden",
-  "waitlist.manage.limits": "Vauchi kann Ihre E-Mail-Adresse auf der Warteliste lesen. Die Abmeldung entfernt den aktiven Eintrag. E-Mails, deren Versand bereits begonnen hat, können noch ankommen, und exportierte Listen oder Sicherungskopien können eine Kopie enthalten.",
+  "waitlist.manage.limits": "Vauchi kann Ihre E-Mail-Adresse auf der Warteliste lesen. Die Abmeldung entfernt den aktiven Eintrag. E-Mails, deren Versand bereits begonnen hat, können noch ankommen, exportierte Listen können eine Kopie enthalten, und Sicherungskopien bewahren eine bis zu etwa einem Jahr auf.",
   "waitlist.manage.privacy": "Datenschutzerklärung",
   "waitlist.manage.remove": "Meine Adresse entfernen",
   "waitlist.manage.request": "Geben Sie Ihre E-Mail-Adresse ein, um einen Link zur Abmeldung zu erhalten.",

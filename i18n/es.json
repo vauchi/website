@@ -149,7 +149,7 @@
   "waitlist.manage.confirm": "Confirma que quieres salir de la lista de espera.",
   "waitlist.manage.done": "Si el enlace correspondía a una inscripción activa, esta se ha eliminado.",
   "waitlist.manage.heading": "Salir de la lista de espera",
-  "waitlist.manage.limits": "Vauchi puede leer tu dirección en la lista de espera. Salir elimina la inscripción activa. Los correos que ya se estén enviando pueden llegar todavía, y las listas exportadas o las copias de seguridad pueden conservar una copia.",
+  "waitlist.manage.limits": "Vauchi puede leer tu dirección en la lista de espera. Salir elimina la inscripción activa. Los correos que ya se estén enviando pueden llegar todavía, las listas exportadas pueden conservar una copia y las copias de seguridad la conservan hasta un año aproximadamente.",
   "waitlist.manage.privacy": "Política de privacidad",
   "waitlist.manage.remove": "Eliminar mi dirección",
   "waitlist.manage.request": "Introduce tu correo para recibir un enlace para salir.",
