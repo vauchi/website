@@ -19,6 +19,16 @@
     banner.className = 'waitlist-message waitlist-message--' + status;
     banner.hidden = false;
 
+    // The #waitlist anchor jump happens before lazy content above the
+    // section has laid out; on phones the note then ends up off screen.
+    // Bring it to the middle now and again once everything has loaded.
+    const reveal = function () {
+      banner.scrollIntoView({ block: 'center' });
+    };
+    reveal();
+    window.addEventListener('load', reveal, { once: true });
+    banner.focus({ preventScroll: true });
+
     // Clean the query string so a refresh doesn't replay the message.
     if (window.history && window.history.replaceState) {
       const url = new URL(window.location.href);

@@ -1347,6 +1347,11 @@
         .waitlist-button {
           width: 100%;
         }
+        /* In the column the row's 220px flex-basis would become the height. */
+        .waitlist-input {
+          flex: none;
+          min-width: 0;
+        }
         .v-compare {
           grid-template-columns: 1fr;
         }
@@ -2283,9 +2288,16 @@
       </div>
 
       <section id="waitlist" class="waitlist-section" aria-labelledby="waitlist-heading">
+        <h2 id="waitlist-heading" class="waitlist-heading">
+          {{ t['waitlist.heading'] }}
+        </h2>
+        <p class="waitlist-caption">{{ t['waitlist.caption'] }}</p>
         <div
           id="waitlist-message"
           class="waitlist-message"
+          role="status"
+          aria-live="polite"
+          tabindex="-1"
           hidden
           data-msg-joined="{{ t['waitlist.message.joined'] }}"
           data-msg-confirmed="{{ t['waitlist.message.confirmed'] }}"
@@ -2295,10 +2307,6 @@
           data-msg-error="{{ t['waitlist.message.error'] }}"
           data-msg-closed="{{ t['waitlist.message.closed'] }}"
         ></div>
-        <h2 id="waitlist-heading" class="waitlist-heading">
-          {{ t['waitlist.heading'] }}
-        </h2>
-        <p class="waitlist-caption">{{ t['waitlist.caption'] }}</p>
         <form
           class="waitlist-form"
           action="/waitlist/join"
