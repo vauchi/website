@@ -315,6 +315,10 @@ def main():
     for locale in targets:
         html = build_page(env, locale, all_translations[locale])
         write_page(locale, html)
+        text_dir = os.path.join(PUBLIC_DIR, "text" if locale == DEFAULT_LOCALE else f"{locale}/text")
+        os.makedirs(text_dir, exist_ok=True)
+        with open(os.path.join(text_dir, "index.html"), "w", encoding="utf-8") as output:
+            output.write(env.get_template("text.html").render(t=all_translations[locale], lang=locale))
 
     # Build per-variant landing pages for accurate SEO/social previews.
     # Each page is pre-rendered with the variant headline/sub in the meta,

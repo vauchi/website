@@ -1,0 +1,59 @@
+<!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ t['meta.title']|e }}</title>
+    <meta name="description" content="{{ t['meta.description']|e }}">
+    <style>
+      html { color-scheme: light dark; }
+      body { max-width: 65ch; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; line-height: 1.7; }
+      h1, h2 { line-height: 1.25; }
+      h2 { margin-top: 2rem; }
+      nav, footer { margin: 2rem 0; }
+      a { text-underline-offset: .15em; }
+      nav a, footer a { margin-right: 1rem; }
+    </style>
+  </head>
+  <body>
+    <nav aria-label="Languages">
+      {% for code in ['en', 'de', 'fr', 'it', 'es'] %}
+      <a href="{{ '/' if code == 'en' else '/' ~ code ~ '/' }}text/" lang="{{ code }}" hreflang="{{ code }}">{{ code|upper }}</a>
+      {% endfor %}
+    </nav>
+    <main>
+      <h1>Vauchi</h1>
+      <p>{{ t['meta.description']|e }}</p>
+      <section>
+        <h2>{{ t['why.heading']|e }}</h2>
+        <p>{{ t['why.body1']|e }}</p>
+        <p>{{ t['why.body2']|e }}</p>
+      </section>
+      {% for scene in [2, 4, 6] %}
+      <section>
+        <h2>{{ t['scene' ~ scene ~ '.label_text']|e }}</h2>
+        <p>{{ t['scene' ~ scene ~ '.heading']|e }}</p>
+      </section>
+      {% endfor %}
+      <section>
+        <h2>{{ t['compare.heading']|e }}</h2>
+        <h3>{{ t['compare.today.label']|e }}</h3>
+        <ul>{% for i in [1, 2, 3] %}<li>{{ t['compare.today.item' ~ i]|e }}</li>{% endfor %}</ul>
+        <p>{{ t['compare.today.result']|e }}</p>
+        <h3>{{ t['compare.vauchi.label']|e }}</h3>
+        <ul>{% for i in [1, 2, 3] %}<li>{{ t['compare.vauchi.item' ~ i]|e }}</li>{% endfor %}</ul>
+        <p>{{ t['compare.vauchi.result']|e }}</p>
+      </section>
+      <p><a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}#waitlist">{{ t['waitlist.heading']|e }}</a></p>
+    </main>
+    <footer>
+      <a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}">{{ t['footer.home']|e }}</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://spec.vauchi.app/">Spec</a>
+      <a href="https://vauchi.app/docs/">Docs</a>
+      <a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['footer.privacy']|e }}</a>
+    </footer>
+  </body>
+</html>
