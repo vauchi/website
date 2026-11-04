@@ -34,7 +34,7 @@ class LocalizedManagement(ServiceTestCase):
                 self.assertEqual(removed.status_code, 200)
                 self.assertIn(f'<html lang="{locale}">', removed.get_data(as_text=True))
 
-    def test_confirmation_mail_and_redirect_keep_the_selected_language(self):
+    def test_confirmation_mail_and_result_keep_the_selected_language(self):
         with patch.object(api, "CONFIRMATION_SUBJECT", ""):
             for locale, (_, _, subject) in LABELS.items():
                 with self.subTest(locale=locale):
@@ -50,8 +50,9 @@ class LocalizedManagement(ServiceTestCase):
                         self.assertEqual(parse_qs(urlparse(link).query)["lang"], [locale])
                     confirmation = next(link for link in links if "/confirm?" in link)
                     result = self.client.get(confirmation)
-                    path = "" if locale == "en" else locale + "/"
-                    self.assertEqual(result.headers["Location"], f"https://vauchi.app/{path}?waitlist=confirmed#waitlist")
+                    self.assertEqual(result.status_code, 200)
+                    self.assertIn(f'<html lang="{locale}">', result.get_data(as_text=True))
+                    self.assertIn(api.translations(locale)['waitlist.message.confirmed'], result.get_data(as_text=True))
 
     def test_unknown_language_cannot_select_an_arbitrary_resource(self):
         response = self.client.get("/waitlist/manage?lang=../../untrusted")

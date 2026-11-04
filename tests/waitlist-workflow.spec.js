@@ -33,7 +33,7 @@ for (const locale of ["en", "de", "fr", "it", "es"]) {
       const confirmation = links.find(link => link.includes("/confirm?"));
       const withdrawal = links.find(link => link.includes("/withdraw?"));
       await page.goto(confirmation);
-      await expect(page.locator("#waitlist-message")).toHaveText(text["waitlist.message.confirmed"]);
+      await expect(page.getByRole("status")).toHaveText(text["waitlist.message.confirmed"]);
       await page.goto(withdrawal);
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(text["waitlist.manage.heading"]);

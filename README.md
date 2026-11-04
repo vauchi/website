@@ -197,7 +197,11 @@ retain older analytics files; an upgrade does not prove their erasure.
 ## Waitlist
 
 The landing page includes a self-hosted waitlist with double-opt-in confirmation
-emails. The form posts to `/waitlist/join`; a small Flask app inside the
+emails. Confirmation links return a localized HTML result directly, without
+JavaScript, external assets, or an automatic redirect to the landing page.
+Both successful and invalid links work with scripts and styles disabled;
+the result is not cached and sends no referrer. The form posts to
+`/waitlist/join`; a small Flask app inside the
 container handles storage (SQLite) and sends confirmation mail via the existing
 Vauchi mailserver.
 

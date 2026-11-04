@@ -31,6 +31,13 @@ def home(base, locale):
     return urljoin(base, "/" if locale == "en" else f"/{locale}/")
 
 
+def confirmation_page(base, successful):
+    locale = language()
+    return render_template("confirmation.html", lang=locale, t=translations(locale),
+        result="confirmed" if successful else "invalid_token", home=home(base, locale),
+        text_home=urljoin(home(base, locale), "text/"))
+
+
 def management_page(base, pending_days, confirmed_days, *, token=None, result=None):
     locale = language()
     text = translations(locale)

@@ -26,7 +26,7 @@ from flask import Flask, abort, redirect, request
 from werkzeug.exceptions import HTTPException
 
 from storage import WaitlistStore, retention_days
-from presentation import home, language, management_page, translations
+from presentation import confirmation_page, home, language, management_page, translations
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024
@@ -186,8 +186,7 @@ def join():
 @app.get("/waitlist/confirm")
 def confirm():
     successful = store().confirm(request.args.get("token") or "")
-    return _waitlist_redirect(_safe_redirect_url(request.args.get("redirect") or home(REDIRECT_BASE, language())),
-        "confirmed" if successful else "invalid-token")
+    return confirmation_page(REDIRECT_BASE, successful)
 
 
 @app.route("/waitlist/withdraw", methods=["GET", "POST"])

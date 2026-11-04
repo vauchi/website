@@ -46,7 +46,7 @@ class LifecycleRoutes(ServiceTestCase):
         body = self.join("alice@example.test")
         confirm, _ = self.link(body, "confirm")
         response = self.client.get(confirm)
-        self.assertEqual(response.status_code, 303)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(self.export(), [{
             "email": "alice@example.test", "status": "confirmed",
             "created_at": "2026-01-01T00:00:00+00:00",
@@ -58,7 +58,8 @@ class LifecycleRoutes(ServiceTestCase):
         confirm, _ = self.link(body, "confirm")
         self.now += timedelta(days=7)
         response = self.client.get(confirm)
-        self.assertEqual(response.headers["Location"], "https://vauchi.app/?waitlist=invalid-token#waitlist")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(api.translations("en")["waitlist.message.invalid_token"], response.get_data(as_text=True))
         self.assertEqual(self.persisted_count(), 0)
 
     def test_resending_does_not_extend_unconfirmed_retention(self):
@@ -68,7 +69,8 @@ class LifecycleRoutes(ServiceTestCase):
         confirm, _ = self.link(body, "confirm")
         self.now += timedelta(days=1)
         response = self.client.get(confirm)
-        self.assertEqual(response.headers["Location"], "https://vauchi.app/?waitlist=invalid-token#waitlist")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(api.translations("en")["waitlist.message.invalid_token"], response.get_data(as_text=True))
         self.assertEqual(self.persisted_count(), 0)
 
     def test_confirmed_expiry_removes_announcement_eligibility_and_active_row(self):
@@ -99,7 +101,8 @@ class LifecycleRoutes(ServiceTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.persisted_count(), 0)
         response = self.client.get(confirm)
-        self.assertEqual(response.headers["Location"], "https://vauchi.app/?waitlist=invalid-token#waitlist")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(api.translations("en")["waitlist.message.invalid_token"], response.get_data(as_text=True))
         self.assertEqual(self.export(), [])
 
     def test_confirmation_token_cannot_authorize_withdrawal(self):
