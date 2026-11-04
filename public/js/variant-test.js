@@ -8,6 +8,14 @@
 
   var STORAGE_KEY = "vauchi-variant";
   var VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
+  // JSON-LD script text still requires TrustedScript under the site's CSP (#1076).
+  var jsonPolicy = window.trustedTypes
+    ? window.trustedTypes.createPolicy("vauchi-json-ld", {
+        createScript: function (json) {
+          return JSON.stringify(JSON.parse(json), null, 6);
+        },
+      })
+    : null;
 
   function parseI18n() {
     var el = document.getElementById("variant-i18n");
@@ -89,7 +97,8 @@
     try {
       var data = JSON.parse(script.textContent);
       data.slogan = slogan;
-      script.textContent = JSON.stringify(data, null, 6);
+      var json = JSON.stringify(data, null, 6);
+      script.textContent = jsonPolicy ? jsonPolicy.createScript(json) : json;
     } catch (e) {}
   }
 
@@ -111,7 +120,7 @@
     if (label) label.textContent = strings.label;
     if (headline) headline.textContent = strings.headline;
     if (sub) sub.textContent = strings.sub;
-    if (cta && strings.cta) cta.innerHTML = strings.cta;
+    if (cta && strings.cta) cta.textContent = strings.cta;
     if (strings.headline) updateStructuredSlogan(strings.headline);
   }
 
