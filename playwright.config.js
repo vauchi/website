@@ -25,7 +25,7 @@ export default defineConfig({
     : {
         webServer: [
           {
-            command: "npx serve public -l 3000 --no-clipboard",
+            command: "python3 scripts/build-discovery.py && npx serve public -l 3000 --no-clipboard",
             port: 3000,
             reuseExistingServer: !process.env.CI,
           },
