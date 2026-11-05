@@ -59,7 +59,7 @@ class LocalizedManagement(ServiceTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('<html lang="en">', response.get_data(as_text=True))
 
-    def test_untrusted_removal_link_is_escaped_and_does_not_enable_scripts(self):
+    def test_untrusted_removal_link_is_escaped_and_cannot_execute_inline_scripts(self):
         payload = '\"><script>alert("synthetic")</script>'
         response = self.client.get("/waitlist/withdraw", query_string={"token": payload})
         self.assertEqual(response.status_code, 200)
@@ -67,4 +67,5 @@ class LocalizedManagement(ServiceTestCase):
         self.assertNotIn("<script>", html)
         self.assertIn("&lt;script&gt;", html)
         self.assertIn("default-src 'none'", response.headers["Content-Security-Policy"])
-        self.assertNotIn("script-src", response.headers["Content-Security-Policy"])
+        self.assertIn("script-src 'self'", response.headers["Content-Security-Policy"])
+        self.assertNotIn("script-src 'unsafe-inline'", response.headers["Content-Security-Policy"])

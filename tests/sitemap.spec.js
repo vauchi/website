@@ -15,6 +15,7 @@ const CHILD_SITEMAPS = [
   "https://vauchi.app/sitemap-pages.xml",
   "https://vauchi.app/blog/sitemap.xml",
   "https://vauchi.app/docs/sitemap.xml",
+  "https://vauchi.app/spec/sitemap.xml",
 ];
 
 test("sitemap.xml is an index referencing pages, blog and docs", async ({

@@ -6,20 +6,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{{ t['waitlist.manage.heading'] }} · Vauchi</title>
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <meta name="robots" content="noindex">
     <style>
-      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+      :root {
+        --bg-primary: #1e1e2e; --bg-secondary: #181825; --bg-tertiary: #313244;
+        --text-primary: #cdd6f4; --text-secondary: #a6adc8; --accent: #89b4fa;
+        --border: #45475a;
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      }
+      @media (prefers-color-scheme: light) {
+        :root { --bg-primary: #eff1f5; --bg-secondary: #e6e9ef; --bg-tertiary: #ccd0da; --text-primary: #4c4f69; --text-secondary: #6c6f85; --accent: #1e66f5; --border: #bcc0cc; }
+      }
       * { box-sizing: border-box; }
-      body { margin: 0; padding: 2rem 1rem; line-height: 1.6; }
-      main { max-width: 40rem; margin: auto; overflow-wrap: anywhere; }
+      body { margin: 0; background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; font-size: 1.05rem; }
+      .wrap { max-width: 44rem; margin: auto; padding: 0 20px; }
+      header { border-bottom: 1px solid var(--border); padding: 18px 0; }
+      header .wrap { display: flex; align-items: center; gap: 12px; }
+      .brand { color: var(--text-primary); font-size: 1.1rem; font-weight: 600; text-decoration: none; }
+      main.wrap { padding-top: 48px; padding-bottom: 40px; overflow-wrap: anywhere; }
+      .brand img { vertical-align: middle; margin-right: 8px; }
+      h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.2; letter-spacing: -.03em; margin: 0 0 24px; }
+      a { color: var(--accent); text-underline-offset: 3px; }
+      p { margin: 0 0 18px; }
       form { display: grid; gap: .75rem; margin: 1.5rem 0; }
-      input, button { font: inherit; padding: .75rem; width: 100%; }
+      input, button { font: inherit; padding: .75rem; border: 1px solid var(--border); border-radius: 8px; }
+      input { width: 100%; background: var(--bg-secondary); color: var(--text-primary); }
       button { cursor: pointer; }
-      :focus-visible { outline: 3px solid Highlight; outline-offset: 3px; }
-      aside { border-top: 1px solid GrayText; margin-top: 2rem; }
+      form button { background: var(--accent); color: var(--bg-primary); font-weight: 600; }
+      :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+      aside { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 24px; color: var(--text-secondary); font-size: .9rem; }
+      .theme-controls { margin-left: auto; position: relative; display: flex; gap: 8px; }
+      .theme-controls > button { background: var(--bg-secondary); color: var(--text-primary); padding: 8px 12px; }
+      #theme-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px; max-height: 70vh; overflow: auto; background: var(--bg-secondary); border: 1px solid var(--border); padding: 8px; z-index: 10; }
     </style>
   </head>
   <body>
-    <main>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="{{ home }}"><img src="/logo.webp" alt="" width="28" height="28">Vauchi</a>
+        <div class="theme-controls">
+          <button id="mode-toggle" type="button" aria-label="Toggle light/dark mode">☀️</button>
+          <button id="theme-menu-toggle" type="button" aria-label="Choose theme" aria-haspopup="true" aria-expanded="false">🎨</button>
+          <div id="theme-menu">
+            <div>Dark</div><div id="theme-menu-dark"></div>
+            <div>Light</div><div id="theme-menu-light"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
       <h1>{{ t['waitlist.manage.heading'] }}</h1>
       {% if result %}
       <p role="status">{{ t['waitlist.manage.' ~ result] }}</p>
@@ -47,5 +83,6 @@
         <p><a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['waitlist.manage.privacy'] }}</a></p>
       </aside>
     </main>
+    <script src="/js/theme-picker.js" defer></script>
   </body>
 </html>

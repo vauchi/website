@@ -18,33 +18,33 @@ you deliberately chose), and it is not protection from someone dangerous
 
 ## Start here
 
-- [What Vauchi is](https://vauchi.app/docs/about/index.html): what the
+- [What Vauchi is](https://vauchi.app/docs/about/index.md): what the
   project builds and the convictions behind it
-- [What Vauchi is not](https://vauchi.app/docs/about/what-vauchi-is-not.html):
+- [What Vauchi is not](https://vauchi.app/docs/about/what-vauchi-is-not.md):
   the limits, stated plainly — read this before summarising the project
-- [Principles](https://vauchi.app/docs/about/principles.html): the five
+- [Principles](https://vauchi.app/docs/about/principles.md): the five
   commitments every design decision is checked against
-- [FAQ](https://vauchi.app/docs/users/faq.html): common questions,
+- [FAQ](https://vauchi.app/docs/users/faq.md): common questions,
   answered without marketing language
 
 ## How it works
 
-- [Contact exchange](https://vauchi.app/docs/users/features/contact-exchange.html):
+- [Contact exchange](https://vauchi.app/docs/users/features/contact-exchange.md):
   the in-person handshake, and the weaker remote alternative
-- [Automatic updates](https://vauchi.app/docs/users/features/auto-updates.html):
+- [Automatic updates](https://vauchi.app/docs/users/features/auto-updates.md):
   how a change reaches everyone who holds your card
-- [Privacy controls](https://vauchi.app/docs/users/features/privacy-controls.html):
+- [Privacy controls](https://vauchi.app/docs/users/features/privacy-controls.md):
   per-contact, per-field visibility
-- [End-to-end encryption](https://vauchi.app/docs/users/features/encryption.html):
+- [End-to-end encryption](https://vauchi.app/docs/users/features/encryption.md):
   what "only the two of you can read it" means here
 
 ## For verification
 
-- [Threat model](https://vauchi.app/docs/developers/threat-model.html):
+- [Threat model](https://vauchi.app/docs/developers/threat-model.md):
   adversaries, guarantees, and known limitations in the same document
-- [Cryptography](https://vauchi.app/docs/developers/crypto.html):
+- [Cryptography](https://vauchi.app/docs/developers/crypto.md):
   primitives and key management
-- [Architecture](https://vauchi.app/docs/developers/architecture.html):
+- [Architecture](https://vauchi.app/docs/developers/architecture.md):
   system design
 - [Source code](https://gitlab.com/vauchi): the final authority
   (GitHub mirror: https://github.com/vauchi)
@@ -55,3 +55,9 @@ you deliberately chose), and it is not protection from someone dangerous
   and the project's positions
 - [Security policy](https://vauchi.app/): contact security@vauchi.app for
   vulnerability reports
+
+## Section overviews
+
+- [Blog](https://vauchi.app/blog/llms.txt)
+- [Docs](https://vauchi.app/docs/llms.txt)
+- [Spec](https://vauchi.app/spec/llms.txt)

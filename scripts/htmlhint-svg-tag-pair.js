@@ -2,14 +2,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// Custom HTMLHint rule: tag-pair that also allows self-closing SVG elements.
-// The built-in tag-pair rule only knows about HTML void elements (br, img, etc.)
-// and flags valid SVG self-closing tags like <path />, <circle />, <rect /> as errors.
+// SVG elements may self-close or have an explicit end tag; they are not HTML voids.
 
 module.exports = function (HTMLHint) {
   HTMLHint.addRule({
     id: 'svg-tag-pair',
-    description: 'Tag must be paired (with SVG void element support).',
+    description: 'Tag must be paired unless void or explicitly self-closing.',
     init(parser, reporter) {
       const stack = []
 
@@ -18,16 +16,10 @@ module.exports = function (HTMLHint) {
         'area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed,track,command,source,keygen,wbr'
       )
 
-      // SVG elements that are commonly self-closing
-      const svgVoid = parser.makeMap(
-        'path,circle,ellipse,line,rect,polygon,polyline,use,image,animate,set,animateTransform,animateMotion,stop,feGaussianBlur,feOffset,feBlend,feFlood,feComposite,feMergeNode'
-      )
-
       parser.addListener('tagstart', (event) => {
         const tagName = event.tagName.toLowerCase()
         if (
           htmlVoid[tagName] === undefined &&
-          svgVoid[tagName] === undefined &&
           !event.close
         ) {
           stack.push({

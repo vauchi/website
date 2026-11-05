@@ -1,6 +1,7 @@
 <!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!doctype html>
+{% set canonical = current_url | replace(from=config.base_url, to="https://vauchi.app/blog") %}
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -11,6 +12,18 @@
       content="{% block description %}{{ config.description }}{% endblock description %}"
     />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href="{{ canonical | safe }}" />
+    <link rel="describedby" href="https://vauchi.app/blog/llms.txt" />
+    <link rel="alternate" type="text/markdown" href="{{ canonical | safe }}index.md" />
+    <meta property="og:title" content="{% if page %}{{ page.title }} — {{ config.title }}{% else %}{{ config.title }}{% endif %}" />
+    <meta property="og:description" content="{% if page %}{{ page.description }}{% else %}{{ config.description }}{% endif %}" />
+    <meta property="og:url" content="{{ canonical | safe }}" />
+    <meta property="og:type" content="{% if page %}article{% else %}website{% endif %}" />
+    <meta property="og:image" content="https://vauchi.app/social-preview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{% if page %}{{ page.title }} — {{ config.title }}{% else %}{{ config.title }}{% endif %}" />
+    <meta name="twitter:description" content="{% if page %}{{ page.description }}{% else %}{{ config.description }}{% endif %}" />
+    <meta name="twitter:image" content="https://vauchi.app/social-preview.png" />
     <link
       rel="alternate"
       type="application/atom+xml"
@@ -207,6 +220,8 @@
       footer.site a:hover {
         color: var(--accent);
       }
+      .theme-controls { position: relative; margin-left: auto; display: flex; gap: 8px; }
+      .theme-controls > button { color: var(--text-primary); background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 8px 12px; cursor: pointer; }
     </style>
   </head>
   <body>
@@ -216,9 +231,17 @@
         <a class="brand" href="/">Vauchi</a>
         <nav>
           <a href="/blog/">Blog</a>
-          <a href="https://vauchi.app/docs">Docs</a>
+          <a href="/docs/">Docs</a>
           <a href="/#waitlist">Get early access</a>
         </nav>
+        <div class="theme-controls">
+          <button id="mode-toggle" type="button" aria-label="Toggle dark/light mode">☀️</button>
+          <button id="theme-menu-toggle" type="button" aria-label="Choose theme" aria-haspopup="true" aria-expanded="false">🎨</button>
+          <div id="theme-menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;min-width:200px;max-height:70vh;overflow:auto;background:var(--bg-secondary);border:1px solid var(--border);padding:8px;z-index:10">
+            <div>Dark</div><div id="theme-menu-dark"></div>
+            <div>Light</div><div id="theme-menu-light"></div>
+          </div>
+        </div>
       </div>
     </header>
     <main>
@@ -240,5 +263,6 @@
         <a href="https://gitlab.com/vauchi" rel="noopener">GitLab</a>
       </div>
     </footer>
+    <script src="/js/theme-picker.js" defer></script>
   </body>
 </html>

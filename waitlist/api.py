@@ -243,7 +243,10 @@ def _privacy_headers(response):
     response.headers["Cache-Control"] = "no-store"
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    policy = "default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    if request.endpoint in ("manage", "withdraw"):
+        policy += "; script-src 'self'; connect-src 'self' https://cdn.vauchi.app; require-trusted-types-for 'script'"
+    response.headers["Content-Security-Policy"] = policy
     return response
 
 
