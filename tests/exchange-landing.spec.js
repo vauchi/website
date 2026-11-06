@@ -41,11 +41,28 @@ test("a name is shown as text, never as markup", async ({ page }) => {
 test("offers to open the installed app with the same exchange", async ({
   page,
 }) => {
-  await page.goto(`/x#pk=${PK}&n=${N}&nm=${b64url("Zoë")}`);
+  await page.goto(`/x#pk=${PK}&n=${N}&v=2&nm=${b64url("Zoë")}`);
   await expect(page.locator("#open-app")).toHaveAttribute(
     "href",
-    `vauchi://exchange?pk=${PK}&n=${N}`
+    `vauchi://exchange?pk=${PK}&n=${N}&v=2`
   );
+});
+
+test("a link with no version or a hostile one opens the app with none", async ({
+  page,
+}) => {
+  for (const fragment of [
+    `pk=${PK}&n=${N}`,
+    `pk=${PK}&n=${N}&v=2%26pk=evil`,
+    `pk=${PK}&n=${N}&v=x`,
+  ]) {
+    await page.goto(`/x#${fragment}`);
+    await page.reload();
+    await expect(page.locator("#open-app")).toHaveAttribute(
+      "href",
+      `vauchi://exchange?pk=${PK}&n=${N}`
+    );
+  }
 });
 
 test("makes no request beyond its own static files", async ({ page }) => {

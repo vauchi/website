@@ -3,8 +3,8 @@
 
 // Exchange-link landing (vauchi/private#277). Reads the exchange from the
 // URL fragment — never sent to any server — and makes no network request:
-// a link carries pk, n and the optional sender name (nm, base64url UTF-8),
-// a scanned QR carries q. The name is written as text only.
+// a link carries pk, n, its version (v) and the optional sender name (nm,
+// base64url UTF-8), a scanned QR carries q. The name is written as text only.
 (function () {
   "use strict";
 
@@ -45,12 +45,17 @@
     return;
   }
 
-  // The installed apps already open this form; it carries only the
-  // exchange key and nonce, never the name.
+  // The installed apps already open this form; it carries the exchange key,
+  // the nonce and the version, never the name. The apps refuse a link with no
+  // version (vauchi/private#727), so one without it stays without it.
   var base64url = /^[A-Za-z0-9_-]+$/;
   if (base64url.test(params.pk || "") && base64url.test(params.n || "")) {
+    var version = /^[0-9]+$/.test(params.v || "") ? "&v=" + params.v : "";
     document
       .getElementById("open-app")
-      .setAttribute("href", "vauchi://exchange?pk=" + params.pk + "&n=" + params.n);
+      .setAttribute(
+        "href",
+        "vauchi://exchange?pk=" + params.pk + "&n=" + params.n + version
+      );
   }
 })();
