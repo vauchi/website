@@ -46,6 +46,15 @@
         <ul>{% for i in [1, 2, 3] %}<li>{{ t['compare.vauchi.item' ~ i]|e }}</li>{% endfor %}</ul>
         <p>{{ t['compare.vauchi.result']|e }}</p>
       </section>
+      <section>
+        <h2>{{ t['honest.heading']|e }}</h2>
+        <ul>
+          {% for item in [1, 2, 4, 3] %}
+          <li>{{ t['honest.item' ~ item]|e }}</li>
+          {% endfor %}
+        </ul>
+        <p>{{ t['honest.note']|e }}</p>
+      </section>
       <p><a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}#waitlist">{{ t['waitlist.heading']|e }}</a></p>
     </main>
     <footer>

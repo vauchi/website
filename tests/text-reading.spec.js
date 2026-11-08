@@ -2,9 +2,22 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
 
 for (const locale of ["en", "de", "fr", "it", "es"]) {
   const prefix = locale === "en" ? "/" : `/${locale}/`;
+  test(`readable versions retain material caveats in ${locale}`, async ({ page, request }) => {
+    const copy = JSON.parse(readFileSync(`i18n/${locale}.json`, "utf8"));
+    await page.goto(`${prefix}text/`);
+    const markdown = await request.get(`${prefix}index.md`);
+    expect(markdown.status()).toBe(200);
+    const body = await markdown.text();
+    for (const key of ["honest.heading", "honest.item1", "honest.item2", "honest.item3", "honest.item4", "honest.note"]) {
+      await expect(page.locator("main")).toContainText(copy[key]);
+      expect(body).toContain(copy[key]);
+    }
+  });
+
   test(`text reading works without scripts or styles in ${locale}`, async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
@@ -13,7 +26,7 @@ for (const locale of ["en", "de", "fr", "it", "es"]) {
     await expect(page).toHaveURL(new RegExp(`${prefix}text/$`));
     await expect(page.locator("html")).toHaveAttribute("lang", locale);
     await expect(page.locator("main h1")).toHaveText("Vauchi");
-    await expect(page.locator("main h2")).toHaveCount(5);
+    await expect(page.locator("main h2")).toHaveCount(6);
     await expect(page.locator("script")).toHaveCount(0);
     await page.locator("style, link[rel=stylesheet]").evaluateAll(nodes => nodes.forEach(node => node.remove()));
     await expect(page.locator("main")).toBeVisible();
