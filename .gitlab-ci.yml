@@ -51,7 +51,7 @@ variables:
   # reach devices that already cached a manifest. 1.1.0: the themes Core
   # can parse (vauchi/private#733 D14). 1.2.0: Twitter becomes X
   # (vauchi/private#734 T3.3).
-  CONTENT_VERSION: "1.2.0"
+  CONTENT_VERSION: "1.3.0"
   CS_IMAGE: "registry.gitlab.com/vauchi/website:$CI_COMMIT_SHA"
 
 stages:
