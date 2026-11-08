@@ -9,6 +9,7 @@ const isExternal = !!process.env.BASE_URL;
 export default defineConfig({
   testDir: "./tests",
   timeout: 15_000,
+  workers: 2,
   retries: isExternal ? 1 : 0,
   reporter: process.env.CI
     ? [["junit", { outputFile: "test-results/results.xml" }], ["list"]]
