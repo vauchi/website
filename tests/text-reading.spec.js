@@ -24,6 +24,7 @@ for (const locale of ["en", "de", "fr", "it", "es"]) {
     await page.goto(`http://localhost:3000${prefix}`);
     await page.locator("footer a[data-text-version]").click();
     await expect(page).toHaveURL(new RegExp(`${prefix}text/$`));
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://vauchi.app${prefix}`);
     await expect(page.locator("html")).toHaveAttribute("lang", locale);
     await expect(page.locator("main h1")).toHaveText("Vauchi");
     await expect(page.locator("main h2")).toHaveCount(6);

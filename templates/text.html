@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ t['meta.title']|e }}</title>
     <meta name="description" content="{{ t['meta.description']|e }}">
+    <link rel="canonical" href="https://vauchi.app{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}">
     <style>
       html { color-scheme: light dark; }
       body { max-width: 65ch; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; line-height: 1.7; }
