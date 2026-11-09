@@ -3,9 +3,10 @@
 
 article .byline,
 .article-editorial-note {
-  font-size: 0.85em;
+  font-size: 0.75em;
   line-height: 1.5;
   color: var(--text-secondary, var(--searchresults-header-fg));
+  color: color-mix(in srgb, var(--text-secondary, var(--searchresults-header-fg)) 80%, transparent);
   margin: 0.75em 0 1.75em;
 }
 
