@@ -56,6 +56,11 @@
         </ul>
         <p>{{ t['honest.note']|e }}</p>
       </section>
+      <section id="organization" aria-labelledby="organization-heading">
+        <h2 id="organization-heading">{{ t['organization.heading']|e }}</h2>
+        <p>{{ t['organization.body1']|e }}</p>
+        <p>{{ t['organization.body2']|e }}</p>
+      </section>
       <p><a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}#waitlist">{{ t['waitlist.heading']|e }}</a></p>
     </main>
     <footer>
