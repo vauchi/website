@@ -23,6 +23,8 @@ class PrivacyRedirectTests(unittest.TestCase):
         (root / "blog" / "admin" / "index.html").write_text("<!doctype html>")
         (root / "blog" / "admin" / "sveltia-cms.js").write_text("")
         (root / "index.html").write_text("<!doctype html>")
+        (root / "build-info.json").write_text('{"sha":"routing-test"}')
+        (root / "indexnow-manifest.json").write_text('{"version":1}')
         cls.access_log = root / "access.log"
         cls.request_log = root / "request-errors.log"
         cls.collected = Queue()
@@ -100,6 +102,20 @@ class PrivacyRedirectTests(unittest.TestCase):
         cls.collector.shutdown()
         cls.collector.server_close()
         cls.collector_thread.join(timeout=5)
+
+    def test_deployment_metadata_requires_revalidation(self):
+        for name in ("build-info.json", "indexnow-manifest.json"):
+            with self.subTest(name=name):
+                connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+                try:
+                    connection.request("GET", "/" + name, headers={"Host": "vauchi.app"})
+                    response = connection.getresponse()
+                    self.assertEqual(response.status, 200)
+                    self.assertEqual(response.getheader("Cache-Control"), "no-cache")
+                    self.assertEqual(response.getheader("X-Content-Type-Options"), "nosniff")
+                    response.read()
+                finally:
+                    connection.close()
 
     def test_stale_clients_cannot_submit_behavior_events(self):
         for method in ("POST", "GET", "HEAD"):
