@@ -1,6 +1,24 @@
 /* SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> */
 /* SPDX-License-Identifier: GPL-3.0-or-later */
 
+article .byline,
+.article-editorial-note {
+  font-size: 0.85em;
+  line-height: 1.5;
+  color: var(--text-secondary, var(--searchresults-header-fg));
+  margin: 0.75em 0 1.75em;
+}
+
+.article-editorial-note p { margin: 0.35em 0 0; }
+
+article .byline .ai-label,
+article .byline .ai-label img,
+.article-editorial-note .ai-label,
+.article-editorial-note .ai-label img {
+  width: 20px;
+  height: 20px;
+}
+
 .ai-label {
   display: inline-flex;
   width: 28px;

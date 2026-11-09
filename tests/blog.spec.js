@@ -94,9 +94,9 @@ test("every article names its responsible editor and AI assistance", async ({
     await page.goto(`/blog/${article.slug}/`);
     const byline = page.locator("article .byline");
     await expect(byline).toContainText(
-      "Reviewed, fact-checked and published by Mattia Egloff"
+      "Reviewed and fact-checked by Mattia Egloff, who is responsible for this content."
     );
-    await expect(byline).toContainText("Drafted with AI assistance");
+    await expect(byline).toContainText("AI-assisted.");
   }
 });
 

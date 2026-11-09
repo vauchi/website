@@ -70,7 +70,7 @@ class BlogSchemaTests(unittest.TestCase):
                 self.assertIn("By", " ".join(visible.text))
                 self.assertIn("Vauchi", " ".join(visible.text))
                 self.assertIn("Mattia Egloff", " ".join(visible.text))
-                self.assertIn("Drafted with AI assistance.", " ".join(visible.text))
+                self.assertIn("AI-assisted.", " ".join(visible.text))
                 self.assertNotIn("http://localhost", blocks[0][1])
                 if "dateModified" in article:
                     self.assertEqual(article["dateModified"], timestamp)

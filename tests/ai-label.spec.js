@@ -36,7 +36,7 @@ test("AI disclosure follows the chosen theme across toggles and reloads", async 
   await expect(light).toBeHidden();
   await expect(dark).toHaveJSProperty("complete", true);
   expect(await circlePixels(dark)).toEqual({ top: [255, 255, 255, 255], corner: [0, 0, 0, 0] });
-  await expect(page.locator(".byline")).toContainText("Drafted with AI assistance.");
+  await expect(page.locator(".byline")).toContainText("AI-assisted.");
 
   await page.reload();
   await expect(dark).toBeVisible();
