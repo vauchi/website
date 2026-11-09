@@ -85,7 +85,7 @@ class BlogJsonTests(unittest.TestCase):
         fragments = ['"', "\\", "\n", "&", "<", ">", "雪", "\u2028", "\u2029",
                      "</script>", "<!-- vauchi-discovery:end -->"]
         rng = random.Random(1172)
-        values = ["Plain title", "Quotes: \" & < > café 👩‍💻", "</script><p>literal</p>",
+        values = ["", "Plain title", "Literal \\u003c stays literal", "Quotes: \" & < > café 👩‍💻", "</script><p>literal</p>",
                   '</script><script type="application/ld+json">{"spoof":true}</script>',
                   "<!-- vauchi-discovery:start --><!-- vauchi-discovery:end -->"]
         values.extend("".join(rng.choices(fragments, k=8)) for _ in range(64))
