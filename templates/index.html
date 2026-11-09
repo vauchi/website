@@ -1536,11 +1536,21 @@
         color: color-mix(in srgb, var(--text-secondary) 80%, transparent);
       }
       .text-fallback { display: none; }
+      .page-title {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body{% if variant_id %} data-variant="{{ variant_id }}"{% endif %}>
     <noscript><p><a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}text/">{{ t['footer.text_version'] }}</a></p></noscript>
     <main class="page-wrapper">
+      <h1 class="page-title">Vauchi</h1>
       <div
         class="v-player"
         id="player"
@@ -1585,12 +1595,12 @@
                 id="hero-variant-label"
                 data-default=""
               >{{ variant_strings.label if variant_id else t['hero.variant.a.label'] }}</div>
-              <h1
+              <h2
                 class="v-heading"
                 id="hero-variant-headline"
                 data-default="{{ t['hero.point1'] }}"
                 aria-labelledby="hero-variant-label"
-              >{{ variant_strings.headline if variant_id else t['hero.variant.a.headline'] }}</h1>
+              >{{ variant_strings.headline if variant_id else t['hero.variant.a.headline'] }}</h2>
               <div
                 class="v-caption"
                 id="hero-variant-sub"
@@ -2240,7 +2250,7 @@
       </div>
 
       <section class="text-fallback">
-        <h1>Vauchi</h1>
+        <p>Vauchi</p>
         <p>{{ t['meta.description'] }}</p>
         <p><a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}text/">{{ t['footer.text_version'] }}</a></p>
       </section>

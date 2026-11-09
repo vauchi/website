@@ -33,7 +33,7 @@ test.describe("landing-page variant test", () => {
     const tagName = await headlineEl.evaluate((el) =>
       el.tagName.toLowerCase()
     );
-    expect(tagName).toBe("h1");
+    expect(tagName).toBe("h2");
 
     const headline = await page.textContent("#hero-variant-headline");
     const validHeadlines = Object.values(EN_VARIANT_HEADLINES);

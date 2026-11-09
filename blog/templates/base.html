@@ -88,9 +88,10 @@
         gap: 12px;
         flex-wrap: wrap;
       }
-      header.site img {
+      header.site .brand-logo {
         width: 28px;
         height: 28px;
+        background: url("/logo.webp") center / contain no-repeat;
       }
       header.site .brand {
         font-weight: 600;
@@ -227,7 +228,7 @@
   <body>
     <header class="site">
       <div class="wrap">
-        <img src="/logo.webp" alt="" width="28" height="28" />
+        <span class="brand-logo" aria-hidden="true"></span>
         <a class="brand" href="/">Vauchi</a>
         <nav>
           <a href="/blog/">Blog</a>
