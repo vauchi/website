@@ -51,6 +51,9 @@ you deliberately chose), and it is not protection from someone dangerous
 
 ## Optional
 
+- [Vauchi author profile](https://vauchi.app/authors/vauchi/): organization
+  credited as author of the blog, documentation and protocol specification;
+  blog articles retain their human editorial-responsibility disclosure
 - [Blog](https://vauchi.app/blog/): essays on contact identity, privacy,
   and the project's positions
 - [Security policy](https://vauchi.app/): contact security@vauchi.app for

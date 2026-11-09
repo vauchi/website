@@ -78,7 +78,6 @@ lint:html:
     - apt-get update -qq && apt-get install -y -qq python3 python3-pip > /dev/null
     - pip3 install --break-system-packages --quiet jinja2
     - python3 scripts/build-pages.py
-    - python3 scripts/prepare_blog.py
   script:
     - npx --yes htmlhint --rulesdir scripts/htmlhint-svg-tag-pair.js "public/**/*.html"
     - python3 -m unittest discover -s scripts/htmlhint-tests
@@ -129,6 +128,7 @@ test:e2e:
     - apt-get update -qq && apt-get install -y -qq python3 python3-pip > /dev/null
     - pip3 install --break-system-packages --quiet jinja2 -r waitlist/requirements.txt
     - python3 scripts/build-pages.py
+    - python3 scripts/prepare_blog.py
     - curl -fsSL https://github.com/getzola/zola/releases/download/v0.22.1/zola-v0.22.1-x86_64-unknown-linux-gnu.tar.gz
       | tar -xz -C /usr/local/bin
     - zola --root blog build --output-dir public/blog
@@ -183,6 +183,7 @@ test:scripts:
   before_script:
     # Both are hard imports in the scripts under test: sign-manifest.py
     # and validate-content.py each sys.exit(1) when theirs is missing.
+    - apt-get update -qq && apt-get install -y -qq git > /dev/null
     - pip install --quiet PyNaCl jsonschema
   script:
     - python -m unittest discover -s scripts/tests -t scripts/tests -v
