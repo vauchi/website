@@ -12,6 +12,9 @@ article .byline,
 
 .article-editorial-note p { margin: 0.35em 0 0; }
 
+article .article-attribution { margin-bottom: 0.35em; }
+article .article-attribution + .byline { margin-top: 0; }
+
 article .byline .ai-label,
 article .byline .ai-label img,
 .article-editorial-note .ai-label,

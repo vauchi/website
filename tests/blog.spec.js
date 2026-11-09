@@ -93,8 +93,9 @@ test("every article names its responsible editor and AI assistance", async ({
   for (const article of ALL_ARTICLES) {
     await page.goto(`/blog/${article.slug}/`);
     const byline = page.locator("article .byline");
+    await expect(page.locator('article .meta [rel~="author"]')).toHaveText("Mattia Egloff");
     await expect(byline).toContainText(
-      "Reviewed and fact-checked by Mattia Egloff, who is responsible for this content."
+      "Reviewed and fact-checked by the author, who is responsible for this content."
     );
     await expect(byline).toContainText("AI-assisted.");
   }

@@ -20,7 +20,8 @@ ARTICLE = {
     "datePublished": "2026-01-02", "dateModified": "2026-02-03T10:20:30+00:00",
     "mainEntityOfPage": "https://vauchi.app/blog/post/",
     "image": "https://vauchi.app/social-preview.png",
-    "author": {"@id": ORGANIZATION}, "publisher": {"@id": ORGANIZATION},
+    "author": {"@type": "Person", "name": "Mattia Egloff", "url": ORGANIZATION},
+    "publisher": {"@id": ORGANIZATION},
 }
 
 
@@ -33,7 +34,7 @@ def document(entities):
         '<meta property="og:image" content="https://vauchi.app/social-preview.png">'
         '<meta property="article:modified_time" content="2026-02-03T10:20:30+00:00">'
         + blocks + '</head><body><h1>Visible title</h1>'
-        '<a rel="author" href="https://vauchi.app/authors/vauchi/">Vauchi</a>'
+        '<a rel="author" href="https://vauchi.app/#organization">Mattia Egloff</a>'
         '<time datetime="2026-01-02">January 2, 2026</time>'
         '<time datetime="2026-02-03T10:20:30+00:00">February 3, 2026</time>'
         '</body></html>'
@@ -87,6 +88,12 @@ class SchemaValidationTests(unittest.TestCase):
                     validate_document(document([entity]))
         with self.assertRaisesRegex(ValueError, "visible author"):
             validate_document(document([ARTICLE]).replace('rel="author"', 'rel="other"'))
+        with self.assertRaisesRegex(ValueError, "visible author"):
+            validate_document(document([ARTICLE]).replace(">Mattia Egloff<", ">Vauchi<"))
+        with self.assertRaisesRegex(ValueError, "author identity"):
+            entity = copy.deepcopy(ARTICLE)
+            entity["author"]["name"] = "Another author"
+            validate_document(document([entity]))
 
     def test_invalid_json_and_duplicate_keys_fail(self):
         for payload in ['{"@type":', '{"@type":"BlogPosting","@type":"TechArticle"}']:

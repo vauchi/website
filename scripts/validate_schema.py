@@ -105,11 +105,14 @@ def validate_document(document, vocabulary=None):
         for field, value in expected.items():
             if value is None or entity.get(field) != value:
                 raise ValueError(f"visible/metadata mismatch: {field}")
-        if "Vauchi" not in [" ".join(author.split()) for author in page.authors]:
+        if "Mattia Egloff" not in [" ".join(author.split()) for author in page.authors]:
             raise ValueError("missing visible author attribution")
-        for field in ("author", "publisher"):
-            if entity[field] != {"@id": ORGANIZATION}:
-                raise ValueError(f"unexpected {field} identity")
+        if entity["author"] != {
+            "@type": "Person", "name": "Mattia Egloff", "url": ORGANIZATION,
+        }:
+            raise ValueError("unexpected author identity")
+        if entity["publisher"] != {"@id": ORGANIZATION}:
+            raise ValueError("unexpected publisher identity")
     canonical = page.canonical or ""
     if canonical.startswith("https://vauchi.app/blog/") and page.headings:
         required = "Blog" if canonical == "https://vauchi.app/blog/" else "BlogPosting"

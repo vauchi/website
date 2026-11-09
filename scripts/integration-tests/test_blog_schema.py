@@ -65,8 +65,11 @@ class BlogSchemaTests(unittest.TestCase):
                 self.assertEqual(article["description"], visible.meta["og:description"])
                 self.assertEqual(article["image"], visible.meta["og:image"])
                 self.assertEqual(article["mainEntityOfPage"], visible.meta["og:url"])
-                self.assertEqual(article["author"], {"@id": "https://vauchi.app/#organization"})
-                self.assertEqual(article["publisher"], article["author"])
+                self.assertEqual(article["author"], {
+                    "@type": "Person", "name": "Mattia Egloff",
+                    "url": "https://vauchi.app/#organization",
+                })
+                self.assertEqual(article["publisher"], {"@id": "https://vauchi.app/#organization"})
                 self.assertIn("By", " ".join(visible.text))
                 self.assertIn("Vauchi", " ".join(visible.text))
                 self.assertIn("Mattia Egloff", " ".join(visible.text))

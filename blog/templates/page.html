@@ -18,7 +18,7 @@
   {% if source_dates and page.relative_path in source_dates %}
   "dateModified": {{ json::value(value=source_dates[page.relative_path].dateModified) }},
   {% endif %}
-  "author": {"@id": "https://vauchi.app/#organization"},
+  "author": {"@type": "Person", "name": "Mattia Egloff", "url": "https://vauchi.app/#organization"},
   "publisher": {"@id": "https://vauchi.app/#organization"},
   "image": {{ json::value(value=social_image) }},
   "mainEntityOfPage": {{ json::value(value=canonical) }}
@@ -29,8 +29,8 @@
 {% block content %}
 <article>
   <h1>{{ page.title }}</h1>
-  <p class="meta">
-    By <a rel="author" href="https://vauchi.app/authors/vauchi/">Vauchi</a> ·
+  <p class="meta article-attribution">
+    By <a rel="author" href="mailto:hello@vauchi.app">Mattia Egloff</a> ·
     <time datetime="{{ page.date }}">{{ page.date | date(format="%B %d, %Y") }}</time> ·
     {{ page.reading_time }} min read
   </p>
@@ -39,8 +39,7 @@
       <img class="ai-label-for-light" src="/ai-label-basic-light.svg" alt="" width="28" height="28" />
       <img class="ai-label-for-dark" src="/ai-label-basic-dark.svg" alt="" width="28" height="28" />
     </span>
-    AI-assisted. Reviewed and fact-checked by
-    <a href="mailto:hello@vauchi.app">Mattia Egloff</a>, who is responsible for this content.
+    AI-assisted. Reviewed and fact-checked by the author, who is responsible for this content.
   </p>
   {{ page.content | safe }}
   <hr />
