@@ -4,6 +4,21 @@
 import { test, expect } from "@playwright/test";
 import { readdirSync } from "node:fs";
 
+function imagesWithoutAlternative(page) {
+  return page.locator("img:not([alt]), img[alt='']");
+}
+
+test("decorative images with empty alt remain silent", async ({ page }) => {
+  await page.setContent('<main><h1>Guide</h1><img src="decoration.svg" alt=""></main>');
+  await expect(imagesWithoutAlternative(page)).toHaveCount(0);
+  await expect(page.getByRole("img")).toHaveCount(0);
+});
+
+test("images missing alt are reported", async ({ page }) => {
+  await page.setContent('<main><h1>Guide</h1><img src="contact-card.png"></main>');
+  await expect(imagesWithoutAlternative(page)).toHaveCount(1);
+});
+
 const locales = ["", "de/", "es/", "fr/", "it/"];
 const paths = locales.flatMap(locale => [`/${locale}`, `/${locale}text/`]);
 for (const directory of ["landing", "blog"]) {
@@ -20,6 +35,6 @@ for (const path of paths) {
     expect(response.status()).toBe(200);
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-    await expect(page.locator("img:not([alt]), img[alt='']")).toHaveCount(0);
+    await expect(imagesWithoutAlternative(page)).toHaveCount(0);
   });
 }
