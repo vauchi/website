@@ -59,6 +59,7 @@
   }
 
   function applyTheme(theme) {
+    ROOT.dataset.vauchiMode = theme.mode;
     for (var i = 0; i < TOKEN_NAMES.length; i++) {
       var value = resolveColor(theme, TOKEN_NAMES[i]);
       if (value) ROOT.style.setProperty("--" + TOKEN_NAMES[i], value);

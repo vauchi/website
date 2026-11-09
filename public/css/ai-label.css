@@ -1,0 +1,29 @@
+/* SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> */
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
+.ai-label {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  margin-right: 0.25em;
+  vertical-align: middle;
+}
+.ai-label img { width: 28px; height: 28px; display: block; }
+.ai-label .ai-label-for-dark { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-vauchi-mode]):not(.light):not(.rust) .ai-label-for-light { display: none; }
+  html:not([data-vauchi-mode]):not(.light):not(.rust) .ai-label-for-dark { display: block; }
+}
+
+html.coal .ai-label-for-light,
+html.navy .ai-label-for-light,
+html.ayu .ai-label-for-light,
+html[data-vauchi-mode="dark"] .ai-label-for-light { display: none; }
+html.coal .ai-label-for-dark,
+html.navy .ai-label-for-dark,
+html.ayu .ai-label-for-dark,
+html[data-vauchi-mode="dark"] .ai-label-for-dark { display: block; }
+
+html[data-vauchi-mode="light"] .ai-label-for-light { display: block; }
+html[data-vauchi-mode="light"] .ai-label-for-dark { display: none; }

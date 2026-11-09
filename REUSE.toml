@@ -106,7 +106,7 @@ SPDX-FileCopyrightText = "Schema.org contributors"
 SPDX-License-Identifier = "CC-BY-SA-3.0"
 
 [[annotations]]
-path = ["public/ai-label-basic.svg"]
+path = ["public/ai-label-basic*.svg"]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 European Union"
 SPDX-License-Identifier = "LicenseRef-EU-AI-Icons"
