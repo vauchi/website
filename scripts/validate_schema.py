@@ -100,8 +100,8 @@ def validate_document(document, vocabulary=None):
             expected["image"] = page.meta.get("og:image")
             if "datePublished" not in entity or entity["datePublished"] not in page.times:
                 raise ValueError("visible publication date mismatch")
-            if "dateModified" in entity and entity["dateModified"] not in page.times:
-                raise ValueError("visible modification date mismatch")
+            if "dateModified" in entity and entity["dateModified"] != page.meta.get("article:modified_time"):
+                raise ValueError("Open Graph modification date mismatch")
         for field, value in expected.items():
             if value is None or entity.get(field) != value:
                 raise ValueError(f"visible/metadata mismatch: {field}")

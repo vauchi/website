@@ -14,7 +14,7 @@ from pathlib import Path
 from test_blog_json import BLOG, JsonScripts
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from validate_schema import validate_tree
+from validate_schema import Page, validate_tree
 
 
 class Metadata(HTMLParser):
@@ -74,6 +74,8 @@ class BlogSchemaTests(unittest.TestCase):
                 self.assertNotIn("http://localhost", blocks[0][1])
                 if "dateModified" in article:
                     self.assertEqual(article["dateModified"], timestamp)
+                    self.assertNotIn(timestamp, Page(document).times)
+                    self.assertEqual(article["dateModified"], visible.meta["article:modified_time"])
                 articles.append(article)
             self.assertEqual(sum("dateModified" in article for article in articles), 1)
             self.assertEqual(

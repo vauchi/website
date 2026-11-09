@@ -5,6 +5,9 @@
 {% block description %}{{ page.description }}{% endblock description %}
 
 {% block extra_head %}
+{% if source_dates and page.relative_path in source_dates %}
+<meta property="article:modified_time" content="{{ source_dates[page.relative_path].dateModified }}" />
+{% endif %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -30,9 +33,6 @@
     By <a rel="author" href="https://vauchi.app/authors/vauchi/">Vauchi</a> ·
     <time datetime="{{ page.date }}">{{ page.date | date(format="%B %d, %Y") }}</time> ·
     {{ page.reading_time }} min read
-    {% if source_dates and page.relative_path in source_dates %}
-    · Updated <time datetime="{{ source_dates[page.relative_path].dateModified }}">{{ source_dates[page.relative_path].dateModified | date(format="%B %d, %Y") }}</time>
-    {% endif %}
   </p>
   <p class="meta byline">
     <img src="/ai-label-basic.svg" alt="" width="32" height="32" style="background:#fff;vertical-align:middle" />

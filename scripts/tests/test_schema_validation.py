@@ -31,6 +31,7 @@ def document(entities):
         '<html><head><link rel="canonical" href="https://vauchi.app/blog/post/">'
         '<meta property="og:description" content="Visible description.">'
         '<meta property="og:image" content="https://vauchi.app/social-preview.png">'
+        '<meta property="article:modified_time" content="2026-02-03T10:20:30+00:00">'
         + blocks + '</head><body><h1>Visible title</h1>'
         '<a rel="author" href="https://vauchi.app/authors/vauchi/">Vauchi</a>'
         '<time datetime="2026-01-02">January 2, 2026</time>'
