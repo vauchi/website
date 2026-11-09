@@ -117,6 +117,47 @@ class PrivacyRedirectTests(unittest.TestCase):
                     connection.close()
         self.assertTrue(self.collected.empty(), "retired endpoint forwarded visitor events")
 
+    def request_redirect(self, host, path, method="GET"):
+        connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        try:
+            connection.request(method, path, headers={"Host": host})
+            response = connection.getresponse()
+            return response.status, response.getheader("Location"), response.read()
+        finally:
+            connection.close()
+
+    def test_original_root_docs_urls_keep_their_document_and_query(self):
+        for path in (
+            "/users/getting-started.html", "/developers/crypto.html",
+            "/about/security.html", "/developers/contributing.html",
+            "/users/faq.html", "/about/principles.html",
+            "/developers/architecture.html",
+        ):
+            for method in ("GET", "HEAD"):
+                with self.subTest(path=path, method=method):
+                    status, location, body = self.request_redirect("vauchi.app", path + "?q=one%20two", method)
+                    self.assertEqual(status, 301)
+                    self.assertEqual(location, "https://vauchi.app/docs" + path + "?q=one%20two")
+                    if method == "HEAD":
+                        self.assertEqual(body, b"")
+
+    def test_old_contents_page_goes_to_current_docs_navigation(self):
+        status, location, _ = self.request_redirect("vauchi.app", "/toc.html")
+        self.assertEqual(status, 301)
+        self.assertEqual(location, "https://vauchi.app/docs/")
+
+    def test_old_docs_host_keeps_the_document_path(self):
+        for path in ("/developers/crypto/", "/developers/crypto.html", "/users/features/"):
+            with self.subTest(path=path):
+                status, location, _ = self.request_redirect("docs.vauchi.app", path + "?q=one%20two")
+                self.assertEqual(status, 301)
+                self.assertEqual(location, "https://vauchi.app/docs" + path + "?q=one%20two")
+
+    def test_unknown_website_urls_are_not_sent_to_the_docs_homepage(self):
+        status, location, _ = self.request_redirect("vauchi.app", "/not-a-real-page/")
+        self.assertEqual(status, 404)
+        self.assertIsNone(location)
+
     def test_page_requests_do_not_create_an_access_event_stream(self):
         connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
         try:
