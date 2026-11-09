@@ -12,7 +12,7 @@ from scriptloader import load
 dates = load("source_dates.py")
 
 
-class SourceDatesTests(unittest.TestCase):
+class GitFixture(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
@@ -32,6 +32,8 @@ class SourceDatesTests(unittest.TestCase):
         environment = dict(os.environ, GIT_AUTHOR_DATE=timestamp, GIT_COMMITTER_DATE=timestamp)
         self.git("commit", "-qm", "Fixture change", env=environment)
 
+
+class SourceDatesTests(GitFixture):
     def test_source_date_survives_unrelated_commits_and_renames(self):
         self.commit("article.md", "Original", "2026-01-02T10:00:00+00:00")
         self.commit("template.html", "Unrelated", "2026-02-03T10:00:00+00:00")

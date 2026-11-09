@@ -4,14 +4,15 @@
 import json
 import subprocess
 import sys
+from pathlib import Path
 
-from test_source_dates import SourceDatesTests
-
-
-SCRIPT = __import__("pathlib").Path(__file__).resolve().parents[1] / "prepare_blog.py"
+from test_source_dates import GitFixture
 
 
-class BlogDatesTests(SourceDatesTests):
+SCRIPT = Path(__file__).resolve().parents[1] / "prepare_blog.py"
+
+
+class BlogDatesTests(GitFixture):
     def test_manifest_binds_dates_to_source_bytes_before_container_build(self):
         (self.root / "blog/content").mkdir(parents=True)
         self.commit("blog/content/post.md", "Article", "2026-01-02T10:00:00+00:00")
