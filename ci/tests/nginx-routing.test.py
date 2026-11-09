@@ -224,6 +224,17 @@ class PrivacyRedirectTests(unittest.TestCase):
         finally:
             connection.close()
 
+    def test_site_allows_local_stylesheets_without_external_style_sources(self):
+        status, headers = self.get_headers("/")
+        self.assertEqual(status, 200)
+        directives = {
+            parts[0]: parts[1:] for directive in headers["content-security-policy"].split(";")
+            if (parts := directive.split())
+        }
+        self.assertEqual(directives["style-src"], ["'self'", "'unsafe-inline'"])
+        self.assertEqual(directives["script-src"], ["'self'"])
+        self.assertEqual(directives["default-src"], ["'none'"])
+
     def test_cms_admin_may_reach_gitlab_but_the_site_may_not(self):
         status, admin = self.get_headers("/blog/admin/")
         self.assertEqual(status, 200)
