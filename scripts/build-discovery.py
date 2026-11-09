@@ -5,10 +5,14 @@
 """Export agent-readable versions of the already-published site content."""
 
 import re
+import hashlib
+import json
+import os
 import sys
 import tomllib
 from html.parser import HTMLParser
 from pathlib import Path
+from xml.etree import ElementTree
 
 
 class ReadablePage(HTMLParser):
@@ -79,6 +83,32 @@ def generate(root):
             for name in ("Blog", "Docs", "Spec")
         )
     overview.write_text(text)
+    canonical_pages = {}
+    for location in ElementTree.parse(public / "sitemap-pages.xml").findall(".//{*}loc"):
+        url = location.text
+        if url not in {"https://vauchi.app/" + suffix for suffix in ("", "de/", "es/", "fr/", "it/")}:
+            raise ValueError("unexpected landing canonical URL")
+        canonical_pages[url] = public / url.removeprefix("https://vauchi.app/") / "index.html"
+    if len(canonical_pages) != 5:
+        raise ValueError("incomplete landing inventory")
+    canonical_pages[base + "/"] = blog / "index.html"
+    for _, url in entries:
+        canonical = url.removesuffix("index.md")
+        canonical_pages[canonical] = blog / canonical.removeprefix(base + "/") / "index.html"
+    build_info = public / "build-info.json"
+    source_sha = (
+        json.loads(build_info.read_text())["sha"] if build_info.is_file()
+        else os.environ.get("CI_COMMIT_SHA", "development")
+    )
+    if source_sha != "development" and not re.fullmatch(r"[0-9a-f]{40}", source_sha):
+        raise ValueError("invalid source SHA")
+    manifest = {
+        "version": 1, "source_sha": source_sha,
+        "page_count": len(canonical_pages),
+        "pages": {url: hashlib.sha256(page.read_bytes()).hexdigest()
+                  for url, page in canonical_pages.items()},
+    }
+    (public / "indexnow-manifest.json").write_text(json.dumps(manifest, sort_keys=True) + "\n")
     print(f"Discovery: landing Markdown and {len(entries)} blog articles")
 
 
