@@ -73,10 +73,15 @@ def unique_object(pairs):
     return result
 
 
+def reject_constant(value):
+    raise ValueError(f"non-JSON number: {value}")
+
+
 def validate_document(document, vocabulary=None):
     vocabulary = vocabulary or Vocabulary()
     page = Page(document)
-    entities = [json.loads(block, object_pairs_hook=unique_object) for block in page.blocks]
+    entities = [json.loads(block, object_pairs_hook=unique_object, parse_constant=reject_constant)
+                for block in page.blocks]
     kinds = Counter(entity.get("@type") for entity in entities)
     if kinds["BlogPosting"] + kinds["TechArticle"] > 1:
         raise ValueError("duplicate article blocks")

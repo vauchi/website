@@ -93,3 +93,8 @@ class SchemaValidationTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate_document('<html><head><script type="application/ld+json">' + payload
                                       + '</script></head><body></body></html>')
+
+    def test_non_json_numbers_are_rejected(self):
+        entity = dict(ARTICLE, wordCount=float("nan"))
+        with self.assertRaisesRegex(ValueError, "non-JSON number"):
+            validate_document(document([entity]))
