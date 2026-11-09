@@ -242,10 +242,11 @@ addresses; a valid address receives mail in either case.
 Leaving removes the active email record, its lookup hash and its confirmation
 and removal capabilities. It cannot recall mail already being sent, or erase
 previous CSV exports, mail-server records or backups. The nightly backup
-includes the database and keeps 7 daily, 8 weekly and 12 monthly snapshots,
-so a removed address can stay in a backup for up to about a year. Operators
-must manage
-those copies separately. Restoring an old database can restore withdrawn
+includes the database. Its encrypted off-site archive is append-only;
+pruning is a separate manual operation. The pruning defaults retain 7 daily,
+8 weekly and 12 monthly snapshots when run, which is not an automatic
+one-year deletion deadline. Operators must manage archive retention and
+exported copies separately. Restoring an old database can restore withdrawn
 entries; do not use a restored campaign for mailing without reconciling
 removals.
 
