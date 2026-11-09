@@ -1550,7 +1550,7 @@
   <body{% if variant_id %} data-variant="{{ variant_id }}"{% endif %}>
     <noscript><p><a href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}text/">{{ t['footer.text_version'] }}</a></p></noscript>
     <main class="page-wrapper">
-      <h1 class="page-title">Vauchi</h1>
+      <h1 class="page-title">{{ t['meta.title'] }}</h1>
       <div
         class="v-player"
         id="player"

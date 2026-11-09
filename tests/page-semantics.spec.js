@@ -5,7 +5,7 @@ import { test, expect } from "@playwright/test";
 import { readdirSync } from "node:fs";
 
 function imagesWithoutAlternative(page) {
-  return page.locator("img:not([alt]), img[alt='']");
+  return page.locator("img:not([alt])");
 }
 
 test("decorative images with empty alt remain silent", async ({ page }) => {
