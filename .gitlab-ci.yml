@@ -136,6 +136,7 @@ test:e2e:
     - curl -fsSL "https://gitlab.com/api/v4/projects/vauchi%2Fthemes/repository/files/themes.json/raw?ref=${VAUCHI_THEMES_REF}"
       -o public/app-files/themes/themes.json
   script:
+    - python3 -m unittest discover -s scripts/tests -p test_blog_json.py
     - npx playwright test
   artifacts:
     when: always

@@ -1,0 +1,3 @@
+{% macro value(value) -%}
+{{ value | json_encode() | replace(from="<", to="\u003c") | safe }}
+{%- endmacro value %}
