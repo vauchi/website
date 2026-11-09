@@ -10,9 +10,9 @@ const admin = { Authorization: "Bearer synthetic-browser-export-key" };
 for (const locale of ["en", "de", "fr", "it", "es"]) {
   const text = JSON.parse(readFileSync(`i18n/${locale}.json`, "utf8"));
   for (const width of [390, 1440]) {
-    test(`local waitlist journey ${locale} ${width}`, async ({ page, request }) => {
+    test(`local waitlist journey ${locale} ${width}`, async ({ page, request }, testInfo) => {
       test.skip(!!process.env.BASE_URL, "Synthetic mail fixture is local only");
-      const email = `browser-${locale}-${width}@example.test`;
+      const email = `browser-${locale}-${width}-${testInfo.repeatEachIndex}-${testInfo.retry}@example.test`;
       await page.setViewportSize({ width, height: 844 });
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(`${service}/${locale === "en" ? "" : locale + "/"}`);
@@ -42,7 +42,13 @@ for (const locale of ["en", "de", "fr", "it", "es"]) {
       expect(await before.text()).toContain(email);
       const remove = page.getByRole("button", { name: text["waitlist.manage.remove"], exact: true });
       await remove.focus();
-      await page.keyboard.press("Enter");
+      const removed = page.waitForResponse(response =>
+        response.url().startsWith(`${service}/waitlist/withdraw`) && response.request().method() === "POST");
+      await Promise.all([
+        page.waitForEvent("domcontentloaded"),
+        page.keyboard.press("Enter"),
+      ]);
+      expect((await removed).status()).toBe(200);
       await expect(page.getByRole("status")).toHaveText(text["waitlist.manage.done"]);
       const after = await request.get(`${service}/waitlist/admin/export`, { headers: admin });
       expect(after.status()).toBe(200);
