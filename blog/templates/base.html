@@ -2,6 +2,8 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!doctype html>
 {% set canonical = current_url | replace(from=config.base_url, to="https://vauchi.app/blog") %}
+{% set social_image = "https://vauchi.app/social-preview.png" %}
+{% set source_dates = load_data(path="source-dates.json", required=false) %}
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -19,7 +21,7 @@
     <meta property="og:description" content="{% if page %}{{ page.description }}{% else %}{{ config.description }}{% endif %}" />
     <meta property="og:url" content="{{ canonical | safe }}" />
     <meta property="og:type" content="{% if page %}article{% else %}website{% endif %}" />
-    <meta property="og:image" content="https://vauchi.app/social-preview.png" />
+    <meta property="og:image" content="{{ social_image }}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{% if page %}{{ page.title }} — {{ config.title }}{% else %}{{ config.title }}{% endif %}" />
     <meta name="twitter:description" content="{% if page %}{{ page.description }}{% else %}{{ config.description }}{% endif %}" />

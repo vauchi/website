@@ -6,6 +6,12 @@ version = 1
 SPDX-PackageName = "vauchi-website"
 SPDX-PackageSupplier = "Mattia Egloff <mattia.egloff@pm.me>"
 
+[[annotations]]
+path = ["public/ai-label-basic.svg"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 European Union"
+SPDX-License-Identifier = "LicenseRef-EU-AI-Icons"
+
 # License files
 [[annotations]]
 path = ["LICENSES/**"]

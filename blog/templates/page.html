@@ -1,16 +1,41 @@
 {% extends "base.html" %}
+{% import "macros/json.html" as json %}
 
 {% block title %}{{ page.title }} — {{ config.title }}{% endblock title %}
 {% block description %}{{ page.description }}{% endblock description %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ json::value(value=page.title) }},
+  "description": {{ json::value(value=page.description) }},
+  "datePublished": {{ json::value(value=page.date) }},
+  {% if source_dates and page.relative_path in source_dates %}
+  "dateModified": {{ json::value(value=source_dates[page.relative_path].dateModified) }},
+  {% endif %}
+  "author": {"@id": "https://vauchi.app/#organization"},
+  "publisher": {"@id": "https://vauchi.app/#organization"},
+  "image": {{ json::value(value=social_image) }},
+  "mainEntityOfPage": {{ json::value(value=canonical) }}
+}
+</script>
+{% endblock extra_head %}
 
 {% block content %}
 <article>
   <h1>{{ page.title }}</h1>
   <p class="meta">
+    By <a rel="author" href="https://vauchi.app/authors/vauchi/">Vauchi</a> ·
     {{ page.date | date(format="%B %d, %Y") }} ·
     {{ page.reading_time }} min read
+    {% if source_dates and page.relative_path in source_dates %}
+    · Updated <time datetime="{{ source_dates[page.relative_path].dateModified }}">{{ source_dates[page.relative_path].dateModified | date(format="%B %d, %Y") }}</time>
+    {% endif %}
   </p>
   <p class="meta byline">
+    <img src="/ai-label-basic.svg" alt="" width="32" height="21" style="background:#fff;vertical-align:middle" />
     Drafted with AI assistance. Reviewed, fact-checked and published by
     Mattia Egloff, who is responsible for its content
     (<a href="mailto:hello@vauchi.app">hello@vauchi.app</a>).

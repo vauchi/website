@@ -1,4 +1,27 @@
 {% extends "base.html" %}
+{% import "macros/json.html" as json %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": {{ json::value(value=config.title) }},
+  "url": {{ json::value(value=canonical) }},
+  "publisher": {"@id": "https://vauchi.app/#organization"},
+  "blogPost": [
+    {% for post in section.pages %}
+    {
+      "@type": "BlogPosting",
+      "name": {{ json::value(value=post.title) }},
+      "url": {{ json::value(value=post.permalink | replace(from=config.base_url, to="https://vauchi.app/blog")) }},
+      "datePublished": {{ json::value(value=post.date) }}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock extra_head %}
 
 {% block content %}
 <h1>{{ config.title }}</h1>
