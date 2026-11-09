@@ -10,13 +10,17 @@ WORKDIR /build
 COPY templates/ templates/
 COPY i18n/ i18n/
 COPY scripts/build-pages.py scripts/build-pages.py
+COPY scripts/prepare_blog.py scripts/source_dates.py scripts/
+COPY blog/ blog/
 COPY public/ public/
 RUN python3 scripts/build-pages.py
+RUN python3 scripts/prepare_blog.py --check
 
 # Blog build stage — official zola image (glibc binary, can't run on
 # alpine, so the build happens here and only the output is copied out)
 FROM ghcr.io/getzola/zola:v0.22.1 AS blogbuild
 COPY blog/ /blog/
+COPY --from=build /build/blog/source-dates.json /blog/source-dates.json
 RUN ["/bin/zola", "--root", "/blog", "build", "--output-dir", "/blog-out"]
 
 # Blog CMS bundle (vauchi/private#822). Served from this image, not a

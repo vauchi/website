@@ -18,3 +18,9 @@ check-file = false
 [default.extend-words]
 # Correct French/German address label used in localization regression tests.
 Adresse = "Adresse"
+
+[type.schema-license]
+extend-glob = ["CC-BY-SA-3.0.txt"]
+[type.schema-license.extend-words]
+# Verbatim SPDX license text: https://spdx.org/licenses/CC-BY-SA-3.0.html
+MERCHANTIBILITY = "MERCHANTIBILITY"
