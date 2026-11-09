@@ -7,6 +7,12 @@ SPDX-PackageName = "vauchi-website"
 SPDX-PackageSupplier = "Mattia Egloff <mattia.egloff@pm.me>"
 
 [[annotations]]
+path = ["scripts/schemaorg-30.1.json"]
+precedence = "override"
+SPDX-FileCopyrightText = "Schema.org contributors"
+SPDX-License-Identifier = "CC-BY-SA-3.0"
+
+[[annotations]]
 path = ["public/ai-label-basic.svg"]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 European Union"

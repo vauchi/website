@@ -28,7 +28,7 @@
   <h1>{{ page.title }}</h1>
   <p class="meta">
     By <a rel="author" href="https://vauchi.app/authors/vauchi/">Vauchi</a> ·
-    {{ page.date | date(format="%B %d, %Y") }} ·
+    <time datetime="{{ page.date }}">{{ page.date | date(format="%B %d, %Y") }}</time> ·
     {{ page.reading_time }} min read
     {% if source_dates and page.relative_path in source_dates %}
     · Updated <time datetime="{{ source_dates[page.relative_path].dateModified }}">{{ source_dates[page.relative_path].dateModified | date(format="%B %d, %Y") }}</time>

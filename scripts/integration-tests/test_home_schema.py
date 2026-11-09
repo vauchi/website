@@ -13,6 +13,8 @@ from test_blog_json import JsonScripts
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from validate_schema import validate_tree
 
 
 class HomeSchemaTests(unittest.TestCase):
@@ -37,3 +39,4 @@ class HomeSchemaTests(unittest.TestCase):
             self.assertEqual(entity["@id"], "https://vauchi.app/#organization")
             self.assertEqual(entity["name"], "Vauchi")
             self.assertIn("Mattia Egloff", profile)
+            self.assertGreater(validate_tree(root / "public")[1], 3)

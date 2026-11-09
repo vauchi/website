@@ -5,12 +5,16 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
 from test_blog_json import BLOG, JsonScripts
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from validate_schema import validate_tree
 
 
 class Metadata(HTMLParser):
@@ -76,3 +80,4 @@ class BlogSchemaTests(unittest.TestCase):
                 sorted((post["name"], post["url"], post["datePublished"]) for post in index["blogPost"]),
                 sorted((post["headline"], post["mainEntityOfPage"], post["datePublished"]) for post in articles),
             )
+            self.assertEqual(validate_tree(output)[1], len(articles) + 1)
