@@ -26,17 +26,25 @@ const UNBUNDLED_ARTICLE = {
   date: "August 21, 2026",
 };
 
-// Newest post. The index is sorted by date descending, so this one leads.
-const LATEST_ARTICLE = {
+const POLITICAL_ARTICLE = {
   slug: "your-address-book-is-political",
   title: "Your address book is political",
   date: "October 14, 2026",
+};
+
+// Newest post. The index is sorted by date descending, so this one leads.
+// The title is a pattern because smart punctuation may curl its apostrophe.
+const LATEST_ARTICLE = {
+  slug: "what-vauchi-cannot-do",
+  title: /^What Vauchi can['’]t do$/,
+  date: "November 11, 2026",
 };
 
 const ALL_ARTICLES = [
   LAUNCH_ARTICLE,
   MISSION_ARTICLE,
   UNBUNDLED_ARTICLE,
+  POLITICAL_ARTICLE,
   LATEST_ARTICLE,
 ];
 
@@ -66,9 +74,9 @@ test("the newest article renders in full", async ({ page }) => {
   await expect(page.locator("article .meta").first()).toContainText(
     LATEST_ARTICLE.date
   );
-  // The residual trust in us is the limit a reader must not miss.
+  // That one operator runs both relays is the limit a reader must not miss.
   await expect(page.locator("article")).toContainText(
-    "You still have to trust us a little"
+    "Today Vauchi runs both of those hops"
   );
 });
 
