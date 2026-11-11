@@ -18,6 +18,9 @@ COPY cdn/nginx-cdn.conf /etc/nginx/conf.d/default.conf
 # Built by CI: build-manifest.py → sign-manifest.py → docker build
 COPY public/app-files/ /usr/share/nginx/html/v1/
 
+# The page a visitor sees at the bare host
+COPY cdn/index.html /usr/share/nginx/html/index.html
+
 # Bake build provenance so cdn.vauchi.app/build-info.json reports the exact
 # built commit — the served-version signal used by `just deploy-status`, and
 # parity with docs.vauchi.app / vauchi.app which already serve /build-info.json.
