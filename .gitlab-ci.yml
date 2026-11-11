@@ -445,10 +445,11 @@ build:cdn-docker:
   image:
     name: gcr.io/kaniko-project/executor:v1.23.2-debug
     entrypoint: [""]
+  # sign:content re-uploads all of public/app-files/ with the signed
+  # manifest. Needing build:content as well extracted its unsigned
+  # manifest over the signed one (vauchi/private#1244).
   needs:
     - job: sign:content
-      optional: true
-    - job: build:content
   before_script:
     - mkdir -p /kaniko/.docker
     - |
@@ -459,6 +460,7 @@ build:cdn-docker:
       }}
       JSON
   script:
+    - sh cdn/require-signed-manifest.sh public/app-files/manifest.json
     # Bake the commit provenance into the image (same shape as landing's
     # public/build-info.json and the relay/ohttp BUILD_INFO build-arg).
     - export BUILD_INFO="{\"sha\":\"$CI_COMMIT_SHA\",\"short_sha\":\"$CI_COMMIT_SHORT_SHA\",\"ref\":\"$CI_COMMIT_REF_NAME\",\"built\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"pipeline\":\"$CI_PIPELINE_URL\"}"
