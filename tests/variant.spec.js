@@ -10,7 +10,7 @@ const EN_VARIANT_HEADLINES = {
   c: "Connect on your own terms, across every channel.",
   d: "Exchange contacts, not access to your life.",
   e: "Stop renting your address book.",
-  f: "Meet once. Stay in touch forever.",
+  f: "Meet once. Stay in touch.",
   g: "The address book that fixes itself.",
   h: "Stay reachable. On your own terms.",
   i: "Nobody should own the way you reach people.",
