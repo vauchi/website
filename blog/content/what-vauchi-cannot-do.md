@@ -113,10 +113,10 @@ the relay is never handed a lasting list of who knows whom.
 It does see that something arrived, roughly when, and roughly how big it
 was. That is metadata — information about an update rather than its
 contents, the envelope rather than the letter — and no design removes it
-entirely. Timing is deliberately blurred, and updates are padded with
-extra bytes so they look more alike in size, but our threat model is
-careful here: a patient observer watching over a long period may still
-infer connections from the pattern. How much the blurring helps is a
+entirely. Timing is deliberately blurred. Updates are also padded with
+extra bytes, so they look more alike in size. Even so, our threat model
+is careful here: a patient observer watching over a long period may
+still infer connections from the pattern. How much the blurring helps is a
 design expectation, not something we have measured.
 
 One more thing we would rather you heard from us. The design splits the
@@ -133,9 +133,9 @@ though we recognise that is a real answer for very few people.
 When a friend changes their number, you will not see it the same second.
 
 Part of the wait is on purpose. The first relay holds each request for
-a random stretch of up to fifteen minutes before passing it on, so the
-timing of your phone checking in is harder to match with what it asked
-for. That blurring is one of the protections described above — it makes
+a random stretch of up to fifteen minutes before passing it on. That
+makes the timing of your phone checking in harder to match with what it
+asked for. That blurring is one of the protections described above — it makes
 matching harder but does not prevent it — and it costs you minutes.
 
 Most of the rest is your phone. To save battery, iPhones and Android
@@ -182,8 +182,8 @@ ones rather than asking you to invent a filing system.
 Still, it is a model you have to hold in your head. If you build
 groups, you maintain them. A friendship that changed two years ago
 does not update your settings for you, and nothing in the app will
-nag you about it, because an app that nags you about permissions has
-just moved the work rather than removed it.
+nag you about it. An app that nags you about permissions has just
+moved the work rather than removed it.
 
 If what you want is a contact app that never asks you anything, this
 is not it, and we would rather you knew that now than after the
@@ -205,8 +205,8 @@ guarantee.
 
 Mostly for a more practical reason. The people most likely to want
 something like Vauchi are the ones most likely to be hurt by believing a
-promise that was never true — and a limit you learn on the website costs
-you nothing, while the same limit learned later can cost a great deal.
+promise that was never true. A limit you learn on the website costs you
+nothing; the same limit learned later can cost a great deal.
 
 The longer version lives at
 [what Vauchi is not](https://vauchi.app/docs/about/what-vauchi-is-not.html),
