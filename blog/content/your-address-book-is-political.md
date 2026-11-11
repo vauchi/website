@@ -8,6 +8,13 @@ date = 2026-10-14
 slug = "your-address-book-is-political"
 +++
 
+> **Correction, 11 November 2026.** This post says the only way to share
+> your card is to meet. Vauchi also has Link exchange: a one-off link you
+> send yourself, with weaker assurance than meeting in person. It also
+> says no server could hold a map of who knows whom. The relay keeps no
+> such list, but it does see which rotating mailbox tokens receive
+> messages, and when.
+
 In the late 1960s, women meeting in small discussion groups started
 saying something that sounds obvious once it is said out loud: *the
 personal is political.* Problems each of them had been told were hers

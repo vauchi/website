@@ -7,6 +7,11 @@ date = 2026-08-02
 slug = "never-meant-to-be-permanent"
 +++
 
+> **Correction, 11 November 2026.** "Nothing legible on our side" holds
+> for contact data: there is no account, no profile and no readable card.
+> The relay still sees routing metadata: which tokens receive messages,
+> and when.
+
 Think about what a phone number actually is. It is a routing
 instruction. It says: to reach this person, send the signal here. It
 was never meant to say anything about who you are, any more than a seat

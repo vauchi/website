@@ -8,6 +8,10 @@ date = 2026-07-10
 slug = "eu-interoperability-contact-layer"
 +++
 
+> **Correction, 11 November 2026.** The relay keeps no list of who knows
+> whom: it routes by anonymous, daily-changing tokens. It still sees that
+> a token received something, and when.
+
 You don't stay on a social network because its feed is good. You stay
 because the people are there — and leaving means losing them. In
 April 2026, the European Commission decided to keep it that way: it
