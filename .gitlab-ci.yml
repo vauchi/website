@@ -130,7 +130,7 @@ test:e2e:
     - pip3 install --break-system-packages --quiet jinja2 -r waitlist/requirements.txt
     - python3 scripts/build-pages.py
     - python3 scripts/prepare_blog.py
-    - curl -fsSL https://github.com/getzola/zola/releases/download/v0.22.1/zola-v0.22.1-x86_64-unknown-linux-gnu.tar.gz
+    - curl -fsSL https://github.com/getzola/zola/releases/download/v0.23.6/zola-v0.23.6-x86_64-unknown-linux-gnu.tar.gz
       | tar -xz -C /usr/local/bin
     - zola --root blog build --output-dir public/blog
       --base-url http://localhost:3000/blog

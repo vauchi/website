@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% import "macros/json.html" as json %}
 
 {% block title %}{{ page.title }} — {{ config.title }}{% endblock title %}
 {% block description %}{{ page.description }}{% endblock description %}
@@ -12,16 +11,16 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": {{ json::value(value=page.title) }},
-  "description": {{ json::value(value=page.description) }},
-  "datePublished": {{ json::value(value=page.date) }},
+  "headline": {{ <json value={page.title} /> }},
+  "description": {{ <json value={page.description} /> }},
+  "datePublished": {{ <json value={page.date} /> }},
   {% if source_dates and page.relative_path in source_dates %}
-  "dateModified": {{ json::value(value=source_dates[page.relative_path].dateModified) }},
+  "dateModified": {{ <json value={source_dates[page.relative_path].dateModified} /> }},
   {% endif %}
   "author": {"@type": "Person", "name": "Mattia Egloff", "url": "https://vauchi.app/#organization"},
   "publisher": {"@id": "https://vauchi.app/#organization"},
-  "image": {{ json::value(value=social_image) }},
-  "mainEntityOfPage": {{ json::value(value=canonical) }}
+  "image": {{ <json value={social_image} /> }},
+  "mainEntityOfPage": {{ <json value={canonical} /> }}
 }
 </script>
 {% endblock extra_head %}

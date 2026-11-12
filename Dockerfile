@@ -18,7 +18,7 @@ RUN python3 scripts/prepare_blog.py --check
 
 # Blog build stage — official zola image (glibc binary, can't run on
 # alpine, so the build happens here and only the output is copied out)
-FROM ghcr.io/getzola/zola:v0.22.1 AS blogbuild
+FROM ghcr.io/getzola/zola:v0.23.6 AS blogbuild
 COPY blog/ /blog/
 COPY --from=build /build/blog/source-dates.json /blog/source-dates.json
 RUN ["/bin/zola", "--root", "/blog", "build", "--output-dir", "/blog-out"]

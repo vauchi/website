@@ -1,0 +1,7 @@
+{#- JSON-LD values: JSON-encoded, with `<` written as the JSON escape
+    < so a value cannot close the surrounding <script> element. Tera 2
+    decodes escapes in string literals, so the backslash itself is escaped
+    here; test_blog_json.py fails if a raw `<` reaches the page. -#}
+{% component json(value) -%}
+{{ value | json_encode() | replace(from="<", to="\\u003c") | safe }}
+{%- endcomponent json %}

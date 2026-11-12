@@ -1,21 +1,20 @@
 {% extends "base.html" %}
-{% import "macros/json.html" as json %}
 
 {% block extra_head %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Blog",
-  "name": {{ json::value(value=config.title) }},
-  "url": {{ json::value(value=canonical) }},
+  "name": {{ <json value={config.title} /> }},
+  "url": {{ <json value={canonical} /> }},
   "publisher": {"@id": "https://vauchi.app/#organization"},
   "blogPost": [
     {% for post in section.pages %}
     {
       "@type": "BlogPosting",
-      "name": {{ json::value(value=post.title) }},
-      "url": {{ json::value(value=post.permalink | replace(from=config.base_url, to="https://vauchi.app/blog")) }},
-      "datePublished": {{ json::value(value=post.date) }}
+      "name": {{ <json value={post.title} /> }},
+      "url": {{ <json value={post.permalink | replace(from=config.base_url, to="https://vauchi.app/blog")} /> }},
+      "datePublished": {{ <json value={post.date} /> }}
     }{% if not loop.last %},{% endif %}
     {% endfor %}
   ]
