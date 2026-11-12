@@ -36,7 +36,7 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - project: 'vauchi/scripts'
-    ref: ci-templates-v2026.11.16
+    ref: ci-templates-v2026.11.17
     file:
       - '/ci-templates/reuse.yml'
       - '/ci-templates/image-lint.yml'
@@ -46,7 +46,7 @@ include:
 
 variables:
   GIT_DEPTH: "0"
-  VAUCHI_SCRIPTS_REF: "ci-templates-v2026.11.16"
+  VAUCHI_SCRIPTS_REF: "ci-templates-v2026.11.17"
   VAUCHI_THEMES_REF: "215da2f699ad6ef8354cefb71f9e88fa8062e6bd"
   # Every content type's manifest version. Core fetches a type again only
   # when its version rises, so raise this whenever published content must
