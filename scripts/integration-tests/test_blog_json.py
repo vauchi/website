@@ -16,11 +16,10 @@ from pathlib import Path
 
 BLOG = Path(__file__).resolve().parents[2] / "blog"
 PROBE_TEMPLATE = '''{% extends "page.html" %}
-{% import "macros/json.html" as json %}
 {% block extra_head %}
 {% set payloads = load_data(path="probes.json") %}
-<script type="application/ld+json" id="probe-title">{{ json::value(value=page.title) }}</script>
-<script type="application/ld+json" id="probe-payload">{{ json::value(value=payloads[page.slug]) }}</script>
+<script type="application/ld+json" id="probe-title">{{ <json value={page.title} /> }}</script>
+<script type="application/ld+json" id="probe-payload">{{ <json value={payloads[page.slug]} /> }}</script>
 {% endblock extra_head %}
 '''
 
@@ -52,7 +51,7 @@ class BlogJsonTests(unittest.TestCase):
         binary = os.environ.get("ZOLA_BIN") or shutil.which("zola")
         self.assertIsNotNone(binary, "the pinned real Zola binary is required")
         version = subprocess.run([binary, "--version"], capture_output=True, text=True, check=True)
-        self.assertEqual(version.stdout.strip(), "zola 0.22.1")
+        self.assertEqual(version.stdout.strip(), "zola 0.23.6")
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         root = Path(directory.name)
@@ -60,8 +59,8 @@ class BlogJsonTests(unittest.TestCase):
         root = root / "blog"
         (root / "templates/json-probe.html").write_text(PROBE_TEMPLATE)
         if unsafe_control:
-            (root / "templates/macros/json.html").write_text(
-                '{% macro value(value) %}{{ value | json_encode() | safe }}{% endmacro value %}'
+            (root / "templates/components.html").write_text(
+                '{% component json(value) %}{{ value | json_encode() | safe }}{% endcomponent json %}'
             )
         payloads = {}
         for index, value in enumerate(values):
