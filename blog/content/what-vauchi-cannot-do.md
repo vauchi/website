@@ -91,28 +91,25 @@ knows. It does nothing about a person with physical access to you or
 your phone, which is how a great deal of real harm actually happens.
 
 If you are dealing with an abusive or stalking situation, please build
-your plan with people who do this work rather than with an app. In the
-United States, the National Domestic Violence Hotline (thehotline.org)
-and NNEDV's Safety Net project (techsafety.org) both publish guidance on
-technology and abuse; elsewhere, a local domestic violence service will
-know the equivalent. Any tool, including this one, is at most a small
-part of a plan built with someone who understands your situation.
+your plan with people who do this work rather than with an app. Any
+tool, including this one, is at most a small part of a plan built with
+someone who understands your situation.
 
 ## The relay sees the envelope, not the letter
 
 When your details change, the update reaches your contacts through a
-relay server. Your phone cannot hold an open line to everyone you know —
-that would drain the battery — so updates wait at the relay until the
+relay server. Your phone cannot hold an open line to everyone you know,
+that would drain the battery, so updates wait at the relay until the
 phone next checks in.
 
 The relay cannot read your details: they are end-to-end encrypted, which
-here means only you and the contact you swapped with hold the keys — not
+here means only you and the contact you swapped with hold the keys, not
 the relay, not us. Updates are addressed by codes that change daily, so
 the relay is never handed a lasting list of who knows whom.
 
 It does see that something arrived, roughly when, and roughly how big it
-was. That is metadata — information about an update rather than its
-contents, the envelope rather than the letter — and no design removes it
+was. That is metadata, information about an update rather than its
+contents, the envelope rather than the letter, and no design removes it
 entirely. Timing is deliberately blurred. Updates are also padded with
 extra bytes, so they look more alike in size. Even so, our threat model
 is careful here: a patient observer watching over a long period may
@@ -135,8 +132,8 @@ When a friend changes their number, you will not see it the same second.
 Part of the wait is on purpose. The first relay holds each request for
 a random stretch of up to fifteen minutes before passing it on. That
 makes the timing of your phone checking in harder to match with what it
-asked for. That blurring is one of the protections described above — it makes
-matching harder but does not prevent it — and it costs you minutes.
+asked for. That blurring is one of the protections described above, it makes
+matching harder but does not prevent it, and it costs you minutes.
 
 Most of the rest is your phone. To save battery, iPhones and Android
 phones decide when an app may run in the background, and a phone left
@@ -157,8 +154,8 @@ it is not, and that is what messages and calls are for.
 
 ## It is not stronger than your device
 
-Your keys live in your platform's secure store — the iOS Keychain or
-Android KeyStore — rather than loose on disk. That helps against a lost
+Your keys live in your platform's secure store, the iOS Keychain or
+Android KeyStore, rather than loose on disk. That helps against a lost
 phone. It does not help against a phone that is unlocked and in someone
 else's hands, or one that has been thoroughly compromised.
 
