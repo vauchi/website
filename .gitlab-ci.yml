@@ -410,14 +410,45 @@ test:e2e:deployed:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   allow_failure: true
 
+# Decides whether this merge may deploy landing without the manual step:
+# only when every change since the commit production runs is blog content
+# or a blog image, what the blog CMS commits (vauchi/private#1249). A
+# failure here leaves DEPLOY_AUTO unset, so the deploy stays manual; it
+# never holds the trigger back.
+deploy:classify:
+  stage: deploy
+  tags: [docker]
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:3.12-slim
+  needs: []
+  allow_failure: true
+  variables:
+    GIT_DEPTH: "0"
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git > /dev/null
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+  script:
+    - python3 scripts/classify-deploy.py --head "$CI_COMMIT_SHA" --dotenv deploy-auto.env
+  artifacts:
+    reports:
+      dotenv: deploy-auto.env
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "pipeline" || $CI_PIPELINE_SOURCE == "trigger" || $CI_PIPELINE_SOURCE == "api"
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
 # Deploy website to production via _private pipeline
 # Auto-triggers the centralized deploy pipeline in _private.
-# The _private pipeline has manual gate jobs — click "play" there.
+# The _private pipeline has manual gate jobs — click "play" there — except
+# for a merge deploy:classify found to be blog content only.
 
 deploy:trigger:
   stage: deploy
   needs:
     - job: build:docker
+    - job: deploy:classify
+      optional: true
   trigger:
     project: vauchi/private
     branch: main
@@ -425,6 +456,7 @@ deploy:trigger:
     DEPLOY_SERVICE: landing
     DEPLOY_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
     DEPLOY_IMAGE_DIGEST: $LANDING_IMAGE_DIGEST
+    DEPLOY_AUTO: $DEPLOY_AUTO
   rules:
     # VCI04: exclude schedules before matching the default branch. The
     # workflow block admits `$CI_PIPELINE_SOURCE == "schedule"`, so without
