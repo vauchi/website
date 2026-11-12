@@ -16,12 +16,11 @@ COPY public/ public/
 RUN python3 scripts/build-pages.py
 RUN python3 scripts/prepare_blog.py --check
 
-# Blog build stage — official zola image (glibc binary, can't run on
-# alpine, so the build happens here and only the output is copied out)
+# Build the blog in the pinned Zola image so only its output reaches nginx.
 FROM ghcr.io/getzola/zola:v0.23.6 AS blogbuild
 COPY blog/ /blog/
 COPY --from=build /build/blog/source-dates.json /blog/source-dates.json
-RUN ["/bin/zola", "--root", "/blog", "build", "--output-dir", "/blog-out"]
+RUN ["/zola", "--root", "/blog", "build", "--output-dir", "/blog-out"]
 
 # Blog CMS bundle (vauchi/private#822). Served from this image, not a
 # CDN, so the admin page's CSP stays script-src 'self'. The tarball is the
