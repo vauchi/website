@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Input validation precedes variable expansion (private#1270). Expand the
+# upstream SHA here, before the downstream schema sees the trigger inputs.
+spec:
+  inputs:
+    source_sha:
+      default: $CI_COMMIT_SHA
+---
+
+# The downstream audit builds this exact commit with the other public sites.
+check:site-indexing:
+  stage: lint
+  needs: []
+  inherit:
+    variables: false
+  trigger:
+    project: vauchi/private
+    branch: main
+    strategy: mirror
+    inputs:
+      site_indexing: local
+      indexing_project: vauchi/website
+      indexing_sha: $[[ inputs.source_sha | expand_vars ]]
+    forward:
+      yaml_variables: false
+      pipeline_variables: false
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes: &indexing-changes
+        - ".gitlab-ci.yml"
+        - "Dockerfile"
+        - "nginx.conf"
+        - "ci/**/*"
+        - "scripts/**/*"
+        - "templates/**/*"
+        - "i18n/**/*"
+        - "public/**/*"
+        - "blog/**/*"
+        - "waitlist/**/*"
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes: *indexing-changes
