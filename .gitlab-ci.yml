@@ -544,3 +544,39 @@ pages:
 
 github-mirror:
   extends: .github-mirror
+
+# The downstream audit builds this exact commit with the other public sites.
+check:site-indexing:
+  stage: lint
+  needs: []
+  inherit:
+    variables: false
+  trigger:
+    project: vauchi/private
+    branch: main
+    strategy: mirror
+    forward:
+      yaml_variables: true
+      pipeline_variables: false
+  variables:
+    SITE_INDEXING_ONLY: "1"
+    INDEXING_MODE: local
+    INDEXING_SOURCE_PROJECT: $CI_PROJECT_PATH
+    INDEXING_SOURCE_SHA: $CI_COMMIT_SHA
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes: &indexing-changes
+        - ".gitlab-ci.yml"
+        - "Dockerfile"
+        - "nginx.conf"
+        - "ci/**/*"
+        - "scripts/**/*"
+        - "templates/**/*"
+        - "i18n/**/*"
+        - "public/**/*"
+        - "blog/**/*"
+        - "waitlist/**/*"
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes: *indexing-changes
