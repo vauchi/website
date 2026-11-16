@@ -555,14 +555,13 @@ check:site-indexing:
     project: vauchi/private
     branch: main
     strategy: mirror
+    inputs:
+      site_indexing: local
+      indexing_project: $CI_PROJECT_PATH
+      indexing_sha: $CI_COMMIT_SHA
     forward:
-      yaml_variables: true
+      yaml_variables: false
       pipeline_variables: false
-  variables:
-    SITE_INDEXING_ONLY: "1"
-    INDEXING_MODE: local
-    INDEXING_SOURCE_PROJECT: $CI_PROJECT_PATH
-    INDEXING_SOURCE_SHA: $CI_COMMIT_SHA
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: never
