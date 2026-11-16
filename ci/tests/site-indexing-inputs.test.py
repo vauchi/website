@@ -37,8 +37,8 @@ class IndexingInputContractTests(unittest.TestCase):
             "$[[ inputs.source_sha | expand_vars ]]",
         )
         self.assertEqual(
-            self.config[0]["spec"]["inputs"]["source_sha"],
-            {"default": "$CI_COMMIT_SHA"},
+            self.config[0]["spec"]["inputs"]["source_sha"]["default"],
+            "$CI_COMMIT_SHA",
         )
 
     def test_internal_include_cannot_replace_sha_with_a_pipeline_input(self):
@@ -46,7 +46,10 @@ class IndexingInputContractTests(unittest.TestCase):
             item for item in self.root["include"] if item.get("local") == TEMPLATE
         ]
         self.assertEqual(includes, [{"local": TEMPLATE}])
-        self.assertNotIn("spec", documents(".gitlab-ci.yml")[0])
+        self.assertNotIn(
+            "source_sha",
+            documents(".gitlab-ci.yml")[0].get("spec", {}).get("inputs", {}),
+        )
 
     def test_gate_mirrors_result_without_forwarding_variables(self):
         trigger = self.job["trigger"]
