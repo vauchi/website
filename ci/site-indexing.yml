@@ -29,6 +29,13 @@ check:site-indexing:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: never
+    # GitLab authorizes the trigger as the pipeline's user, and only
+    # maintainers may start pipelines on private's protected main: an agent
+    # bot's MR fails with insufficient_bridge_permissions. Its MRs skip the
+    # audit; the maintainer's MR runs and every main pipeline still make it
+    # (vauchi/private#1284).
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $GITLAB_USER_LOGIN =~ /^(group|project)_[0-9]+_bot_/'
+      when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes: &indexing-changes
         - ".gitlab-ci.yml"

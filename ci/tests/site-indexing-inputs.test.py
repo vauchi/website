@@ -3,6 +3,7 @@
 
 """The trigger must send literals before private validates its input schema."""
 
+import re
 import unittest
 from pathlib import Path
 
@@ -63,6 +64,25 @@ class IndexingInputContractTests(unittest.TestCase):
         )
         self.assertEqual(self.job["inherit"], {"variables": False})
 
+
+    def test_agent_bot_merge_requests_skip_the_trigger(self):
+        # The bot cannot start pipelines on private's protected main
+        # (vauchi/private#1284); the maintainer and main still run it.
+        rules = self.job["rules"]
+        mr = [i for i, r in enumerate(rules) if '"merge_request_event"' in r["if"]]
+        skip, run = rules[mr[0]], rules[mr[1]]
+        self.assertEqual(skip["when"], "never")
+        self.assertNotIn("when", run)
+        pattern = re.search(r"\$GITLAB_USER_LOGIN =~ /(.+)/'?$", skip["if"] + "'")
+        self.assertIsNotNone(pattern, skip["if"])
+        bot = re.compile(pattern.group(1))
+        self.assertTrue(bot.search("group_122552022_bot_5269f4a65ce21963ed6123e3f9b78256"))
+        self.assertTrue(bot.search("project_83_bot_0a1b2c"))
+        self.assertFalse(bot.search("megloff1"))
+        self.assertFalse(bot.search("someone_group_1_bot_x"))
+        main = [r for r in rules if "CI_DEFAULT_BRANCH" in r["if"]]
+        self.assertEqual(len(main), 1)
+        self.assertNotIn("GITLAB_USER_LOGIN", main[0]["if"])
 
 if __name__ == "__main__":
     unittest.main()
