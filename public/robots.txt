@@ -47,24 +47,20 @@ User-agent: cohere-ai
 Allow: /
 Disallow: /app-files/
 
-# Google-Extended is one switch for two uses: Gemini grounding its live
-# answers in these pages, and Gemini training. Google offers no token for
-# grounding alone, so allowing it lets Gemini answer from the site and also
-# lets Google train Gemini on it. We accept that for Gemini only.
-
-User-agent: Google-Extended
-Allow: /
-Disallow: /app-files/
-
 # --- Bulk training and dataset crawlers: not allowed ---
 # Each operator says the crawler collects pages to train models or sells
 # them as datasets. Where an operator also runs a live fetcher, that one
 # is in the allowed group above (ClaudeBot here, Claude-User there).
+# Google-Extended is one switch for Gemini training and Gemini grounding
+# its answers in these pages; Google offers none for grounding alone, so
+# blocking training also keeps these pages out of Gemini's answers. Google
+# Search and AI Overviews still use them, through the ordinary Googlebot.
 
 User-agent: GPTBot
 User-agent: ClaudeBot
 User-agent: anthropic-ai
 User-agent: Applebot-Extended
+User-agent: Google-Extended
 User-agent: CCBot
 User-agent: Bytespider
 User-agent: TikTokSpider
