@@ -20,6 +20,7 @@
     <link rel="alternate" hreflang="x-default" href="https://vauchi.app/">
     <title>{{ page_title }}</title>
     <meta name="description" content="{{ page_description }}">
+    <meta name="keywords" content="{{ t['meta.keywords'] }}">
     <meta name="author" content="Vauchi">
     <meta name="theme-color" content="#4fc3f7">
     <meta name="vauchi:variant" content="{{ variant_id if variant_id else 'a' }}">
@@ -98,6 +99,7 @@
         "@type": "SoftwareApplication",
         "name": "Vauchi",
         "description": "{{ t['meta.description'] }}",
+        "keywords": "{{ t['meta.keywords'] }}",
         "applicationCategory": "CommunicationApplication",
         "operatingSystem": "iOS, Android, macOS, Windows, Linux",
         "offers": {

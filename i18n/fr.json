@@ -63,7 +63,7 @@
   "honest.item4": "Il y a quand même un serveur au milieu. Votre téléphone ne peut pas garder une ligne ouverte vers tous ceux que vous connaissez — cela viderait la batterie — alors les mises à jour attendent sur un relais jusqu'à ce que votre téléphone vienne voir. Le relais les garde scellées et n'a aucune clé, et les adresses qu'il trie changent chaque jour : la liste de qui connaît qui ne lui est jamais remise. Il voit que quelque chose est arrivé. Vous pouvez héberger le vôtre.",
   "honest.label": "Soyons francs",
   "honest.note": "Si quelque chose sur cette page cesse un jour de correspondre au code, c'est le code qui dit vrai.",
-  "meta.description": "Votre numéro, votre e-mail et votre travail changeront. Vauchi tient à jour les gens que vous avez rencontrés — sans compte, sans entreprise au milieu, chiffré de bout en bout.",
+  "meta.description": "Votre numéro, votre e-mail et votre travail changeront. Vauchi tient à jour vos rencontres — sans compte, sans entreprise au milieu, chiffré de bout en bout.",
   "meta.title": "Vauchi — rester joignable, à vos conditions",
   "outro.caption": "Rencontrez-vous une fois. Restez proches — peu importe ce qui change.",
   "organization.body1": "Pour le moment, Vauchi est un projet solo de Mattia Egloff. Il pense que les réseaux de relations appartiennent aux personnes qui les composent.",
@@ -173,5 +173,6 @@
   "why.body1": "Internet a donné à chacun une adresse permanente — un numéro, une boîte mail, un profil — puis a rendu coûteux le fait de la quitter. Changez-en une et vous passerez un an à courir après les gens qui comptent. Gardez-la, et elle vous suivra toute votre vie.",
   "why.body2": "Les gens changent de travail, de pays, de téléphone et de nom. La façon dont on se joint devrait pouvoir changer aussi — sans demander la permission à une entreprise, et sans perdre personne en route.",
   "why.heading": "Les coordonnées n'ont jamais été faites pour durer.",
-  "why.label": "Pourquoi c'est important"
+  "why.label": "Pourquoi c'est important",
+  "meta.keywords": "échange de contacts, carte de contact numérique, échange de contacts en personne, chiffrement de bout en bout, minimisation des métadonnées, vie privée, open source, sans compte, carnet d'adresses"
 }

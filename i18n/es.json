@@ -63,7 +63,7 @@
   "honest.item4": "Sigue habiendo un servidor en medio. Tu teléfono no puede mantener una línea abierta con todos los que conoces — eso agotaría la batería — así que las actualizaciones esperan en un relé hasta que tu teléfono vuelve a mirar. El relé las guarda selladas y no tiene la llave, y las direcciones con las que las ordena cambian cada día: la lista de quién conoce a quién nunca se le entrega. Sí ve que ha llegado algo. Puedes alojar el tuyo.",
   "honest.label": "Hablando claro",
   "honest.note": "Si algo de esta página deja de coincidir con el código, la verdad es el código.",
-  "meta.description": "Tu número, tu correo y tu trabajo cambiarán. Vauchi mantiene al día a las personas que conociste — sin cuenta, sin empresas en medio, cifrado de extremo a extremo.",
+  "meta.description": "Tu número, tu correo y tu trabajo cambiarán. Vauchi mantiene al día a quienes conociste — sin cuenta, sin empresas en medio, cifrado de extremo a extremo.",
   "meta.title": "Vauchi — sigue localizable, en tus propios términos",
   "outro.caption": "Un solo encuentro. Sigue en contacto — pase lo que pase.",
   "organization.body1": "Por ahora, Vauchi es un proyecto individual de Mattia Egloff. Cree que las redes de relaciones pertenecen a las personas que las forman.",
@@ -173,5 +173,6 @@
   "why.body1": "Internet le dio a cada uno una dirección permanente — un número, un buzón, un perfil — y luego hizo caro abandonarla. Cambia una y pasarás un año persiguiendo a la gente que importa. Consérvala, y te seguirá el resto de tu vida.",
   "why.body2": "La gente cambia de trabajo, de país, de teléfono y de nombre. La forma en que nos localizamos también debería poder cambiar — sin pedirle permiso a una empresa y sin perder a nadie por el camino.",
   "why.heading": "Los datos de contacto nunca fueron pensados para durar.",
-  "why.label": "Por qué importa"
+  "why.label": "Por qué importa",
+  "meta.keywords": "intercambio de contactos, tarjeta de contacto digital, intercambio de contactos en persona, cifrado de extremo a extremo, minimización de metadatos, privacidad, código abierto, sin cuenta, libreta de direcciones"
 }

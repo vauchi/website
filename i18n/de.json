@@ -63,7 +63,7 @@
   "honest.item4": "Ein Server ist trotzdem im Spiel. Dein Telefon kann keine offene Leitung zu allen halten, die du kennst — das würde den Akku leeren —, also warten Aktualisierungen auf einem Relay, bis dein Telefon das nächste Mal nachsieht. Das Relay verwahrt sie versiegelt und hat keinen Schlüssel, und die Adressen, nach denen es sortiert, wechseln täglich; die Liste, wer wen kennt, bekommt es nie. Dass etwas angekommen ist, sieht es. Du kannst dein eigenes betreiben.",
   "honest.label": "Ehrlich gesagt",
   "honest.note": "Sollte hier je etwas nicht mehr zum Code passen, gilt der Code.",
-  "meta.description": "Deine Nummer, deine E-Mail und dein Job werden sich ändern. Vauchi hält die Menschen, die du getroffen hast, auf dem Laufenden — ohne Konto, ohne Unternehmen dazwischen, Ende-zu-Ende-verschlüsselt.",
+  "meta.description": "Nummer, E-Mail und Job ändern sich. Vauchi hält die Menschen, die du getroffen hast, aktuell — ohne Konto, ohne Firma dazwischen, Ende-zu-Ende-verschlüsselt.",
   "meta.title": "Vauchi — erreichbar bleiben, zu deinen Bedingungen",
   "outro.caption": "Einmal treffen. Verbunden bleiben — egal was sich ändert.",
   "organization.body1": "Vorerst ist Vauchi ein Soloprojekt von Mattia Egloff. Er ist überzeugt, dass persönliche Netzwerke den Menschen gehören, die sie bilden.",
@@ -173,5 +173,6 @@
   "why.body1": "Das Internet hat jedem eine feste Adresse gegeben — eine Nummer, ein Postfach, ein Profil — und es dann teuer gemacht, sie zu verlassen. Ändere eine davon, und du verbringst ein Jahr damit, den Menschen hinterherzulaufen, die dir wichtig sind. Behalte sie, und sie begleitet dich ein Leben lang.",
   "why.body2": "Menschen wechseln Job, Land, Telefon und Namen. Auch die Art, wie wir einander erreichen, sollte sich ändern dürfen — ohne ein Unternehmen um Erlaubnis zu fragen und ohne dabei jemanden zu verlieren.",
   "why.heading": "Kontaktdaten waren nie für die Ewigkeit gedacht.",
-  "why.label": "Warum das zählt"
+  "why.label": "Warum das zählt",
+  "meta.keywords": "Kontaktaustausch, digitale Kontaktkarte, Kontakte persönlich austauschen, Ende-zu-Ende-Verschlüsselung, Metadaten-Minimierung, Datenschutz, Open Source, ohne Konto, Adressbuch"
 }
