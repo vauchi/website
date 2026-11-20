@@ -185,8 +185,9 @@ test:scripts:
   before_script:
     # Both are hard imports in the scripts under test: sign-manifest.py
     # and validate-content.py each sys.exit(1) when theirs is missing.
-    # qrencode re-renders the committed donation QR codes to compare them.
-    - apt-get update -qq && apt-get install -y -qq git qrencode gnupg > /dev/null
+    # qrencode renders the donation QR codes; rsvg-convert and zbarimg read
+    # them back the way a camera would; gnupg verifies the signed list.
+    - apt-get update -qq && apt-get install -y -qq git qrencode gnupg librsvg2-bin zbar-tools > /dev/null
     - pip install --quiet PyNaCl jsonschema
   script:
     - python -m unittest discover -s scripts/tests -t scripts/tests -v

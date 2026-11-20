@@ -33,7 +33,7 @@ for (const prefix of locales) {
       await expect(address).toHaveText(addresses[guid]);
       await expect(address).toHaveAttribute("translate", "no");
       const qr = channel.getByRole("img");
-      await expect(qr).toHaveAttribute("src", `/support/qr-${guid}.svg`);
+      await expect(qr).toHaveAttribute("src", new RegExp(`^/support/qr-${guid}-[0-9a-f]{12}\\.svg$`));
       await expect(qr).not.toHaveAttribute("alt", "");
       await expect.poll(() => qr.evaluate((img) => img.naturalWidth)).toBeGreaterThan(0);
     }

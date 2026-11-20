@@ -59,16 +59,37 @@ class PublishedAddressesTest(unittest.TestCase):
         self.assertLessEqual(set(OWNER_ADDRESSES), set(any_amount["channels"]))
 
 
-class QrCodeTest(unittest.TestCase):
-    def test_each_committed_qr_code_is_rendered_from_its_published_address(self):
-        for guid, address in OWNER_ADDRESSES.items():
-            with self.subTest(guid=guid):
-                committed = donations.qr_svg_path(guid).read_text(encoding="utf-8")
-                self.assertEqual(committed, donations.render_qr_svg(address))
+def decode_qr(svg_text):
+    """What a camera reads from the code: rasterised, then decoded by zbar."""
+    with tempfile.TemporaryDirectory() as directory:
+        svg, png = Path(directory) / "qr.svg", Path(directory) / "qr.png"
+        svg.write_text(svg_text, encoding="utf-8")
+        subprocess.run(["rsvg-convert", "-w", "600", "-o", str(png), str(svg)], check=True)
+        result = subprocess.run(["zbarimg", "-q", "--raw", str(png)], check=True, capture_output=True, text=True)
+        return result.stdout.strip()
 
-    def test_a_qr_code_for_another_address_differs(self):
-        committed = donations.qr_svg_path("monero").read_text(encoding="utf-8")
-        self.assertNotEqual(committed, donations.render_qr_svg(OWNER_ADDRESSES["bitcoin"]))
+
+class QrCodeTest(unittest.TestCase):
+    def test_each_generated_qr_code_decodes_to_its_published_address(self):
+        with tempfile.TemporaryDirectory() as directory:
+            files = donations.write_qr_codes(OWNER_ADDRESSES, Path(directory))
+            for guid, address in OWNER_ADDRESSES.items():
+                with self.subTest(guid=guid):
+                    self.assertEqual(decode_qr((Path(directory) / files[guid]).read_text()), address)
+
+    def test_the_decoder_tells_one_address_from_another(self):
+        svg = donations.render_qr_svg(OWNER_ADDRESSES["bitcoin"])
+        self.assertEqual(decode_qr(svg), OWNER_ADDRESSES["bitcoin"])
+        self.assertNotEqual(decode_qr(svg), OWNER_ADDRESSES["monero"])
+
+    def test_a_new_address_gets_a_new_file_name_and_the_old_file_goes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            first = donations.write_qr_codes({"monero": OWNER_ADDRESSES["monero"]}, out)["monero"]
+            second = donations.write_qr_codes({"monero": OWNER_ADDRESSES["bitcoin"]}, out)["monero"]
+            self.assertRegex(first, r"^qr-monero-[0-9a-f]{12}\.svg$")
+            self.assertNotEqual(first, second)
+            self.assertEqual([path.name for path in out.glob("qr-*.svg")], [second])
 
 
 class SignedListTest(unittest.TestCase):
