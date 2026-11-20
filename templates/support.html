@@ -1,6 +1,7 @@
 <!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 {%- set home = '/' if lang == 'en' else '/' ~ lang ~ '/' %}
+{%- set page_url = 'https://vauchi.app' ~ home ~ 'support/' %}
 <!doctype html>
 <html lang="{{ lang }}">
   <head>
@@ -8,30 +9,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ t['support.meta.title']|e }}</title>
     <meta name="description" content="{{ t['support.meta.description']|e }}">
-    <link rel="canonical" href="https://vauchi.app{{ home }}support/">
+    <meta name="theme-color" content="#4fc3f7">
+    <link rel="canonical" href="{{ page_url }}">
     {% for code in locales %}
     <link rel="alternate" hreflang="{{ code }}" href="https://vauchi.app{{ '/' if code == 'en' else '/' ~ code ~ '/' }}support/">
     {% endfor %}
     <link rel="alternate" hreflang="x-default" href="https://vauchi.app/support/">
-    <style>
-      html { color-scheme: light dark; }
-      body { max-width: 65ch; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; line-height: 1.7; }
-      h1, h2, h3 { line-height: 1.25; }
-      h2 { margin-top: 2rem; }
-      nav, footer { margin: 2rem 0; }
-      a { text-underline-offset: .15em; }
-      nav a, footer a { margin-right: 1rem; }
-      .donation-qr { display: block; width: 240px; max-width: 100%; height: auto; }
-      .donation-address { display: block; overflow-wrap: anywhere; user-select: all; font-size: .95rem; padding: .5rem; border: 1px solid; border-radius: 4px; }
-    </style>
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ page_url }}">
+    <meta property="og:title" content="{{ t['support.meta.title']|e }}">
+    <meta property="og:description" content="{{ t['support.meta.description']|e }}">
+    <meta property="og:image" content="https://vauchi.app/social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Vauchi">
+    <meta property="og:locale" content="{{ lang }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ t['support.meta.title']|e }}">
+    <meta name="twitter:description" content="{{ t['support.meta.description']|e }}">
+    <meta name="twitter:image" content="https://vauchi.app/social-preview.png">
+    <link rel="stylesheet" href="/css/page.css">
   </head>
   <body>
-    <nav aria-label="Languages">
-      {% for code in locales %}
-      <a href="{{ '/' if code == 'en' else '/' ~ code ~ '/' }}support/" lang="{{ code }}" hreflang="{{ code }}">{{ code|upper }}</a>
-      {% endfor %}
-    </nav>
-    <main>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="{{ home }}"><img src="/logo.webp" alt="" width="28" height="28">Vauchi</a>
+        <div class="theme-controls">
+          <button id="mode-toggle" type="button" aria-label="Toggle light/dark mode">☀️</button>
+          <button id="theme-menu-toggle" type="button" aria-label="Choose theme" aria-haspopup="true" aria-expanded="false">🎨</button>
+          <div id="theme-menu">
+            <div>Dark</div><div id="theme-menu-dark"></div>
+            <div>Light</div><div id="theme-menu-light"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <nav class="languages" aria-label="Languages">
+        {% for code in locales %}
+        <a href="{{ '/' if code == 'en' else '/' ~ code ~ '/' }}support/" lang="{{ code }}" hreflang="{{ code }}">{{ code|upper }}</a>
+        {% endfor %}
+      </nav>
       <h1>{{ t['support.heading']|e }}</h1>
       <p>{{ t['support.intro']|e }}</p>
       <section aria-labelledby="platforms-heading">
@@ -57,9 +79,12 @@
       </section>
     </main>
     <footer>
-      <a href="{{ home }}">{{ t['footer.home']|e }}</a>
-      <a href="{{ home }}text/">{{ t['footer.text_version']|e }}</a>
-      <a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['footer.privacy']|e }}</a>
+      <div class="wrap">
+        <a href="{{ home }}">{{ t['footer.home']|e }}</a>
+        <a href="{{ home }}text/">{{ t['footer.text_version']|e }}</a>
+        <a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['footer.privacy']|e }}</a>
+      </div>
     </footer>
+    <script src="/js/theme-picker.js" defer></script>
   </body>
 </html>
