@@ -51,6 +51,24 @@
         "type": "payment-provider",
         "address": "https://liberapay.com/Vauchi/donate",
         "description": "Recurring donations via Liberapay. No platform fees."
+      },
+      {
+        "guid": "bitcoin-silent-payments",
+        "type": "other",
+        "address": "sp1qqtpujd9vfhx4jzh4xtjndmfazssfq64hrqx5082re0kdmzh5sj466q5n29n83gqst884p3yn8ek9k6r6qf92cm7wmnd9nddml0lvxxm5rcprygzt",
+        "description": "Bitcoin Silent Payments address (BIP-352). Each payment lands at a new on-chain address, so donations cannot be linked to each other. Needs a wallet that supports Silent Payments. QR code: https://vauchi.app/support/"
+      },
+      {
+        "guid": "bitcoin",
+        "type": "other",
+        "address": "bc1pykga6j933ss43xmad2layn3ln99e29r9s2t8rwmmrn5f98p2x92sz42fep",
+        "description": "Bitcoin Taproot address for wallets without Silent Payments. Every payment to it is publicly visible on-chain. QR code: https://vauchi.app/support/"
+      },
+      {
+        "guid": "monero",
+        "type": "other",
+        "address": "83bHi5sfzVCDGyGmjEnGKgX31JruNzjF3crafNMwWowZeEE2rWYLsK3fdwYZP5HXkn8ynwu5wVK82Um8kataXUf62a8f7kg",
+        "description": "Monero subaddress. QR code: https://vauchi.app/support/"
       }
     ],
     "plans": [
@@ -72,7 +90,7 @@
         "amount": 8000,
         "currency": "CHF",
         "frequency": "monthly",
-        "channels": ["bank", "github-sponsors", "liberapay"]
+        "channels": ["bank", "github-sponsors", "liberapay", "bitcoin-silent-payments", "bitcoin", "monero"]
       },
       {
         "guid": "security-audit",
@@ -92,7 +110,7 @@
         "amount": 600,
         "currency": "CHF",
         "frequency": "yearly",
-        "channels": ["bank", "github-sponsors", "liberapay"]
+        "channels": ["bank", "github-sponsors", "liberapay", "bitcoin-silent-payments", "bitcoin", "monero"]
       },
       {
         "guid": "any-amount",
@@ -102,7 +120,7 @@
         "amount": 0,
         "currency": "CHF",
         "frequency": "one-time",
-        "channels": ["github-sponsors", "liberapay"]
+        "channels": ["github-sponsors", "liberapay", "bitcoin-silent-payments", "bitcoin", "monero"]
       }
     ]
   }
