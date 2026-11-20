@@ -202,11 +202,23 @@ class PrivacyRedirectTests(unittest.TestCase):
                     "https://vauchi.app/landing/nobody-but-you-should-own-the-way-you-can-be-reached/" + suffix + "?utm=a",
                 )
 
+    def test_the_retired_every_channel_headline_reaches_its_successor(self):
+        for suffix in ("", "it/"):
+            with self.subTest(suffix=suffix):
+                status, location, _ = self.request_redirect(
+                    "vauchi.app", "/landing/connect-on-your-own-terms-across-every-channel/" + suffix + "?utm=a", "GET",
+                )
+                self.assertEqual(status, 301)
+                self.assertEqual(
+                    location, "https://vauchi.app/landing/connect-on-your-own-terms-on-the-channels-you-choose/" + suffix + "?utm=a",
+                )
+
     def test_retired_headlines_redirect_without_a_trailing_slash_too(self):
         for old, new in (
             ("meet-once-stay-in-touch-forever", "meet-once-stay-in-touch"),
             ("no-brainrot-no-data-theft-just-people", "no-brainrot-no-feeds-just-people"),
             ("nobody-should-own-the-way-you-reach-people", "nobody-but-you-should-own-the-way-you-can-be-reached"),
+            ("connect-on-your-own-terms-across-every-channel", "connect-on-your-own-terms-on-the-channels-you-choose"),
         ):
             with self.subTest(old=old):
                 status, location, _ = self.request_redirect("vauchi.app", f"/landing/{old}?utm=a", "GET")

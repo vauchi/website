@@ -7,7 +7,7 @@ const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 const EN_VARIANT_HEADLINES = {
   a: "Your contact card. Your channels. Your rules.",
   b: "No brainrot. No feeds. Just people.",
-  c: "Connect on your own terms, across every channel.",
+  c: "Connect on your own terms, on the channels you choose.",
   d: "Exchange contacts, not access to your life.",
   e: "Stop renting your address book.",
   f: "Meet once. Stay in touch.",
