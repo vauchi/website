@@ -255,7 +255,7 @@
   "support.bitcoin-silent-payments.note": "Ogni pagamento va a un nuovo indirizzo sulla blockchain, quindi la blockchain da sola non mostra che è andato a Vauchi. Il tuo wallet deve supportare i Silent Payments (lo standard BIP-352). Se rifiuta questo indirizzo, usa quello qui sotto.",
   "support.bitcoin-silent-payments.qr_alt": "Codice QR dell'indirizzo Bitcoin Silent Payments",
   "support.bitcoin.heading": "Bitcoin: indirizzo standard",
-  "support.bitcoin.note": "Funziona con qualsiasi wallet Bitcoin. I pagamenti a questo indirizzo sono pubblici: chiunque può vedere ogni pagamento, il suo importo e l'indirizzo da cui proviene.",
+  "support.bitcoin.note": "Funziona con la maggior parte dei wallet Bitcoin attuali. I pagamenti a questo indirizzo sono pubblici: chiunque può vedere ogni pagamento, il suo importo e l'indirizzo da cui proviene.",
   "support.bitcoin.qr_alt": "Codice QR dell'indirizzo Bitcoin standard",
   "support.monero.heading": "Monero",
   "support.monero.note": "Monero nasconde l'importo e l'indirizzo di ricezione di ogni pagamento, e nasconde il mittente tra i pagamenti di altre persone.",

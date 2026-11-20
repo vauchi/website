@@ -255,7 +255,7 @@
   "support.bitcoin-silent-payments.note": "Cada pago va a una dirección nueva en la blockchain, así que la blockchain por sí sola no muestra que fue a Vauchi. Tu monedero tiene que admitir Silent Payments (el estándar BIP-352). Si rechaza esta dirección, usa la de abajo.",
   "support.bitcoin-silent-payments.qr_alt": "Código QR de la dirección Bitcoin Silent Payments",
   "support.bitcoin.heading": "Bitcoin: dirección estándar",
-  "support.bitcoin.note": "Funciona con cualquier monedero Bitcoin. Los pagos a esta dirección son públicos: cualquiera puede ver cada pago, su importe y la dirección de la que viene.",
+  "support.bitcoin.note": "Funciona con la mayoría de los monederos Bitcoin actuales. Los pagos a esta dirección son públicos: cualquiera puede ver cada pago, su importe y la dirección de la que viene.",
   "support.bitcoin.qr_alt": "Código QR de la dirección Bitcoin estándar",
   "support.monero.heading": "Monero",
   "support.monero.note": "Monero oculta el importe y la dirección de recepción de cada pago, y esconde al remitente entre los pagos de otras personas.",

@@ -255,7 +255,7 @@
   "support.bitcoin-silent-payments.note": "Chaque paiement part vers une nouvelle adresse de la blockchain : la blockchain seule ne montre donc pas qu'il est allé à Vauchi. Votre portefeuille doit prendre en charge les Silent Payments (la norme BIP-352). S'il refuse cette adresse, utilisez celle ci-dessous.",
   "support.bitcoin-silent-payments.qr_alt": "Code QR de l'adresse Bitcoin Silent Payments",
   "support.bitcoin.heading": "Bitcoin : adresse standard",
-  "support.bitcoin.note": "Fonctionne avec tous les portefeuilles Bitcoin. Les paiements vers cette adresse sont publics : tout le monde peut voir chaque paiement, son montant et l'adresse d'où il vient.",
+  "support.bitcoin.note": "Fonctionne avec la plupart des portefeuilles Bitcoin actuels. Les paiements vers cette adresse sont publics : tout le monde peut voir chaque paiement, son montant et l'adresse d'où il vient.",
   "support.bitcoin.qr_alt": "Code QR de l'adresse Bitcoin standard",
   "support.monero.heading": "Monero",
   "support.monero.note": "Monero masque le montant et l'adresse de réception de chaque paiement, et cache l'expéditeur parmi les paiements d'autres personnes.",
