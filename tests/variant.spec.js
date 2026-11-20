@@ -3,7 +3,7 @@
 
 import { test, expect } from "@playwright/test";
 
-const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
+const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 const EN_VARIANT_HEADLINES = {
   a: "Your contact card. Your channels. Your rules.",
   b: "No brainrot. No data theft. Just people.",
@@ -14,6 +14,7 @@ const EN_VARIANT_HEADLINES = {
   g: "The address book that fixes itself.",
   h: "Stay reachable. On your own terms.",
   i: "Nobody should own the way you reach people.",
+  j: "Change your details. Keep your connections.",
 };
 
 test.describe("landing-page variant test", () => {
@@ -196,4 +197,13 @@ test.describe("landing-page variant test", () => {
     const heroHeadline = await page.textContent("#hero-variant-headline");
     expect(heroHeadline.trim()).toBe(EN_VARIANT_HEADLINES.g);
   });
+});
+
+test("variant j has its own landing page and short link", async ({ page }) => {
+  const response = await page.goto("/landing/change-your-details-keep-your-connections/");
+  expect(response.status()).toBe(200);
+  await expect(page.locator("#hero-variant-headline")).toHaveText(EN_VARIANT_HEADLINES.j);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex");
+  await page.goto("/l/j/");
+  await expect(page).toHaveURL(/\/landing\/change-your-details-keep-your-connections\/$/);
 });
