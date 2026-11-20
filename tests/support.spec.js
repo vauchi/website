@@ -39,6 +39,13 @@ for (const prefix of locales) {
     }
   });
 
+  test(`${name}support/ description fits search snippets (120-160 characters)`, async ({ page }) => {
+    await page.goto(`/${prefix}support/`);
+    const description = await page.locator('meta[name="description"]').getAttribute("content");
+    expect(description.length).toBeGreaterThanOrEqual(120);
+    expect(description.length).toBeLessThanOrEqual(160);
+  });
+
   test(`${name} footer links to its support page`, async ({ page }) => {
     await page.goto(`/${prefix}`);
     await expect(page.locator("[data-support-page]")).toHaveAttribute("href", `/${prefix}support/`);
