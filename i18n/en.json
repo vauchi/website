@@ -261,5 +261,6 @@
   "support.monero.note": "Monero hides the amount and the receiving address of each payment, and hides the sender among other users' payments.",
   "support.monero.qr_alt": "QR code of the Monero address",
   "waitlist.manage.description": "Leave the Vauchi waitlist: remove your email address, or ask for a new removal link by email.",
-  "waitlist.confirm.description": "Your Vauchi waitlist confirmation: whether your spot on the list is confirmed, with a link back to the Vauchi home page."
+  "waitlist.confirm.description": "Your Vauchi waitlist confirmation: whether your spot on the list is confirmed, with a link back to the Vauchi home page.",
+  "support.crypto.signed": "Compare them with the list signed with Vauchi's PGP key"
 }

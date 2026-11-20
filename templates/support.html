@@ -67,6 +67,7 @@
       <section aria-labelledby="crypto-heading">
         <h2 id="crypto-heading">{{ t['support.crypto.heading']|e }}</h2>
         <p>{{ t['support.crypto.intro']|e }}</p>
+        <p><a href="/donation-addresses.txt.asc">{{ t['support.crypto.signed']|e }}</a></p>
         {% for guid, address in donation_addresses.items() %}
         <section aria-labelledby="{{ guid }}-heading" data-donation-channel="{{ guid }}">
           <h3 id="{{ guid }}-heading">{{ t['support.' ~ guid ~ '.heading']|e }}</h3>

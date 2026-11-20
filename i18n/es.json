@@ -261,5 +261,6 @@
   "support.monero.note": "Monero oculta el importe y la dirección de recepción de cada pago, y esconde al remitente entre los pagos de otras personas.",
   "support.monero.qr_alt": "Código QR de la dirección Monero",
   "waitlist.manage.description": "Sal de la lista de espera de Vauchi: quita tu dirección de correo o pide por correo un enlace nuevo para hacerlo.",
-  "waitlist.confirm.description": "Tu confirmación para la lista de espera de Vauchi: si tu plaza está confirmada, con un enlace a la página de inicio de Vauchi."
+  "waitlist.confirm.description": "Tu confirmación para la lista de espera de Vauchi: si tu plaza está confirmada, con un enlace a la página de inicio de Vauchi.",
+  "support.crypto.signed": "Compáralas con la lista firmada con la clave PGP de Vauchi"
 }
