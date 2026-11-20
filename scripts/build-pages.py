@@ -38,6 +38,7 @@ PUBLIC_DIR = os.path.join(ROOT, "public")
 
 DEFAULT_LOCALE = "en"
 VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"]
+WHY_TOPICS = ["no-directory", "change-your-number"]
 
 
 def load_translations(locale: str) -> dict:
@@ -213,11 +214,82 @@ def write_pages_sitemap(locales: list[str]):
         lines.append("    <priority>0.8</priority>")
         lines.append("  </url>")
 
+    for url in why_page_urls(locales):
+        lines.append("  <url>")
+        lines.append(f"    <loc>{url}</loc>")
+        lines.append("    <changefreq>monthly</changefreq>")
+        lines.append("    <priority>0.6</priority>")
+        lines.append("  </url>")
+
     lines.append("</urlset>")
     path = os.path.join(PUBLIC_DIR, "sitemap-pages.xml")
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
     print(f"  sitemap: {path} ({len(locales)} locale page(s))")
+
+
+def locale_prefix(locale: str) -> str:
+    return "/" if locale == DEFAULT_LOCALE else f"/{locale}/"
+
+
+def why_path(locale: str, topic: str | None) -> str:
+    return f"{locale_prefix(locale)}why/" + (f"{topic}/" if topic else "")
+
+
+def why_page_urls(locales: list[str]) -> list[str]:
+    return [SITE_URL + why_path(loc, topic) for loc in locales for topic in [None, *WHY_TOPICS]]
+
+
+def why_structured_data(translations: dict, locale: str, topic: str | None) -> list[str]:
+    key = f"whypage.{topic or 'index'}."
+    url = SITE_URL + why_path(locale, topic)
+    blocks = [{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": translations[key + "title"],
+        "description": translations[key + "description"],
+        "url": url,
+        "headline": translations[key + "heading"],
+        "mainEntityOfPage": url,
+        "author": {"@type": "Person", "name": "Mattia Egloff", "url": SITE_URL + "/#organization"},
+        "publisher": {"@id": SITE_URL + "/#organization"},
+        "inLanguage": locale,
+        "isPartOf": {"@type": "WebSite", "name": "Vauchi", "url": SITE_URL + "/"},
+    }]
+    if topic:
+        blocks.append({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "url": url,
+            "inLanguage": locale,
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": translations[f"{key}q{n}"],
+                    "acceptedAnswer": {"@type": "Answer", "text": translations[f"{key}a{n}"]},
+                }
+                for n in (1, 2, 3)
+            ],
+        })
+    # "</" inside a script element would end it early.
+    return [json.dumps(block, ensure_ascii=False).replace("</", "<\\/") for block in blocks]
+
+
+def write_why_pages(env: Environment, locale: str, translations: dict, locales: list[str]):
+    for topic in [None, *WHY_TOPICS]:
+        dir_path = os.path.join(PUBLIC_DIR, why_path(locale, topic).strip("/"))
+        os.makedirs(dir_path, exist_ok=True)
+        html = env.get_template("why.html").render(
+            t=translations,
+            lang=locale,
+            locales=locales,
+            topic=topic,
+            topics=WHY_TOPICS,
+            page_url=SITE_URL + why_path(locale, topic),
+            structured_data=why_structured_data(translations, locale, topic),
+        )
+        with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
 
 
 def build_page(
@@ -319,6 +391,7 @@ def main():
         os.makedirs(text_dir, exist_ok=True)
         with open(os.path.join(text_dir, "index.html"), "w", encoding="utf-8") as output:
             output.write(env.get_template("text.html").render(t=all_translations[locale], lang=locale))
+        write_why_pages(env, locale, all_translations[locale], locales)
 
     # Build per-variant landing pages for accurate SEO/social previews.
     # Each page is pre-rendered with the variant headline/sub in the meta,

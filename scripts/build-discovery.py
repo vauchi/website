@@ -84,12 +84,14 @@ def generate(root):
         )
     overview.write_text(text)
     canonical_pages = {}
+    homes = {"https://vauchi.app/" + suffix for suffix in ("", "de/", "es/", "fr/", "it/")}
+    why_page = re.compile(r"https://vauchi\.app/(?:(?:de|es|fr|it)/)?why/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)?")
     for location in ElementTree.parse(public / "sitemap-pages.xml").findall(".//{*}loc"):
         url = location.text
-        if url not in {"https://vauchi.app/" + suffix for suffix in ("", "de/", "es/", "fr/", "it/")}:
-            raise ValueError("unexpected landing canonical URL")
+        if url not in homes and not why_page.fullmatch(url or ""):
+            raise ValueError(f"unexpected sitemap URL: {url}")
         canonical_pages[url] = public / url.removeprefix("https://vauchi.app/") / "index.html"
-    if len(canonical_pages) != 5:
+    if not homes <= set(canonical_pages):
         raise ValueError("incomplete landing inventory")
     canonical_pages[base + "/"] = blog / "index.html"
     for _, url in entries:

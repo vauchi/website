@@ -1,0 +1,117 @@
+<!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+{%- set home = '/' if lang == 'en' else '/' ~ lang ~ '/' %}
+{%- set key = 'whypage.' ~ (topic or 'index') ~ '.' %}
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ t[key ~ 'title']|e }} · Vauchi</title>
+    <meta name="description" content="{{ t[key ~ 'description']|e }}">
+    <meta name="theme-color" content="#4fc3f7">
+    <link rel="canonical" href="{{ page_url }}">
+    {% for code in locales %}
+    <link rel="alternate" hreflang="{{ code }}" href="https://vauchi.app{{ '/' if code == 'en' else '/' ~ code ~ '/' }}why/{{ topic ~ '/' if topic else '' }}">
+    {% endfor %}
+    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/why/{{ topic ~ '/' if topic else '' }}">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ page_url }}">
+    <meta property="og:title" content="{{ t[key ~ 'title']|e }}">
+    <meta property="og:description" content="{{ t[key ~ 'description']|e }}">
+    <meta property="og:image" content="https://vauchi.app/social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Vauchi">
+    <meta property="og:locale" content="{{ lang }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ t[key ~ 'title']|e }}">
+    <meta name="twitter:description" content="{{ t[key ~ 'description']|e }}">
+    <meta name="twitter:image" content="https://vauchi.app/social-preview.png">
+    <link rel="stylesheet" href="/css/page.css">
+    <link rel="stylesheet" href="/css/ai-label.css">
+    {% for block in structured_data %}
+    <script type="application/ld+json">{{ block }}</script>
+    {% endfor %}
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="{{ home }}"><img src="/logo.webp" alt="" width="28" height="28">Vauchi</a>
+        <div class="theme-controls">
+          <button id="mode-toggle" type="button" aria-label="Toggle light/dark mode">☀️</button>
+          <button id="theme-menu-toggle" type="button" aria-label="Choose theme" aria-haspopup="true" aria-expanded="false">🎨</button>
+          <div id="theme-menu">
+            <div>Dark</div><div id="theme-menu-dark"></div>
+            <div>Light</div><div id="theme-menu-light"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <nav class="languages" aria-label="Languages">
+        {% for code in locales %}
+        <a href="{{ '/' if code == 'en' else '/' ~ code ~ '/' }}why/{{ topic ~ '/' if topic else '' }}" lang="{{ code }}" hreflang="{{ code }}">{{ code|upper }}</a>
+        {% endfor %}
+      </nav>
+      <article>
+      <h1>{{ t[key ~ 'heading']|e }}</h1>
+      <p class="byline" data-why-byline>
+        <span class="ai-label" aria-hidden="true">
+          <img class="ai-label-for-light" src="/ai-label-basic-light.svg" alt="" width="28" height="28">
+          <img class="ai-label-for-dark" src="/ai-label-basic-dark.svg" alt="" width="28" height="28">
+        </span>
+        {{ t['whypage.by']|e }} <a rel="author" href="mailto:hello@vauchi.app">Mattia Egloff</a> · {{ t['whypage.ai_assisted']|e }}
+      </p>
+      <p data-why-notice><em>{{ t['whypage.notice']|e }}</em></p>
+      {% if topic %}
+      <p>{{ t[key ~ 'intro1']|e }}</p>
+      <p><strong>{{ t[key ~ 'intro2']|e }}</strong></p>
+      {% for n in [1, 2, 3, 4] %}
+      <section aria-labelledby="s{{ n }}">
+        <h2 id="s{{ n }}">{{ t[key ~ 's' ~ n ~ '.heading']|e }}</h2>
+        <p>{{ t[key ~ 's' ~ n ~ '.body']|e }}</p>
+      </section>
+      {% endfor %}
+      <section aria-labelledby="limits" data-why-limits>
+        <h2 id="limits">{{ t['whypage.limits_heading']|e }}</h2>
+        <ul>
+          {% for n in [1, 2, 3] %}
+          <li>{{ t[key ~ 'limit' ~ n]|e }}</li>
+          {% endfor %}
+        </ul>
+        <p><a href="https://vauchi.app/docs/about/what-vauchi-is-not.html">{{ t['whypage.limits_link']|e }}</a></p>
+      </section>
+      <section aria-labelledby="faq">
+        <h2 id="faq">{{ t['whypage.faq_heading']|e }}</h2>
+        {% for n in [1, 2, 3] %}
+        <h3>{{ t[key ~ 'q' ~ n]|e }}</h3>
+        <p>{{ t[key ~ 'a' ~ n]|e }}</p>
+        {% endfor %}
+      </section>
+      <p><a href="{{ home }}#waitlist">{{ t['whypage.cta']|e }}</a> · <a href="{{ home }}why/">{{ t['whypage.all']|e }}</a></p>
+      {% else %}
+      <p>{{ t[key ~ 'intro']|e }}</p>
+      <ul>
+        {% for other in topics %}
+        <li><a href="{{ home }}why/{{ other }}/">{{ t['whypage.' ~ other ~ '.heading']|e }}</a>: {{ t['whypage.' ~ other ~ '.description']|e }}</li>
+        {% endfor %}
+      </ul>
+      <p><a href="{{ home }}#waitlist">{{ t['whypage.cta']|e }}</a></p>
+      {% endif %}
+      </article>
+    </main>
+    <footer>
+      <div class="wrap">
+        <a href="{{ home }}">{{ t['footer.home']|e }}</a>
+        <a href="{{ home }}text/">{{ t['footer.text_version']|e }}</a>
+        <a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['footer.privacy']|e }}</a>
+      </div>
+    </footer>
+    <script src="/js/theme-picker.js" defer></script>
+  </body>
+</html>
