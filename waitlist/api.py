@@ -200,7 +200,7 @@ def withdraw():
 @app.get("/waitlist/")
 def waitlist_root():
     locale = language()
-    return redirect(("/" if locale == "en" else f"/{locale}/") + "#waitlist", code=308)
+    return redirect(("/" if locale == "en" else f"/{locale}/") + "#waitlist", code=302)
 
 
 @app.get("/waitlist/manage/")
