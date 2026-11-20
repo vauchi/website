@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from markupsafe import escape
+
 from service_fixture import ServiceTestCase, api
 
 
@@ -17,3 +19,20 @@ class ConfirmationResult(ServiceTestCase):
         self.assertEqual(response.headers['Cache-Control'], 'no-store')
         self.assertEqual(response.headers['Referrer-Policy'], 'no-referrer')
         self.assertIn("default-src 'none'", response.headers['Content-Security-Policy'])
+
+    def test_confirmation_pages_stay_out_of_search_and_describe_themselves(self):
+        for locale in ("en", "de", "fr", "it", "es"):
+            with self.subTest(locale=locale):
+                html = self.client.get(f"/waitlist/confirm?token=synthetic-token-42&lang={locale}").get_data(as_text=True)
+                head = html.split("</head>")[0]
+                description = escape(api.translations(locale)["waitlist.confirm.description"])
+                self.assertIn('<meta name="robots" content="noindex">', head)
+                self.assertIn(f'<meta name="description" content="{description}">', head)
+                self.assertNotIn("synthetic-token-42", html)
+
+    def test_the_waitlist_root_leads_to_the_signup_on_the_landing_page(self):
+        for query, target in (("", "/#waitlist"), ("?lang=fr", "/fr/#waitlist"), ("?lang=../x", "/#waitlist")):
+            with self.subTest(query=query):
+                response = self.client.get("/waitlist/" + query)
+                self.assertEqual(response.status_code, 308)
+                self.assertEqual(response.headers["Location"], target)
