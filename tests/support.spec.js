@@ -46,6 +46,13 @@ for (const prefix of locales) {
     expect(description.length).toBeLessThanOrEqual(160);
   });
 
+  test(`${name} footer has a BTC / XMR button to its support page`, async ({ page }) => {
+    await page.goto(`/${prefix}`);
+    const button = page.locator(".support-links").getByRole("link", { name: "BTC / XMR" });
+    await expect(button).toHaveAttribute("href", `/${prefix}support/`);
+    await expect(button).toBeVisible();
+  });
+
   test(`${name} footer links to its support page`, async ({ page }) => {
     await page.goto(`/${prefix}`);
     await expect(page.locator("[data-support-page]")).toHaveAttribute("href", `/${prefix}support/`);
