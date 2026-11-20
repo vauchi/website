@@ -186,7 +186,7 @@ test:scripts:
     # Both are hard imports in the scripts under test: sign-manifest.py
     # and validate-content.py each sys.exit(1) when theirs is missing.
     # qrencode re-renders the committed donation QR codes to compare them.
-    - apt-get update -qq && apt-get install -y -qq git qrencode > /dev/null
+    - apt-get update -qq && apt-get install -y -qq git qrencode gnupg > /dev/null
     - pip install --quiet PyNaCl jsonschema
   script:
     - python -m unittest discover -s scripts/tests -t scripts/tests -v

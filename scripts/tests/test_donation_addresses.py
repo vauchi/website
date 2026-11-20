@@ -4,6 +4,9 @@
 """Donation addresses in funding.json, their validators and QR codes (vauchi/private#1307)."""
 
 import json
+import os
+import re
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +17,10 @@ donations = load("donation_addresses.py")
 
 FUNDING_JSON = REPO_ROOT / "public" / "funding.json"
 WELL_KNOWN_FUNDING_JSON = REPO_ROOT / "public" / ".well-known" / "funding.json"
+SIGNED_LIST = REPO_ROOT / "public" / "donation-addresses.txt.asc"
+PUBLISHED_KEY = REPO_ROOT / "public" / ".well-known" / "pgp-key.txt"
+# The key security.txt names: the signature must come from it.
+SIGNING_KEY_FINGERPRINT = "4347B1C657A397E5206E4709A84E1AABD7830274"
 
 # Pinned on purpose: changing an address must touch this test too, so a
 # swapped address cannot reach the site in a one-line diff.
@@ -62,6 +69,44 @@ class QrCodeTest(unittest.TestCase):
     def test_a_qr_code_for_another_address_differs(self):
         committed = donations.qr_svg_path("monero").read_text(encoding="utf-8")
         self.assertNotEqual(committed, donations.render_qr_svg(OWNER_ADDRESSES["bitcoin"]))
+
+
+class SignedListTest(unittest.TestCase):
+    """The out-of-band anchor: a change to funding.json alone cannot pass."""
+
+    def verify(self, signed_bytes):
+        with tempfile.TemporaryDirectory() as home:
+            env = {**os.environ, "GNUPGHOME": home}
+            subprocess.run(["gpg", "--batch", "--quiet", "--import", str(PUBLISHED_KEY)],
+                           env=env, check=True, capture_output=True)
+            status = subprocess.run(["gpg", "--batch", "--status-fd", "1", "--decrypt"],
+                                    input=signed_bytes, env=env, capture_output=True)
+            return status.stdout.decode("utf-8", "replace")
+
+    def test_the_list_is_signed_by_the_published_key(self):
+        status = self.verify(SIGNED_LIST.read_bytes())
+        validsig = re.search(r"^\[GNUPG:\] VALIDSIG (\S+(?: \S+)*)$", status, re.M)
+        self.assertIsNotNone(validsig, status)
+        self.assertEqual(validsig[1].split()[-1], SIGNING_KEY_FINGERPRINT)
+
+    def test_the_signed_list_names_exactly_the_published_addresses(self):
+        status = self.verify(SIGNED_LIST.read_bytes())
+        self.assertIn("[GNUPG:] GOODSIG", status)
+        plaintext = re.sub(r"^\[GNUPG:\].*$", "", status, flags=re.M)
+        for guid, address in OWNER_ADDRESSES.items():
+            with self.subTest(guid=guid):
+                self.assertIn(address, plaintext)
+        found = set(re.findall(r"\b(?:sp1|bc1)[02-9ac-hj-np-z]{20,}\b|\b[48][1-9A-HJ-NP-Za-km-z]{94}\b", plaintext))
+        self.assertEqual(found, set(OWNER_ADDRESSES.values()))
+
+    def test_a_tampered_list_fails_verification(self):
+        signed = SIGNED_LIST.read_bytes()
+        address = OWNER_ADDRESSES["monero"].encode()
+        tampered = signed.replace(address, address[:-1] + (b"j" if address[-1:] != b"j" else b"k"))
+        self.assertNotEqual(tampered, signed)
+        status = self.verify(tampered)
+        self.assertNotIn("[GNUPG:] GOODSIG", status)
+        self.assertNotIn("[GNUPG:] VALIDSIG", status)
 
 
 class ValidatorTest(unittest.TestCase):
