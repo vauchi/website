@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
 const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 const EN_VARIANT_HEADLINES = {
   a: "Your contact card. Your channels. Your rules.",
-  b: "No brainrot. No data theft. Just people.",
+  b: "No brainrot. No feeds. Just people.",
   c: "Connect on your own terms, across every channel.",
   d: "Exchange contacts, not access to your life.",
   e: "Stop renting your address book.",
@@ -132,7 +132,7 @@ test.describe("landing-page variant test", () => {
     expect(manifest.default_locale).toBe("en");
     expect(manifest.locales).toHaveProperty("en");
     expect(manifest.variants).toHaveProperty("b");
-    expect(manifest.variants.b.slug).toBe("no-brainrot-no-data-theft-just-people");
+    expect(manifest.variants.b.slug).toBe("no-brainrot-no-feeds-just-people");
 
     const en = manifest.locales.en;
     for (const id of VARIANTS) {
@@ -146,9 +146,9 @@ test.describe("landing-page variant test", () => {
   });
 
   test("variant landing page has accurate SEO/social meta", async ({ page }) => {
-    const slug = "no-brainrot-no-data-theft-just-people";
+    const slug = "no-brainrot-no-feeds-just-people";
     const headline = EN_VARIANT_HEADLINES.b;
-    const sub = "A contact exchange that respects your attention and your data.";
+    const sub = "No feed to scroll, no ads, no tracking. Vauchi is built to know as little about you as it can, and to stay that way.";
     const url = `/landing/${slug}/`;
 
     await page.goto(url);

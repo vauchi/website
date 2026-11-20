@@ -181,6 +181,15 @@ class PrivacyRedirectTests(unittest.TestCase):
                     self.assertEqual(status, 301)
                     self.assertEqual(location, "https://vauchi.app/landing/meet-once-stay-in-touch/" + suffix + "?utm=a")
 
+    def test_the_retired_no_data_theft_headline_reaches_its_successor(self):
+        for suffix in ("", "fr/"):
+            with self.subTest(suffix=suffix):
+                status, location, _ = self.request_redirect(
+                    "vauchi.app", "/landing/no-brainrot-no-data-theft-just-people/" + suffix + "?utm=a", "GET",
+                )
+                self.assertEqual(status, 301)
+                self.assertEqual(location, "https://vauchi.app/landing/no-brainrot-no-feeds-just-people/" + suffix + "?utm=a")
+
     def test_unknown_website_urls_are_not_sent_to_the_docs_homepage(self):
         status, location, _ = self.request_redirect("vauchi.app", "/not-a-real-page/")
         self.assertEqual(status, 404)
