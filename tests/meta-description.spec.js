@@ -10,6 +10,13 @@ import { test, expect } from "@playwright/test";
 
 const locales = ["", "de/", "es/", "fr/", "it/"];
 
+test("/authors/vauchi/ description fits search snippets (120-160 characters)", async ({ page }) => {
+  await page.goto("/authors/vauchi/");
+  const description = await page.locator('meta[name="description"]').getAttribute("content");
+  expect(description.length).toBeGreaterThanOrEqual(120);
+  expect(description.length).toBeLessThanOrEqual(160);
+});
+
 for (const prefix of locales) {
   for (const path of [`/${prefix}`, `/${prefix}text/`]) {
     test(`${path} description fits search snippets (120-160 characters)`, async ({ page }) => {

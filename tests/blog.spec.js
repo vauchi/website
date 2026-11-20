@@ -109,6 +109,15 @@ test("every article names its responsible editor and AI assistance", async ({
   }
 });
 
+test("every article links the publisher page its structured data names", async ({
+  page,
+}) => {
+  for (const article of ALL_ARTICLES) {
+    await page.goto(`/blog/${article.slug}/`);
+    await expect(page.locator('article a[href="/authors/vauchi/"]')).toHaveText("Vauchi");
+  }
+});
+
 test("the CMS admin loads its pinned bundle from this site only", async ({
   page,
   request,

@@ -47,6 +47,16 @@ test("sitemap-pages.xml lists every localized home page", async ({
   expect(body).not.toContain(".html/</loc>");
 });
 
+test("sitemap-pages.xml lists the support page in every locale and the publisher page", async ({
+  request,
+}) => {
+  const body = await (await request.get("/sitemap-pages.xml")).text();
+  for (const prefix of ["", "de/", "es/", "fr/", "it/"]) {
+    expect(body).toContain(`<loc>https://vauchi.app/${prefix}support/</loc>`);
+  }
+  expect(body).toContain("<loc>https://vauchi.app/authors/vauchi/</loc>");
+});
+
 test("robots.txt advertises the sitemap index", async ({ request }) => {
   const res = await request.get("/robots.txt");
   expect(res.status()).toBe(200);

@@ -24,6 +24,15 @@ for (const [variantId, { slug }] of Object.entries(manifest.variants)) {
   });
 }
 
+// The variant pages they lead to are noindex; a short link must not be the
+// one indexable copy of a campaign page.
+for (const variantId of Object.keys(manifest.variants)) {
+  test(`/l/${variantId}/ asks search engines not to index it`, async ({ request }) => {
+    const body = await (await request.get(`/l/${variantId}/`)).text();
+    expect(body).toContain('<meta name="robots" content="noindex">');
+  });
+}
+
 test("landing page #waitlist anchor targets the waitlist section", async ({
   page,
 }) => {
