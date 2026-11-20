@@ -18,11 +18,12 @@ for (const locale of ["en", "de", "fr", "it", "es"]) {
     }
   });
 
-  test(`text reading works without scripts or styles in ${locale}`, async ({ browser }) => {
+  test(`text reading works without scripts or styles in ${locale}`, async ({ browser, baseURL }) => {
     const copy = JSON.parse(readFileSync(`i18n/${locale}.json`, "utf8"));
-    const context = await browser.newContext({ javaScriptEnabled: false });
+    // A context made by hand does not inherit the configured baseURL.
+    const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
     const page = await context.newPage();
-    await page.goto(`http://localhost:3000${prefix}`);
+    await page.goto(prefix);
     await page.locator("footer a[data-text-version]").click();
     await expect(page).toHaveURL(new RegExp(`${prefix}text/$`));
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://vauchi.app${prefix}`);
@@ -47,10 +48,10 @@ test("unstyled landing page offers prose instead of the decorative player", asyn
   await expect(page.locator(".text-fallback")).toBeVisible();
 });
 
-test("email confirmation survives the first language redirect", async ({ browser }) => {
-  const context = await browser.newContext({ locale: "de-DE" });
+test("email confirmation survives the first language redirect", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ locale: "de-DE", baseURL });
   const page = await context.newPage();
-  await page.goto("http://localhost:3000/?waitlist=confirmed#waitlist");
+  await page.goto("/?waitlist=confirmed#waitlist");
   await expect(page).toHaveURL(/\/de\/#waitlist$/);
   await expect(page.locator("#waitlist-message")).toBeVisible();
   await expect(page.locator("#waitlist-message")).toHaveClass(/--confirmed/);
