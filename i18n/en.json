@@ -63,7 +63,7 @@
   "honest.item4": "There is still a server in the middle. Your phone can't keep an open line to everyone you know — that would drain the battery — so updates wait at a relay until your phone next checks in. The relay holds them sealed and has no key, and the addresses it sorts by change every day, so it is never handed the list of who knows whom. It does see that something arrived. You can run your own.",
   "honest.label": "Being straight with you",
   "honest.note": "If anything on this page ever stops matching the code, the code is the truth.",
-  "meta.description": "Your number, email and job will change. Vauchi keeps the people you chose to meet up to date — no account, no company in the middle, end-to-end encrypted.",
+  "meta.description": "Your number, email and job will change. Vauchi keeps the people you chose to meet up to date — no account, no ads, end-to-end encrypted.",
   "meta.title": "Vauchi — stay reachable, on your own terms",
   "outro.caption": "Meet once. Stay close — whatever changes.",
   "organization.body1": "For now, Vauchi is a solo project by Mattia Egloff. He believes people's networks belong to the people in them.",
