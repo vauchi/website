@@ -324,12 +324,26 @@ class PrivacyRedirectTests(unittest.TestCase):
                 self.assertEqual(response.getheader("Location"), path + "/")
 
     def test_www_redirects_permanently_to_the_apex_keeping_path_and_query(self):
+        # 308, not 301: a form posted from a cached www page must stay a
+        # POST with its body, or a waitlist signup or removal is lost.
         for path in ("/", "/de/text/?utm_source=a&x=1", "/waitlist/manage?lang=fr"):
             with self.subTest(path=path):
                 response = self.get(path, host="www.vauchi.app")
-                self.assertEqual(response.status, 301)
+                self.assertEqual(response.status, 308)
                 self.assertEqual(response.getheader("Location"), "https://vauchi.app" + path)
                 self.assertIn("max-age=", response.getheader("Strict-Transport-Security"))
+
+    def test_a_form_posted_to_www_is_redirected_as_a_post(self):
+        connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        try:
+            connection.request("POST", "/waitlist/join", body=b"email=a%40example.test",
+                               headers={"Host": "www.vauchi.app", "Content-Type": "application/x-www-form-urlencoded"})
+            response = connection.getresponse()
+            response.read()
+        finally:
+            connection.close()
+        self.assertEqual(response.status, 308)
+        self.assertEqual(response.getheader("Location"), "https://vauchi.app/waitlist/join")
 
     def test_the_apex_and_unknown_hosts_still_serve_the_site(self):
         for host in ("vauchi.app", "10.0.0.5:3080"):
