@@ -37,14 +37,19 @@ User-agent: Applebot
 Allow: /
 Disallow: /app-files/
 
+# Google-Extended is one switch for two uses: Gemini grounding its live
+# answers in these pages, and Gemini training. Google offers no token for
+# grounding alone, so allowing it lets Gemini answer from the site and also
+# lets Google train Gemini on it. We accept that for Gemini only.
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /app-files/
+
 # --- Bulk training and dataset crawlers: not allowed ---
-# Note that disallowing Google-Extended opts out of Gemini training and
-# grounding only. It does not remove these pages from Google's AI
-# Overviews, which are served from the ordinary Googlebot index.
 
 User-agent: GPTBot
 User-agent: ClaudeBot
-User-agent: Google-Extended
 User-agent: Applebot-Extended
 User-agent: CCBot
 User-agent: Bytespider
