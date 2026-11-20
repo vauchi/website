@@ -34,5 +34,6 @@ class ConfirmationResult(ServiceTestCase):
         for query, target in (("", "/#waitlist"), ("?lang=fr", "/fr/#waitlist"), ("?lang=../x", "/#waitlist")):
             with self.subTest(query=query):
                 response = self.client.get("/waitlist/" + query)
-                self.assertEqual(response.status_code, 308)
+                # 302: the landing section it points at may move.
+                self.assertEqual(response.status_code, 302)
                 self.assertEqual(response.headers["Location"], target)

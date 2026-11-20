@@ -225,6 +225,22 @@ class PrivacyRedirectTests(unittest.TestCase):
                 self.assertEqual(status, 301)
                 self.assertEqual(location, f"https://vauchi.app/landing/{new}/?utm=a")
 
+    def test_proxied_waitlist_pages_carry_the_site_content_security_policy(self):
+        # The waitlist app sends its own CSP too; the browser enforces both,
+        # so an add_header inside location /waitlist/ (which drops this one)
+        # would quietly leave only the app's.
+        connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        try:
+            connection.request("GET", "/waitlist/manage?lang=en", headers={"Host": "vauchi.app"})
+            response = connection.getresponse()
+            response.read()
+        finally:
+            connection.close()
+        self.assertEqual(response.status, 200)
+        policy = response.getheader("Content-Security-Policy") or ""
+        self.assertIn("default-src 'none'", policy)
+        self.assertIn("style-src 'self' 'unsafe-inline'", policy)
+
     def test_unknown_website_urls_are_not_sent_to_the_docs_homepage(self):
         status, location, _ = self.request_redirect("vauchi.app", "/not-a-real-page/")
         self.assertEqual(status, 404)
