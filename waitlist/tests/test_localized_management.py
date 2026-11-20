@@ -70,6 +70,13 @@ class LocalizedManagement(ServiceTestCase):
                 self.assertIn('<meta property="og:image" content="https://vauchi.app/social-preview.png">', html)
                 self.assertIn('<link rel="stylesheet" href="/css/page.css">', html)
 
+    def test_management_pages_may_load_the_shared_stylesheet_and_nothing_foreign(self):
+        for path in ("/waitlist/manage?lang=en", "/waitlist/withdraw?token=x&lang=en"):
+            with self.subTest(path=path):
+                policy = self.client.get(path).headers["Content-Security-Policy"]
+                style = next(d for d in policy.split("; ") if d.startswith("style-src "))
+                self.assertEqual(style, "style-src 'self' 'unsafe-inline'")
+
     def test_a_withdrawal_page_never_names_its_token_in_metadata(self):
         html = self.client.get("/waitlist/withdraw?token=secret-token-123&lang=de").get_data(as_text=True)
         head = html.split("</head>")[0]
