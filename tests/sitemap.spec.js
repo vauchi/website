@@ -83,16 +83,15 @@ test("robots.txt separates answer engines from training crawlers", async ({
   // Training: the operator says the crawler collects pages to train models.
   for (const training of [
     "GPTBot", "ClaudeBot", "anthropic-ai", "Applebot-Extended", "CCBot", "Bytespider",
-    "TikTokSpider", "meta-externalagent", "FacebookBot", "Amazonbot", "cohere-training-data-crawler",
+    // Google-Extended also gates Gemini grounding; the maintainer chose no
+    // training over Gemini answers (vauchi/private#1308).
+    "Google-Extended", "TikTokSpider", "meta-externalagent", "FacebookBot", "Amazonbot", "cohere-training-data-crawler",
     "AI2Bot", "Ai2Bot-Dolma", "DeepSeekBot", "MistralAI-Training", "MoonshotBot", "QwenBot",
     "ERNIEBot", "Hunyuan", "PanguBot", "img2dataset", "LAIONDownloader", "Timpibot", "Webzio-Extended",
   ]) {
     expect(rulesFor(body, training), training).toEqual(["Disallow: /"]);
   }
   expect(body).toMatch(/^Content-Signal: search=yes, ai-input=yes, ai-train=no$/m);
-  // Google-Extended gates Gemini grounding as well as training; the
-  // maintainer chose to allow it for grounding (vauchi/private#1308).
-  expect(rulesFor(body, "Google-Extended")).toEqual(["Allow: /", "Disallow: /app-files/"]);
 });
 
 // The rules of the group that names this user agent, as robots.txt groups
