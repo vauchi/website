@@ -178,5 +178,9 @@
   "hero.variant.j.label": "Aggiorna una volta",
   "hero.variant.j.headline": "Cambia i tuoi recapiti. Mantieni i tuoi contatti.",
   "hero.variant.j.sub": "Scambia un solo biglietto da visita, scegli cosa vede ogni persona e cambia numero, email o nome nelle app di messaggi una volta, senza avvisare tutti.",
-  "hero.variant.j.cta": "Scopri come funziona"
+  "hero.variant.j.cta": "Scopri come funziona",
+  "hero.variant.k.label": "Nessun elenco",
+  "hero.variant.k.headline": "Nessuno può cercarti. Scegli tu chi riceve i tuoi recapiti.",
+  "hero.variant.k.sub": "Vauchi non ha un elenco pubblico né una casella di posta. I tuoi recapiti arrivano solo a chi ha scambiato il biglietto con te, e puoi nascondere ogni campo a chiunque.",
+  "hero.variant.k.cta": "Scopri come funziona"
 }

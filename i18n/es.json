@@ -178,5 +178,9 @@
   "hero.variant.j.label": "Actualiza una vez",
   "hero.variant.j.headline": "Cambia tus datos. Conserva tus contactos.",
   "hero.variant.j.sub": "Intercambia una sola tarjeta de contacto, elige qué ve cada persona y cambia número, correo o usuario de mensajería una vez, sin avisar a todos.",
-  "hero.variant.j.cta": "Descubre cómo funciona"
+  "hero.variant.j.cta": "Descubre cómo funciona",
+  "hero.variant.k.label": "Sin directorio",
+  "hero.variant.k.headline": "Nadie puede buscarte. Tú eliges quién recibe tus datos.",
+  "hero.variant.k.sub": "Vauchi no tiene directorio público ni bandeja de entrada. Tus datos solo llegan a quienes intercambiaron tarjetas contigo, y puedes ocultar cualquier campo a cualquiera.",
+  "hero.variant.k.cta": "Descubre cómo funciona"
 }

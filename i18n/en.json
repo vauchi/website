@@ -178,5 +178,9 @@
   "hero.variant.j.label": "Update once",
   "hero.variant.j.headline": "Change your details. Keep your connections.",
   "hero.variant.j.sub": "Swap one contact card, choose what each person sees, and change your number, email or messaging handle once instead of telling everyone.",
-  "hero.variant.j.cta": "See how it works"
+  "hero.variant.j.cta": "See how it works",
+  "hero.variant.k.label": "No directory",
+  "hero.variant.k.headline": "Nobody can look you up. You choose who gets your details.",
+  "hero.variant.k.sub": "Vauchi has no public directory and no inbox. Your details reach only people you swapped cards with, and you can hide any field from anyone.",
+  "hero.variant.k.cta": "See how it works"
 }

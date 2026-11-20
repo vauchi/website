@@ -7,7 +7,7 @@
   "use strict";
 
   var STORAGE_KEY = "vauchi-variant";
-  var VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+  var VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
   // JSON-LD script text still requires TrustedScript under the site's CSP (#1076).
   var jsonPolicy = window.trustedTypes
     ? window.trustedTypes.createPolicy("vauchi-json-ld", {

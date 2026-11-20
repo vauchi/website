@@ -178,5 +178,9 @@
   "hero.variant.j.label": "Einmal ändern",
   "hero.variant.j.headline": "Ändere deine Daten. Behalte deine Kontakte.",
   "hero.variant.j.sub": "Tausche eine Kontaktkarte, wähle, was jede Person sieht, und ändere Nummer, E-Mail oder Messenger-Namen einmal, statt es allen einzeln zu sagen.",
-  "hero.variant.j.cta": "So funktioniert's"
+  "hero.variant.j.cta": "So funktioniert's",
+  "hero.variant.k.label": "Kein Verzeichnis",
+  "hero.variant.k.headline": "Niemand kann dich nachschlagen. Du entscheidest, wer deine Daten bekommt.",
+  "hero.variant.k.sub": "Vauchi hat kein öffentliches Verzeichnis und keinen Posteingang. Deine Daten erreichen nur Menschen, mit denen du Karten getauscht hast, und jedes Feld kannst du vor jedem verbergen.",
+  "hero.variant.k.cta": "So funktioniert's"
 }

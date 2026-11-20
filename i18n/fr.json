@@ -178,5 +178,9 @@
   "hero.variant.j.label": "Une seule mise à jour",
   "hero.variant.j.headline": "Changez vos coordonnées. Gardez vos liens.",
   "hero.variant.j.sub": "Échangez une seule carte de contact, choisissez ce que chacun voit, et changez numéro, e-mail ou pseudo de messagerie une fois, sans prévenir tout le monde.",
-  "hero.variant.j.cta": "Découvrez comment ça marche"
+  "hero.variant.j.cta": "Découvrez comment ça marche",
+  "hero.variant.k.label": "Aucun annuaire",
+  "hero.variant.k.headline": "Personne ne peut vous chercher. Vous choisissez qui reçoit vos coordonnées.",
+  "hero.variant.k.sub": "Vauchi n'a ni annuaire public ni boîte de réception. Vos coordonnées n'atteignent que les personnes avec qui vous avez échangé vos cartes, et chaque champ peut être caché à qui vous voulez.",
+  "hero.variant.k.cta": "Découvrez comment ça marche"
 }
