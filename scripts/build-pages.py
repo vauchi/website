@@ -161,6 +161,7 @@ def write_short_links(manifest: dict):
             '<html lang="en">\n'
             "<head>\n"
             '<meta charset="utf-8">\n'
+            '<meta name="robots" content="noindex">\n'
             f'<meta http-equiv="refresh" content="0; url={target}">\n'
             f'<link rel="canonical" href="https://vauchi.app{target}">\n'
             "<title>Vauchi</title>\n"
@@ -175,6 +176,7 @@ def write_short_links(manifest: dict):
 
 
 SITE_URL = "https://vauchi.app"
+PUBLISHER_URL = SITE_URL + "/authors/vauchi/"
 
 
 def write_pages_sitemap(locales: list[str]):
@@ -224,6 +226,13 @@ def write_pages_sitemap(locales: list[str]):
         lines.append(f"    <loc>{url}</loc>")
         lines.append("    <changefreq>monthly</changefreq>")
         lines.append("    <priority>0.6</priority>")
+        lines.append("  </url>")
+
+    for url in [SITE_URL + locale_prefix(loc) + "support/" for loc in locales] + [PUBLISHER_URL]:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{url}</loc>")
+        lines.append("    <changefreq>monthly</changefreq>")
+        lines.append("    <priority>0.4</priority>")
         lines.append("  </url>")
 
     lines.append("</urlset>")

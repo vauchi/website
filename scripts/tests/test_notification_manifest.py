@@ -101,8 +101,20 @@ class WhyPagesInventoryTests(unittest.TestCase):
             pages = json.loads((public / "indexnow-manifest.json").read_text())["pages"]
             self.assertEqual(set(pages), set(HOMES + why + ["https://vauchi.app/blog/"]))
 
+    def test_support_and_publisher_pages_in_the_sitemap_are_fingerprinted(self):
+        listed = ["https://vauchi.app/support/", "https://vauchi.app/fr/support/", "https://vauchi.app/authors/vauchi/"]
+        with tempfile.TemporaryDirectory() as directory:
+            public = minimal_site(Path(directory), HOMES + listed)
+            result = discover(Path(directory))
+            self.assertEqual(result.returncode, 0, result.stderr)
+            pages = json.loads((public / "indexnow-manifest.json").read_text())["pages"]
+            self.assertEqual(set(pages), set(HOMES + listed + ["https://vauchi.app/blog/"]))
+
     def test_any_other_sitemap_url_is_still_refused(self):
-        for stray in ("https://vauchi.app/support/", "https://vauchi.app/why/../x/", "https://evil.example/why/"):
+        for stray in (
+            "https://vauchi.app/text/", "https://vauchi.app/why/../x/", "https://evil.example/why/",
+            "https://vauchi.app/support/../x/", "https://vauchi.app/xx/support/", "https://vauchi.app/authors/other/",
+        ):
             with self.subTest(stray=stray), tempfile.TemporaryDirectory() as directory:
                 minimal_site(Path(directory), HOMES + [stray])
                 result = discover(Path(directory))
