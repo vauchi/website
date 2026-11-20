@@ -174,5 +174,9 @@
   "why.body2": "La gente cambia de trabajo, de país, de teléfono y de nombre. La forma en que nos localizamos también debería poder cambiar — sin pedirle permiso a una empresa y sin perder a nadie por el camino.",
   "why.heading": "Los datos de contacto nunca fueron pensados para durar.",
   "why.label": "Por qué importa",
-  "meta.keywords": "intercambio de contactos, tarjeta de contacto digital, intercambio de contactos en persona, cifrado de extremo a extremo, minimización de metadatos, privacidad, código abierto, sin cuenta, libreta de direcciones"
+  "meta.keywords": "intercambio de contactos, tarjeta de contacto digital, intercambio de contactos en persona, cifrado de extremo a extremo, minimización de metadatos, privacidad, código abierto, sin cuenta, libreta de direcciones",
+  "hero.variant.j.label": "Actualiza una vez",
+  "hero.variant.j.headline": "Cambia tus datos. Conserva tus contactos.",
+  "hero.variant.j.sub": "Intercambia una sola tarjeta de contacto, elige qué ve cada persona y cambia número, correo o usuario de mensajería una vez, sin avisar a todos.",
+  "hero.variant.j.cta": "Descubre cómo funciona"
 }

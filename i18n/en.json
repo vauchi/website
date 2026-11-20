@@ -174,5 +174,9 @@
   "why.body2": "People change jobs, countries, phones and names. The way we reach each other should be allowed to change too — without asking a company for permission, and without losing anyone along the way.",
   "why.heading": "Contact details were never meant to be permanent.",
   "why.label": "Why this matters",
-  "meta.keywords": "contact exchange, digital contact card, in-person contact exchange, end-to-end encryption, metadata minimization, privacy, open source, no account, address book"
+  "meta.keywords": "contact exchange, digital contact card, in-person contact exchange, end-to-end encryption, metadata minimization, privacy, open source, no account, address book",
+  "hero.variant.j.label": "Update once",
+  "hero.variant.j.headline": "Change your details. Keep your connections.",
+  "hero.variant.j.sub": "Swap one contact card, choose what each person sees, and change your number, email or messaging handle once instead of telling everyone.",
+  "hero.variant.j.cta": "See how it works"
 }

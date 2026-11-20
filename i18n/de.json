@@ -174,5 +174,9 @@
   "why.body2": "Menschen wechseln Job, Land, Telefon und Namen. Auch die Art, wie wir einander erreichen, sollte sich ändern dürfen — ohne ein Unternehmen um Erlaubnis zu fragen und ohne dabei jemanden zu verlieren.",
   "why.heading": "Kontaktdaten waren nie für die Ewigkeit gedacht.",
   "why.label": "Warum das zählt",
-  "meta.keywords": "Kontaktaustausch, digitale Kontaktkarte, Kontakte persönlich austauschen, Ende-zu-Ende-Verschlüsselung, Metadaten-Minimierung, Datenschutz, Open Source, ohne Konto, Adressbuch"
+  "meta.keywords": "Kontaktaustausch, digitale Kontaktkarte, Kontakte persönlich austauschen, Ende-zu-Ende-Verschlüsselung, Metadaten-Minimierung, Datenschutz, Open Source, ohne Konto, Adressbuch",
+  "hero.variant.j.label": "Einmal ändern",
+  "hero.variant.j.headline": "Ändere deine Daten. Behalte deine Kontakte.",
+  "hero.variant.j.sub": "Tausche eine Kontaktkarte, wähle, was jede Person sieht, und ändere Nummer, E-Mail oder Messenger-Namen einmal, statt es allen einzeln zu sagen.",
+  "hero.variant.j.cta": "So funktioniert's"
 }

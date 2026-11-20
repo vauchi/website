@@ -174,5 +174,9 @@
   "why.body2": "Les gens changent de travail, de pays, de téléphone et de nom. La façon dont on se joint devrait pouvoir changer aussi — sans demander la permission à une entreprise, et sans perdre personne en route.",
   "why.heading": "Les coordonnées n'ont jamais été faites pour durer.",
   "why.label": "Pourquoi c'est important",
-  "meta.keywords": "échange de contacts, carte de contact numérique, échange de contacts en personne, chiffrement de bout en bout, minimisation des métadonnées, vie privée, open source, sans compte, carnet d'adresses"
+  "meta.keywords": "échange de contacts, carte de contact numérique, échange de contacts en personne, chiffrement de bout en bout, minimisation des métadonnées, vie privée, open source, sans compte, carnet d'adresses",
+  "hero.variant.j.label": "Une seule mise à jour",
+  "hero.variant.j.headline": "Changez vos coordonnées. Gardez vos liens.",
+  "hero.variant.j.sub": "Échangez une seule carte de contact, choisissez ce que chacun voit, et changez numéro, e-mail ou pseudo de messagerie une fois, sans prévenir tout le monde.",
+  "hero.variant.j.cta": "Découvrez comment ça marche"
 }
