@@ -69,9 +69,27 @@ test("robots.txt separates answer engines from training crawlers", async ({
   for (const allowed of ["OAI-SearchBot", "Claude-SearchBot", "PerplexityBot"]) {
     expect(body).toContain(`User-agent: ${allowed}`);
   }
-  for (const blocked of ["GPTBot", "ClaudeBot", "Applebot-Extended", "CCBot"]) {
-    expect(rulesFor(body, blocked)).toContain("Disallow: /");
+  // Live AI: fetches a page because a person asked, or indexes it for
+  // answers that link back. Must read the whole site.
+  for (const live of [
+    "Googlebot", "Bingbot", "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User",
+    "PerplexityBot", "Perplexity-User", "DuckAssistBot", "MistralAI-User", "MistralAI-Index",
+    "Applebot", "meta-externalfetcher", "Amzn-User", "Amzn-SearchBot", "GoogleAgent-URLContext",
+    "Gemini-Deep-Research", "cohere-ai", "facebookexternalhit",
+  ]) {
+    expect(rulesFor(body, live), live).toContain("Allow: /");
+    expect(rulesFor(body, live), live).not.toContain("Disallow: /");
   }
+  // Training: the operator says the crawler collects pages to train models.
+  for (const training of [
+    "GPTBot", "ClaudeBot", "anthropic-ai", "Applebot-Extended", "CCBot", "Bytespider",
+    "TikTokSpider", "meta-externalagent", "FacebookBot", "Amazonbot", "cohere-training-data-crawler",
+    "AI2Bot", "Ai2Bot-Dolma", "DeepSeekBot", "MistralAI-Training", "MoonshotBot", "QwenBot",
+    "ERNIEBot", "Hunyuan", "PanguBot", "img2dataset", "LAIONDownloader", "Timpibot", "Webzio-Extended",
+  ]) {
+    expect(rulesFor(body, training), training).toEqual(["Disallow: /"]);
+  }
+  expect(body).toMatch(/^Content-Signal: search=yes, ai-input=yes, ai-train=no$/m);
   // Google-Extended gates Gemini grounding as well as training; the
   // maintainer chose to allow it for grounding (vauchi/private#1308).
   expect(rulesFor(body, "Google-Extended")).toEqual(["Allow: /", "Disallow: /app-files/"]);
@@ -98,5 +116,6 @@ function rulesFor(body, agent) {
       rules.push(line);
     }
   }
-  throw new Error(`robots.txt has no group for ${agent}`);
+  if (agent !== "*") return rulesFor(body, "*");
+  throw new Error("robots.txt has no group for *");
 }
