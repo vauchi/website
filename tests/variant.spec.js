@@ -3,7 +3,7 @@
 
 import { test, expect } from "@playwright/test";
 
-const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+const VARIANTS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 const EN_VARIANT_HEADLINES = {
   a: "Your contact card. Your channels. Your rules.",
   b: "No brainrot. No data theft. Just people.",
@@ -15,6 +15,7 @@ const EN_VARIANT_HEADLINES = {
   h: "Stay reachable. On your own terms.",
   i: "Nobody should own the way you reach people.",
   j: "Change your details. Keep your connections.",
+  k: "Nobody can look you up. You choose who gets your details.",
 };
 
 test.describe("landing-page variant test", () => {
@@ -206,4 +207,12 @@ test("variant j has its own landing page and short link", async ({ page }) => {
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex");
   await page.goto("/l/j/");
   await expect(page).toHaveURL(/\/landing\/change-your-details-keep-your-connections\/$/);
+});
+
+test("variant k has its own landing page and short link", async ({ page }) => {
+  const response = await page.goto("/landing/nobody-can-look-you-up-you-choose-who-gets-your-details/");
+  expect(response.status()).toBe(200);
+  await expect(page.locator("#hero-variant-headline")).toHaveText(EN_VARIANT_HEADLINES.k);
+  await page.goto("/l/k/");
+  await expect(page).toHaveURL(/\/landing\/nobody-can-look-you-up-you-choose-who-gets-your-details\/$/);
 });
