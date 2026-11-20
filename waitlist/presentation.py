@@ -41,6 +41,7 @@ def confirmation_page(base, successful):
 def management_page(base, pending_days, confirmed_days, *, token=None, result=None):
     locale = language()
     text = translations(locale)
+    canonical = urljoin(base, "/waitlist/manage") + ("" if locale == "en" else f"?lang={locale}")
     return render_template("manage.html", lang=locale, t=text, token=token, result=result,
-        home=home(base, locale), retention=text["waitlist.manage.retention"].format(
+        home=home(base, locale), canonical=canonical, retention=text["waitlist.manage.retention"].format(
             pending_days=pending_days, confirmed_days=confirmed_days))

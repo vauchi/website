@@ -259,5 +259,6 @@
   "support.bitcoin.qr_alt": "QR-Code der Standard-Bitcoin-Adresse",
   "support.monero.heading": "Monero",
   "support.monero.note": "Monero verbirgt bei jeder Zahlung den Betrag und die Empfangsadresse und versteckt den Absender unter den Zahlungen anderer.",
-  "support.monero.qr_alt": "QR-Code der Monero-Adresse"
+  "support.monero.qr_alt": "QR-Code der Monero-Adresse",
+  "waitlist.manage.description": "Verlasse die Vauchi-Warteliste: Entferne deine E-Mail-Adresse oder fordere per E-Mail einen neuen Link zum Entfernen an."
 }

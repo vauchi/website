@@ -259,5 +259,6 @@
   "support.bitcoin.qr_alt": "Código QR de la dirección Bitcoin estándar",
   "support.monero.heading": "Monero",
   "support.monero.note": "Monero oculta el importe y la dirección de recepción de cada pago, y esconde al remitente entre los pagos de otras personas.",
-  "support.monero.qr_alt": "Código QR de la dirección Monero"
+  "support.monero.qr_alt": "Código QR de la dirección Monero",
+  "waitlist.manage.description": "Sal de la lista de espera de Vauchi: quita tu dirección de correo o pide por correo un enlace nuevo para hacerlo."
 }

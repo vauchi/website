@@ -197,6 +197,12 @@ def withdraw():
     return _management_page(result="done")
 
 
+@app.get("/waitlist/manage/")
+def manage_with_slash():
+    query = request.query_string.decode("ascii", "replace")
+    return redirect("/waitlist/manage" + ("?" + query if query else ""), code=308)
+
+
 @app.route("/waitlist/manage", methods=["GET", "POST"])
 def manage():
     if request.method == "GET":
