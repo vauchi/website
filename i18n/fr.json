@@ -260,5 +260,6 @@
   "support.monero.heading": "Monero",
   "support.monero.note": "Monero masque le montant et l'adresse de réception de chaque paiement, et cache l'expéditeur parmi les paiements d'autres personnes.",
   "support.monero.qr_alt": "Code QR de l'adresse Monero",
-  "waitlist.manage.description": "Quittez la liste d'attente Vauchi : retirez votre adresse e-mail ou demandez par e-mail un nouveau lien de désinscription."
+  "waitlist.manage.description": "Quittez la liste d'attente Vauchi : retirez votre adresse e-mail ou demandez par e-mail un nouveau lien de désinscription.",
+  "waitlist.confirm.description": "Votre confirmation pour la liste d'attente Vauchi : si votre inscription est confirmée, avec un lien vers l'accueil de Vauchi."
 }

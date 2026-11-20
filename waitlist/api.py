@@ -197,6 +197,12 @@ def withdraw():
     return _management_page(result="done")
 
 
+@app.get("/waitlist/")
+def waitlist_root():
+    locale = language()
+    return redirect(("/" if locale == "en" else f"/{locale}/") + "#waitlist", code=308)
+
+
 @app.get("/waitlist/manage/")
 def manage_with_slash():
     query = request.query_string.decode("ascii", "replace")
