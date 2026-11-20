@@ -20,7 +20,7 @@ test("images missing alt are reported", async ({ page }) => {
 });
 
 const locales = ["", "de/", "es/", "fr/", "it/"];
-const paths = locales.flatMap(locale => [`/${locale}`, `/${locale}text/`, `/${locale}why/`, `/${locale}why/no-directory/`, `/${locale}why/change-your-number/`]);
+const paths = locales.flatMap(locale => [`/${locale}`, `/${locale}text/`, `/${locale}support/`, `/${locale}why/`, `/${locale}why/no-directory/`, `/${locale}why/change-your-number/`]);
 for (const directory of ["landing", "blog"]) {
   for (const file of readdirSync(`public/${directory}`, { recursive: true })) {
     if (file.endsWith("index.html") && !file.startsWith("admin/")) {
