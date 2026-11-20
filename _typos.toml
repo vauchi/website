@@ -26,6 +26,8 @@ extend-ignore-re = [
 [default.extend-words]
 # Correct French/German address label used in localization regression tests.
 Adresse = "Adresse"
+# German formal "you", which the locale test forbids in de.json.
+Sie = "Sie"
 
 [type.schema-license]
 extend-glob = ["CC-BY-SA-3.0.txt"]

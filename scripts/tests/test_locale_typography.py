@@ -43,6 +43,15 @@ class FrenchPunctuationSpacingTest(unittest.TestCase):
                 self.assertNotIn(f"http{NO_BREAK_SPACE}:", text)
 
 
+class GermanInformalAddressTest(unittest.TestCase):
+    # The site says "du"; a capitalised "Sie" is formal address unless it
+    # opens a sentence, where it can be "they".
+    def test_german_never_addresses_the_reader_formally(self):
+        formal = re.compile(r"\b(Ihnen|Ihr|Ihre|Ihren|Ihrem|Ihrer|Ihres)\b|(?<![.!?:]\s)(?<!^)\bSie\b")
+        offenders = [key for key, text in strings("de") if formal.search(text)]
+        self.assertEqual(offenders, [])
+
+
 class TypographicApostropheTest(unittest.TestCase):
     def test_french_and_italian_use_the_typographic_apostrophe(self):
         for locale in ("fr", "it"):
