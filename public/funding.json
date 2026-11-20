@@ -22,8 +22,8 @@
         "wellKnown": "https://vauchi.app/.well-known/funding-manifest-urls"
       },
       "repositoryUrl": {
-        "url": "https://gitlab.com/vauchi/vauchi",
-        "wellKnown": "https://gitlab.com/vauchi/vauchi/-/raw/main/.well-known/funding-manifest-urls"
+        "url": "https://github.com/vauchi/vauchi",
+        "wellKnown": "https://github.com/vauchi/vauchi/blob/main/.well-known/funding-manifest-urls"
       },
       "licenses": ["spdx:AGPL-3.0-or-later", "spdx:GPL-3.0-or-later"],
       "tags": [
