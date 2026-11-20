@@ -71,7 +71,7 @@
         <section aria-labelledby="{{ guid }}-heading" data-donation-channel="{{ guid }}">
           <h3 id="{{ guid }}-heading">{{ t['support.' ~ guid ~ '.heading']|e }}</h3>
           <p>{{ t['support.' ~ guid ~ '.note']|e }}</p>
-          <img class="donation-qr" src="/support/qr-{{ guid }}.svg" width="240" height="240" alt="{{ t['support.' ~ guid ~ '.qr_alt']|e }}">
+          <img class="donation-qr" src="/support/{{ qr_files[guid] }}" width="240" height="240" alt="{{ t['support.' ~ guid ~ '.qr_alt']|e }}">
           {#- translate="no": browser page translation must never rewrite an address. #}
           <code class="donation-address" translate="no">{{ address|e }}</code>
         </section>

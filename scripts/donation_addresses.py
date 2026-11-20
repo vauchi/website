@@ -8,10 +8,13 @@ and the QR files are derived from it, so a mistyped or swapped address
 fails the build instead of shipping in one place only (vauchi/private#1307).
 
 Usage:
-    python3 scripts/donation_addresses.py            # validate funding.json
-    python3 scripts/donation_addresses.py --write-qr # regenerate the QR SVGs
+    python3 scripts/donation_addresses.py   # validate funding.json
+
+build-pages.py renders the QR codes at build time (write_qr_codes), so a
+code can never drift from the address beside it.
 """
 
+import hashlib
 import json
 import re
 import subprocess
@@ -20,7 +23,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FUNDING_JSON = ROOT / "public" / "funding.json"
-QR_DIR = ROOT / "public" / "support"
 
 
 class InvalidAddress(ValueError):
@@ -215,10 +217,6 @@ def load_donation_addresses(funding_json: Path = FUNDING_JSON) -> dict[str, str]
     return addresses
 
 
-def qr_svg_path(guid: str) -> Path:
-    return QR_DIR / f"qr-{guid}.svg"
-
-
 def render_qr_svg(address: str) -> str:
     """The QR code for an address, without qrencode's version comment.
 
@@ -234,17 +232,29 @@ def render_qr_svg(address: str) -> str:
     return re.sub(r"<!--.*?-->\n?", "", result.stdout, flags=re.DOTALL)
 
 
+def write_qr_codes(addresses: dict[str, str], out_dir: Path) -> dict[str, str]:
+    """Write one QR SVG per address and return {guid: file name}.
+
+    The name carries a hash of the code, because nginx serves SVGs with a
+    one-year immutable cache: a changed address must get a new URL.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for stale in out_dir.glob("qr-*.svg"):
+        stale.unlink()
+    names = {}
+    for guid, address in addresses.items():
+        svg = render_qr_svg(address)
+        names[guid] = f"qr-{guid}-{hashlib.sha256(svg.encode()).hexdigest()[:12]}.svg"
+        (out_dir / names[guid]).write_text(svg, encoding="utf-8")
+    return names
+
+
 def main() -> int:
     try:
         addresses = load_donation_addresses()
     except InvalidAddress as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
-    if "--write-qr" in sys.argv:
-        QR_DIR.mkdir(parents=True, exist_ok=True)
-        for guid, address in addresses.items():
-            qr_svg_path(guid).write_text(render_qr_svg(address), encoding="utf-8")
-            print(f"  wrote {qr_svg_path(guid).relative_to(ROOT)}")
     print(f"  {len(addresses)} donation address(es) valid")
     return 0
 

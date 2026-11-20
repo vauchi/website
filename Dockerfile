@@ -5,7 +5,7 @@ RUN apk update && apk upgrade --no-cache && rm -rf /var/cache/apk/*
 
 # Build stage — generate locale HTML from templates + i18n
 FROM base AS build
-RUN apk add --no-cache python3 py3-jinja2
+RUN apk add --no-cache python3 py3-jinja2 libqrencode-tools
 WORKDIR /build
 COPY templates/ templates/
 COPY i18n/ i18n/

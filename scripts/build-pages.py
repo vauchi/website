@@ -32,7 +32,9 @@ except ImportError:
     print("ERROR: jinja2 not installed. Run: pip install jinja2", file=sys.stderr)
     sys.exit(1)
 
-from donation_addresses import InvalidAddress, load_donation_addresses
+from pathlib import Path
+
+from donation_addresses import InvalidAddress, load_donation_addresses, write_qr_codes
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 I18N_DIR = os.path.join(ROOT, "i18n")
@@ -295,7 +297,7 @@ def locale_prefix(locale: str) -> str:
     return "/" if locale == DEFAULT_LOCALE else f"/{locale}/"
 
 
-def write_support_page(env: Environment, locale: str, translations: dict, locales: list[str], addresses: dict[str, str]):
+def write_support_page(env: Environment, locale: str, translations: dict, locales: list[str], addresses: dict[str, str], qr_files: dict[str, str]):
     dir_path = os.path.join(PUBLIC_DIR, locale_prefix(locale).strip("/"), "support")
     os.makedirs(dir_path, exist_ok=True)
     html = env.get_template("support.html").render(
@@ -303,6 +305,7 @@ def write_support_page(env: Environment, locale: str, translations: dict, locale
         lang=locale,
         locales=locales,
         donation_addresses=addresses,
+        qr_files=qr_files,
     )
     with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
@@ -403,6 +406,7 @@ def main():
     except InvalidAddress as error:
         print(f"ERROR: {error}", file=sys.stderr)
         sys.exit(1)
+    qr_files = write_qr_codes(donation_addresses, Path(PUBLIC_DIR) / "support")
 
     targets = [single_locale] if single_locale else locales
     print(f"\nBuilding {len(targets)} page(s)...")
@@ -414,8 +418,7 @@ def main():
         with open(os.path.join(text_dir, "index.html"), "w", encoding="utf-8") as output:
             output.write(env.get_template("text.html").render(t=all_translations[locale], lang=locale))
         write_why_pages(env, locale, all_translations[locale], locales)
-
-        write_support_page(env, locale, all_translations[locale], locales, donation_addresses)
+        write_support_page(env, locale, all_translations[locale], locales, donation_addresses, qr_files)
 
     # Build per-variant landing pages for accurate SEO/social previews.
     # Each page is pre-rendered with the variant headline/sub in the meta,
