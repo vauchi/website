@@ -9,7 +9,7 @@ RUN apk add --no-cache python3 py3-jinja2
 WORKDIR /build
 COPY templates/ templates/
 COPY i18n/ i18n/
-COPY scripts/build-pages.py scripts/build-pages.py
+COPY scripts/build-pages.py scripts/donation_addresses.py scripts/
 COPY scripts/prepare_blog.py scripts/source_dates.py scripts/
 COPY blog/ blog/
 COPY public/ public/

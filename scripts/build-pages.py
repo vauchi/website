@@ -18,6 +18,7 @@ Reads:
 Writes:
     public/index.html        — English (default)
     public/{lang}/index.html — each additional locale
+    public/[{lang}/]support/index.html — donation page, addresses from funding.json
 """
 
 import json
@@ -30,6 +31,8 @@ try:
 except ImportError:
     print("ERROR: jinja2 not installed. Run: pip install jinja2", file=sys.stderr)
     sys.exit(1)
+
+from donation_addresses import InvalidAddress, load_donation_addresses
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 I18N_DIR = os.path.join(ROOT, "i18n")
@@ -288,6 +291,22 @@ def write_why_pages(env: Environment, locale: str, translations: dict, locales: 
         with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
 
+def locale_prefix(locale: str) -> str:
+    return "/" if locale == DEFAULT_LOCALE else f"/{locale}/"
+
+
+def write_support_page(env: Environment, locale: str, translations: dict, locales: list[str], addresses: dict[str, str]):
+    dir_path = os.path.join(PUBLIC_DIR, locale_prefix(locale).strip("/"), "support")
+    os.makedirs(dir_path, exist_ok=True)
+    html = env.get_template("support.html").render(
+        t=translations,
+        lang=locale,
+        locales=locales,
+        donation_addresses=addresses,
+    )
+    with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+
 
 def build_page(
     env: Environment,
@@ -379,6 +398,12 @@ def main():
         keep_trailing_newline=True,
     )
 
+    try:
+        donation_addresses = load_donation_addresses()
+    except InvalidAddress as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        sys.exit(1)
+
     targets = [single_locale] if single_locale else locales
     print(f"\nBuilding {len(targets)} page(s)...")
     for locale in targets:
@@ -389,6 +414,8 @@ def main():
         with open(os.path.join(text_dir, "index.html"), "w", encoding="utf-8") as output:
             output.write(env.get_template("text.html").render(t=all_translations[locale], lang=locale))
         write_why_pages(env, locale, all_translations[locale], locales)
+
+        write_support_page(env, locale, all_translations[locale], locales, donation_addresses)
 
     # Build per-variant landing pages for accurate SEO/social previews.
     # Each page is pre-rendered with the variant headline/sub in the meta,

@@ -1,0 +1,65 @@
+<!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+{%- set home = '/' if lang == 'en' else '/' ~ lang ~ '/' %}
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ t['support.meta.title']|e }}</title>
+    <meta name="description" content="{{ t['support.meta.description']|e }}">
+    <link rel="canonical" href="https://vauchi.app{{ home }}support/">
+    {% for code in locales %}
+    <link rel="alternate" hreflang="{{ code }}" href="https://vauchi.app{{ '/' if code == 'en' else '/' ~ code ~ '/' }}support/">
+    {% endfor %}
+    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/support/">
+    <style>
+      html { color-scheme: light dark; }
+      body { max-width: 65ch; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; line-height: 1.7; }
+      h1, h2, h3 { line-height: 1.25; }
+      h2 { margin-top: 2rem; }
+      nav, footer { margin: 2rem 0; }
+      a { text-underline-offset: .15em; }
+      nav a, footer a { margin-right: 1rem; }
+      .donation-qr { display: block; width: 240px; max-width: 100%; height: auto; }
+      .donation-address { display: block; overflow-wrap: anywhere; user-select: all; font-size: .95rem; padding: .5rem; border: 1px solid; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <nav aria-label="Languages">
+      {% for code in locales %}
+      <a href="{{ '/' if code == 'en' else '/' ~ code ~ '/' }}support/" lang="{{ code }}" hreflang="{{ code }}">{{ code|upper }}</a>
+      {% endfor %}
+    </nav>
+    <main>
+      <h1>{{ t['support.heading']|e }}</h1>
+      <p>{{ t['support.intro']|e }}</p>
+      <section aria-labelledby="platforms-heading">
+        <h2 id="platforms-heading">{{ t['support.platforms.heading']|e }}</h2>
+        <ul>
+          <li><a href="https://github.com/sponsors/vauchi" rel="noopener">{{ t['support.github']|e }}</a></li>
+          <li><a href="https://liberapay.com/Vauchi/donate" rel="noopener">{{ t['support.liberapay']|e }}</a></li>
+          <li><a href="mailto:hello@vauchi.app">{{ t['support.bank']|e }}</a></li>
+        </ul>
+      </section>
+      <section aria-labelledby="crypto-heading">
+        <h2 id="crypto-heading">{{ t['support.crypto.heading']|e }}</h2>
+        <p>{{ t['support.crypto.intro']|e }}</p>
+        {% for guid, address in donation_addresses.items() %}
+        <section aria-labelledby="{{ guid }}-heading" data-donation-channel="{{ guid }}">
+          <h3 id="{{ guid }}-heading">{{ t['support.' ~ guid ~ '.heading']|e }}</h3>
+          <p>{{ t['support.' ~ guid ~ '.note']|e }}</p>
+          <img class="donation-qr" src="/support/qr-{{ guid }}.svg" width="240" height="240" alt="{{ t['support.' ~ guid ~ '.qr_alt']|e }}">
+          {#- translate="no": browser page translation must never rewrite an address. #}
+          <code class="donation-address" translate="no">{{ address|e }}</code>
+        </section>
+        {% endfor %}
+      </section>
+    </main>
+    <footer>
+      <a href="{{ home }}">{{ t['footer.home']|e }}</a>
+      <a href="{{ home }}text/">{{ t['footer.text_version']|e }}</a>
+      <a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['footer.privacy']|e }}</a>
+    </footer>
+  </body>
+</html>
