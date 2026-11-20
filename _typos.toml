@@ -15,6 +15,14 @@ extend-exclude = ["public/index.html", "public/de/", "public/fr/", "public/it/"]
 [type.json]
 check-file = false
 
+[default]
+# Bitcoin bech32/bech32m and Monero base58 addresses are random strings
+# that would otherwise read as typos (vauchi/private#1307).
+extend-ignore-re = [
+  "(?i)\\b(bc|tb|sp|tsp)1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{6,}\\b",
+  "\\b[48][1-9A-HJ-NP-Za-km-z]{94}\\b",
+]
+
 [default.extend-words]
 # Correct French/German address label used in localization regression tests.
 Adresse = "Adresse"
