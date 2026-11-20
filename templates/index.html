@@ -2394,7 +2394,7 @@
           <span>{{ t['footer.line1'] }}</span>
           <span>{{ t['footer.line2'] }}</span>
         </div>
-        <div style="display: flex; gap: 16px; font-size: 0.85rem; opacity: 0.6">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; font-size: 0.85rem; opacity: 0.6">
           <a data-text-version href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}text/" class="c-muted-no-underline">{{ t['footer.text_version'] }}</a>
           <a data-why-link href="{{ '/' if lang == 'en' else '/' ~ lang ~ '/' }}why/" class="c-muted-no-underline">{{ t['footer.why'] }}</a>
           <a
