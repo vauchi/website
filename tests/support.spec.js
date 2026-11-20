@@ -52,6 +52,51 @@ for (const prefix of locales) {
   });
 }
 
+for (const prefix of locales) {
+  test(`${prefix || "en/"}support/ carries link-preview metadata and the shared page style`, async ({ page }) => {
+    await page.goto(`/${prefix}support/`);
+    const url = `https://vauchi.app/${prefix}support/`;
+    const description = await page.locator('meta[name="description"]').getAttribute("content");
+    await expect(page.locator('link[rel="stylesheet"][href="/css/page.css"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", url);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", await page.title());
+    await expect(page.locator('meta[property="og:description"]')).toHaveAttribute("content", description);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://vauchi.app/social-preview.png");
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+    await expect(page.locator('meta[name="theme-color"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
+  });
+}
+
+async function backgroundColor(page) {
+  return page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+}
+
+async function waitForThemes(page) {
+  await page.waitForFunction(() => document.querySelectorAll("#theme-menu [data-theme-id]").length > 0);
+}
+
+test("the support page switches light and dark like the landing page", async ({ page }) => {
+  await page.goto("/support/");
+  await page.evaluate(() => localStorage.removeItem("vauchi-theme"));
+  await page.goto("/support/");
+  await waitForThemes(page);
+  const before = await backgroundColor(page);
+  await page.click("#mode-toggle");
+  await expect.poll(() => backgroundColor(page)).not.toBe(before);
+});
+
+test("a theme chosen on the landing page carries over to the support page", async ({ page }) => {
+  await page.goto("/");
+  await waitForThemes(page);
+  await page.click("#theme-menu-toggle");
+  await page.click('#theme-menu [data-theme-id="solarized-light"]');
+  const landing = await backgroundColor(page);
+  await page.goto("/support/");
+  await waitForThemes(page);
+  await expect.poll(() => backgroundColor(page)).toBe(landing);
+});
+
 test("each locale's support page has its own title", async ({ page }) => {
   const titles = new Set();
   for (const prefix of locales) {

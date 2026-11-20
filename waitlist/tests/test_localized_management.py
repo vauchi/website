@@ -5,6 +5,8 @@ import re
 from urllib.parse import parse_qs, urlparse
 from unittest.mock import patch
 
+from markupsafe import escape
+
 from service_fixture import ServiceTestCase, api
 
 
@@ -53,6 +55,31 @@ class LocalizedManagement(ServiceTestCase):
                     self.assertEqual(result.status_code, 200)
                     self.assertIn(f'<html lang="{locale}">', result.get_data(as_text=True))
                     self.assertIn(api.translations(locale)['waitlist.message.confirmed'], result.get_data(as_text=True))
+
+    def test_management_pages_carry_preview_metadata_and_stay_out_of_search(self):
+        for locale in LABELS:
+            with self.subTest(locale=locale):
+                html = self.client.get(f"/waitlist/manage?lang={locale}").get_data(as_text=True)
+                description = escape(api.translations(locale)["waitlist.manage.description"])
+                canonical = api.REDIRECT_BASE + "waitlist/manage" + ("" if locale == "en" else f"?lang={locale}")
+                self.assertIn('<meta name="robots" content="noindex">', html)
+                self.assertIn(f'<meta name="description" content="{description}">', html)
+                self.assertIn(f'<meta property="og:description" content="{description}">', html)
+                self.assertIn(f'<link rel="canonical" href="{canonical}">', html)
+                self.assertIn(f'<meta property="og:url" content="{canonical}">', html)
+                self.assertIn('<meta property="og:image" content="https://vauchi.app/social-preview.png">', html)
+                self.assertIn('<link rel="stylesheet" href="/css/page.css">', html)
+
+    def test_a_withdrawal_page_never_names_its_token_in_metadata(self):
+        html = self.client.get("/waitlist/withdraw?token=secret-token-123&lang=de").get_data(as_text=True)
+        head = html.split("</head>")[0]
+        self.assertNotIn("secret-token-123", head)
+        self.assertIn(f'<link rel="canonical" href="{api.REDIRECT_BASE}waitlist/manage?lang=de">', head)
+
+    def test_a_trailing_slash_reaches_the_management_page_with_its_query(self):
+        response = self.client.get("/waitlist/manage/?lang=fr")
+        self.assertEqual(response.status_code, 308)
+        self.assertEqual(response.headers["Location"], "/waitlist/manage?lang=fr")
 
     def test_unknown_language_cannot_select_an_arbitrary_resource(self):
         response = self.client.get("/waitlist/manage?lang=../../untrusted")
