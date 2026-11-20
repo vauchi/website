@@ -23,6 +23,8 @@ class PrivacyRedirectTests(unittest.TestCase):
         (root / "blog" / "admin" / "index.html").write_text("<!doctype html>")
         (root / "blog" / "admin" / "sveltia-cms.js").write_text("")
         (root / "index.html").write_text("<!doctype html>")
+        (root / "de" / "text").mkdir(parents=True)
+        (root / "de" / "text" / "index.html").write_text("<!doctype html>")
         (root / "build-info.json").write_text('{"sha":"routing-test"}')
         (root / "indexnow-manifest.json").write_text('{"version":1}')
         cls.access_log = root / "access.log"
@@ -301,6 +303,38 @@ class PrivacyRedirectTests(unittest.TestCase):
         finally:
             connection.close()
         self.assertEqual(self.request_log.read_text() if self.request_log.exists() else "", "")
+
+    def get(self, path, host="vauchi.app"):
+        connection = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        try:
+            connection.request("GET", path, headers={"Host": host})
+            response = connection.getresponse()
+            response.read()
+            return response
+        finally:
+            connection.close()
+
+    def test_a_directory_without_its_slash_redirects_relative_so_https_is_kept(self):
+        # nginx sees plain HTTP behind kamal-proxy; an absolute Location
+        # would send https visitors to http:// first (vauchi/private#1182).
+        for path in ("/de", "/de/text"):
+            with self.subTest(path=path):
+                response = self.get(path)
+                self.assertEqual(response.status, 301)
+                self.assertEqual(response.getheader("Location"), path + "/")
+
+    def test_www_redirects_permanently_to_the_apex_keeping_path_and_query(self):
+        for path in ("/", "/de/text/?utm_source=a&x=1", "/waitlist/manage?lang=fr"):
+            with self.subTest(path=path):
+                response = self.get(path, host="www.vauchi.app")
+                self.assertEqual(response.status, 301)
+                self.assertEqual(response.getheader("Location"), "https://vauchi.app" + path)
+                self.assertIn("max-age=", response.getheader("Strict-Transport-Security"))
+
+    def test_the_apex_and_unknown_hosts_still_serve_the_site(self):
+        for host in ("vauchi.app", "10.0.0.5:3080"):
+            with self.subTest(host=host):
+                self.assertEqual(self.get("/de/text/", host=host).status, 200)
 
 
 if __name__ == "__main__":
