@@ -202,6 +202,17 @@ class PrivacyRedirectTests(unittest.TestCase):
                     "https://vauchi.app/landing/nobody-but-you-should-own-the-way-you-can-be-reached/" + suffix + "?utm=a",
                 )
 
+    def test_retired_headlines_redirect_without_a_trailing_slash_too(self):
+        for old, new in (
+            ("meet-once-stay-in-touch-forever", "meet-once-stay-in-touch"),
+            ("no-brainrot-no-data-theft-just-people", "no-brainrot-no-feeds-just-people"),
+            ("nobody-should-own-the-way-you-reach-people", "nobody-but-you-should-own-the-way-you-can-be-reached"),
+        ):
+            with self.subTest(old=old):
+                status, location, _ = self.request_redirect("vauchi.app", f"/landing/{old}?utm=a", "GET")
+                self.assertEqual(status, 301)
+                self.assertEqual(location, f"https://vauchi.app/landing/{new}/?utm=a")
+
     def test_unknown_website_urls_are_not_sent_to_the_docs_homepage(self):
         status, location, _ = self.request_redirect("vauchi.app", "/not-a-real-page/")
         self.assertEqual(status, 404)
