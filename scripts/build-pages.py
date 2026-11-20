@@ -228,12 +228,9 @@ def write_pages_sitemap(locales: list[str]):
     print(f"  sitemap: {path} ({len(locales)} locale page(s))")
 
 
-def locale_prefix(locale: str) -> str:
-    return "/" if locale == DEFAULT_LOCALE else f"/{locale}/"
-
-
 def why_path(locale: str, topic: str | None) -> str:
-    return f"{locale_prefix(locale)}why/" + (f"{topic}/" if topic else "")
+    prefix = "/" if locale == DEFAULT_LOCALE else f"/{locale}/"
+    return f"{prefix}why/" + (f"{topic}/" if topic else "")
 
 
 def why_page_urls(locales: list[str]) -> list[str]:
