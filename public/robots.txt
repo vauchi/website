@@ -43,7 +43,6 @@ User-agent: Amzn-User
 User-agent: Amzn-SearchBot
 User-agent: GoogleAgent-URLContext
 User-agent: Gemini-Deep-Research
-User-agent: cohere-ai
 Allow: /
 Disallow: /app-files/
 
@@ -51,6 +50,8 @@ Disallow: /app-files/
 # Each operator says the crawler collects pages to train models or sells
 # them as datasets. Where an operator also runs a live fetcher, that one
 # is in the allowed group above (ClaudeBot here, Claude-User there).
+# cohere-ai is here because Cohere documents no purpose for it; it moves
+# up once Cohere says it only fetches for people's questions.
 # Google-Extended is one switch for Gemini training and Gemini grounding
 # its answers in these pages; Google offers none for grounding alone, so
 # blocking training also keeps these pages out of Gemini's answers. Google
@@ -67,6 +68,7 @@ User-agent: TikTokSpider
 User-agent: meta-externalagent
 User-agent: FacebookBot
 User-agent: Amazonbot
+User-agent: cohere-ai
 User-agent: cohere-training-data-crawler
 User-agent: AI2Bot
 User-agent: Ai2Bot-Dolma
@@ -91,7 +93,6 @@ User-agent: img2dataset
 User-agent: LAIONDownloader
 User-agent: laion-huggingface-processor
 User-agent: Timpibot
-User-agent: Kangaroo Bot
 User-agent: ICC-Crawler
 User-agent: Cotoyogi
 User-agent: FriendlyCrawler
