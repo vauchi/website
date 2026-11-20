@@ -39,6 +39,15 @@ for (const prefix of locales) {
     }
   });
 
+  test(`${name}support/ links the address list signed with Vauchi's key`, async ({ page, request }) => {
+    const copy = JSON.parse(readFileSync(`i18n/${prefix ? prefix.slice(0, -1) : "en"}.json`, "utf8"));
+    await page.goto(`/${prefix}support/`);
+    await expect(page.getByRole("link", { name: copy["support.crypto.signed"] })).toHaveAttribute("href", "/donation-addresses.txt.asc");
+    const signed = await request.get("/donation-addresses.txt.asc");
+    expect(signed.status()).toBe(200);
+    for (const address of Object.values(addresses)) expect(await signed.text()).toContain(address);
+  });
+
   test(`${name}support/ description fits search snippets (120-160 characters)`, async ({ page }) => {
     await page.goto(`/${prefix}support/`);
     const description = await page.locator('meta[name="description"]').getAttribute("content");
