@@ -224,7 +224,7 @@
   "whypage.change-your-number.s1.heading": "Cómo funciona",
   "whypage.change-your-number.s1.body": "Cuando intercambias tarjetas con alguien, vuestros dos teléfonos crean un canal privado entre vosotros. Cambia un dato de tu tarjeta, y Vauchi envía el cambio a cada contacto que puede verlo. Solo vosotros dos podéis leerlo, ni el relay de en medio ni quienes lo gestionan.",
   "whypage.change-your-number.s2.heading": "Qué puedes cambiar",
-  "whypage.change-your-number.s2.body": "Todo lo que hay en tu tarjeta: números de teléfono, correos, direcciones postales y usuarios de redes sociales o de mensajería. También puedes añadir un dato nuevo y elegir quién lo ve, u ocultar uno a un contacto.",
+  "whypage.change-your-number.s2.body": "Todo lo que hay en tu tarjeta: números de teléfono, correos, direcciones postales y usuarios de redes sociales o de mensajería. Edita un dato, y su nuevo valor llega a todos los que pueden verlo. Añade uno nuevo, y empieza oculto: solo lo reciben las personas que elijas.",
   "whypage.change-your-number.s3.heading": "Quién recibe la actualización",
   "whypage.change-your-number.s3.body": "Cada contacto recibe solo los datos que le dejas ver. Cambia tu número privado, y solo quienes ven ese número reciben el nuevo. Para los demás, tu tarjeta sigue igual.",
   "whypage.change-your-number.s4.heading": "Cuándo llega",
@@ -233,11 +233,11 @@
   "whypage.change-your-number.limit2": "Actualiza tu tarjeta en Vauchi. Una copia guardada en otro sitio, como la agenda de un teléfono o una captura de pantalla, conserva los datos antiguos.",
   "whypage.change-your-number.limit3": "El relay no puede leer la actualización, pero ve que se envió algo, cuándo y su tamaño aproximado.",
   "whypage.change-your-number.q1": "¿Mis contactos tienen que hacer algo?",
-  "whypage.change-your-number.a1": "No. Una vez intercambiadas las tarjetas, las actualizaciones llegan solas la próxima vez que su app se conecta.",
+  "whypage.change-your-number.a1": "No. Una vez intercambiadas las tarjetas, las actualizaciones les llegan la próxima vez que su app se sincroniza, por ejemplo al abrirla.",
   "whypage.change-your-number.q2": "¿Y si cambio de número mientras el teléfono de un contacto está apagado?",
   "whypage.change-your-number.a2": "La actualización espera, sellada, hasta que su teléfono se reconecta, hasta 120 días.",
   "whypage.change-your-number.q3": "¿Puedo evitar que alguien reciba mi número nuevo?",
-  "whypage.change-your-number.a3": "Sí. Ocúltale ese dato antes de cambiarlo, y no recibirá el nuevo.",
+  "whypage.change-your-number.a3": "Sí. Ocúltale ese dato antes de cambiarlo, y no recibirá más cambios de él. Si usas varios dispositivos, deja que se sincronicen primero.",
   "whypage.by": "Por",
   "whypage.ai_assisted": "Escrito con ayuda de IA. Revisado y verificado por el autor, que es responsable de este contenido."
 }

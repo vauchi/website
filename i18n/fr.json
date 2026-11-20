@@ -224,7 +224,7 @@
   "whypage.change-your-number.s1.heading": "Comment ça marche",
   "whypage.change-your-number.s1.body": "Quand vous échangez vos cartes avec quelqu'un, vos deux téléphones établissent un canal privé entre vous. Changez une information sur votre carte, et Vauchi envoie le changement à chaque contact autorisé à la voir. Vous seuls pouvez le lire, ni le relais entre vous, ni ceux qui le font tourner.",
   "whypage.change-your-number.s2.heading": "Ce que vous pouvez changer",
-  "whypage.change-your-number.s2.body": "Tout ce qui est sur votre carte : numéros de téléphone, adresses e-mail, adresses postales, et pseudos de réseaux sociaux ou de messagerie. Vous pouvez aussi ajouter une information et choisir qui la voit, ou en cacher une à un contact.",
+  "whypage.change-your-number.s2.body": "Tout ce qui est sur votre carte : numéros de téléphone, adresses e-mail, adresses postales, et pseudos de réseaux sociaux ou de messagerie. Modifiez une information, et sa nouvelle valeur va à tous ceux qui peuvent la voir. Ajoutez-en une, et elle est d'abord cachée : seules les personnes que vous choisissez la reçoivent.",
   "whypage.change-your-number.s3.heading": "Qui reçoit la mise à jour",
   "whypage.change-your-number.s3.body": "Chaque contact reçoit seulement les informations que vous lui montrez. Changez votre numéro privé, et seules les personnes qui voient ce numéro reçoivent le nouveau. Pour les autres, votre carte reste telle quelle.",
   "whypage.change-your-number.s4.heading": "Quand elle arrive",
@@ -233,11 +233,11 @@
   "whypage.change-your-number.limit2": "Cela met à jour votre carte dans Vauchi. Une copie gardée ailleurs, comme dans le carnet d'adresses d'un téléphone ou une capture d'écran, conserve les anciennes informations.",
   "whypage.change-your-number.limit3": "Le relais ne peut pas lire la mise à jour, mais il voit qu'un envoi a eu lieu, quand, et sa taille approximative.",
   "whypage.change-your-number.q1": "Mes contacts doivent-ils faire quelque chose ?",
-  "whypage.change-your-number.a1": "Non. Une fois les cartes échangées, les mises à jour arrivent seules la prochaine fois que leur application se connecte.",
+  "whypage.change-your-number.a1": "Non. Une fois les cartes échangées, les mises à jour leur parviennent à la prochaine synchronisation de leur application, par exemple quand ils l'ouvrent.",
   "whypage.change-your-number.q2": "Et si je change de numéro pendant que le téléphone d'un contact est éteint ?",
   "whypage.change-your-number.a2": "La mise à jour attend, scellée, jusqu'à ce que son téléphone se reconnecte, jusqu'à 120 jours.",
   "whypage.change-your-number.q3": "Puis-je empêcher quelqu'un de recevoir mon nouveau numéro ?",
-  "whypage.change-your-number.a3": "Oui. Cachez-lui cette information avant de la changer, et il ne recevra pas la nouvelle.",
+  "whypage.change-your-number.a3": "Oui. Cachez-lui cette information avant de la changer, et il ne recevra plus ses modifications. Si vous utilisez plusieurs appareils, laissez-les d'abord se synchroniser.",
   "whypage.by": "Par",
   "whypage.ai_assisted": "Rédigé avec l'aide de l'IA. Relu et vérifié par l'auteur, qui est responsable de ce contenu."
 }
