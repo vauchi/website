@@ -42,6 +42,10 @@ for (const locale of locales) {
       expect(webPage.description).toBe(description);
       expect(webPage.url).toBe(url);
       await expect(page.locator("[data-why-notice]")).toHaveText(copy["whypage.notice"]);
+      await expect(page.locator('a[rel="author"]')).toHaveText("Mattia Egloff");
+      await expect(page.locator("[data-why-byline]")).toContainText(copy["whypage.ai_assisted"]);
+      expect(webPage.headline).toBe(await page.locator("h1").textContent());
+      expect(webPage.mainEntityOfPage).toBe(url);
     });
   }
 
