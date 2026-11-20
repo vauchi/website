@@ -13,7 +13,7 @@ const EN_VARIANT_HEADLINES = {
   f: "Meet once. Stay in touch.",
   g: "The address book that fixes itself.",
   h: "Stay reachable. On your own terms.",
-  i: "Nobody should own the way you reach people.",
+  i: "Nobody but you should own the way you can be reached.",
   j: "Change your details. Keep your connections.",
   k: "Nobody can look you up. You choose who gets your details.",
 };
