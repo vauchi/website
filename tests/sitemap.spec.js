@@ -69,9 +69,34 @@ test("robots.txt separates answer engines from training crawlers", async ({
   for (const allowed of ["OAI-SearchBot", "Claude-SearchBot", "PerplexityBot"]) {
     expect(body).toContain(`User-agent: ${allowed}`);
   }
-  for (const blocked of ["GPTBot", "ClaudeBot", "Google-Extended", "CCBot"]) {
-    expect(body).toContain(`User-agent: ${blocked}`);
+  for (const blocked of ["GPTBot", "ClaudeBot", "Applebot-Extended", "CCBot"]) {
+    expect(rulesFor(body, blocked)).toContain("Disallow: /");
   }
-  const trainingGroup = body.slice(body.indexOf("User-agent: GPTBot"));
-  expect(trainingGroup).toContain("Disallow: /");
+  // Google-Extended gates Gemini grounding as well as training; the
+  // maintainer chose to allow it for grounding (vauchi/private#1308).
+  expect(rulesFor(body, "Google-Extended")).toEqual(["Allow: /", "Disallow: /app-files/"]);
 });
+
+// The rules of the group that names this user agent, as robots.txt groups
+// them: consecutive User-agent lines share the rules that follow.
+function rulesFor(body, agent) {
+  const lines = body.split("\n").map((line) => line.trim()).filter((line) => line && !line.startsWith("#"));
+  let names = [];
+  let rules = [];
+  let collectingRules = false;
+  for (const line of [...lines, "User-agent: <end>"]) {
+    if (line.startsWith("User-agent:")) {
+      if (collectingRules) {
+        if (names.includes(agent)) return rules;
+        names = [];
+        rules = [];
+        collectingRules = false;
+      }
+      names.push(line.slice("User-agent:".length).trim());
+    } else if (/^(Allow|Disallow):/.test(line)) {
+      collectingRules = true;
+      rules.push(line);
+    }
+  }
+  throw new Error(`robots.txt has no group for ${agent}`);
+}
