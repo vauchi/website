@@ -69,34 +69,46 @@ test("robots.txt separates answer engines from training crawlers", async ({
   for (const allowed of ["OAI-SearchBot", "Claude-SearchBot", "PerplexityBot"]) {
     expect(body).toContain(`User-agent: ${allowed}`);
   }
+  // Search engines reach the site through the * group.
+  for (const search of ["Googlebot", "Bingbot"]) {
+    expect(rulesFor(body, search), search).toContain("Allow: /");
+  }
   // Live AI: fetches a page because a person asked, or indexes it for
-  // answers that link back. Must read the whole site.
+  // answers that link back. Each must be named, so deleting one fails.
   for (const live of [
-    "Googlebot", "Bingbot", "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User",
+    "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User",
     "PerplexityBot", "Perplexity-User", "DuckAssistBot", "MistralAI-User", "MistralAI-Index",
     "Applebot", "meta-externalfetcher", "Amzn-User", "Amzn-SearchBot", "GoogleAgent-URLContext",
-    "Gemini-Deep-Research", "cohere-ai", "facebookexternalhit",
+    "Gemini-Deep-Research",
   ]) {
-    expect(rulesFor(body, live), live).toContain("Allow: /");
-    expect(rulesFor(body, live), live).not.toContain("Disallow: /");
+    expect(rulesFor(body, live, { named: true }), live).toEqual(["Allow: /", "Disallow: /app-files/"]);
   }
-  // Training: the operator says the crawler collects pages to train models.
-  for (const training of [
-    "GPTBot", "ClaudeBot", "anthropic-ai", "Applebot-Extended", "CCBot", "Bytespider",
-    // Google-Extended also gates Gemini grounding; the maintainer chose no
-    // training over Gemini answers (vauchi/private#1308).
-    "Google-Extended", "TikTokSpider", "meta-externalagent", "FacebookBot", "Amazonbot", "cohere-training-data-crawler",
-    "AI2Bot", "Ai2Bot-Dolma", "DeepSeekBot", "MistralAI-Training", "MoonshotBot", "QwenBot",
-    "ERNIEBot", "Hunyuan", "PanguBot", "img2dataset", "LAIONDownloader", "Timpibot", "Webzio-Extended",
-  ]) {
-    expect(rulesFor(body, training), training).toEqual(["Disallow: /"]);
+  // Training, or no documented purpose: the whole group, so deleting any
+  // one of them fails. Google-Extended also gates Gemini grounding; the
+  // maintainer chose no training over Gemini answers (vauchi/private#1308).
+  const training = [
+    "GPTBot", "ClaudeBot", "anthropic-ai", "Applebot-Extended", "Google-Extended", "CCBot",
+    "Bytespider", "TikTokSpider", "meta-externalagent", "FacebookBot", "Amazonbot",
+    "cohere-ai", "cohere-training-data-crawler", "AI2Bot", "Ai2Bot-Dolma", "DeepSeekBot",
+    "MistralAI-Training", "MoonshotBot", "KimiBot", "QwenBot", "ERNIEBot", "Hunyuan", "PanguBot",
+    "ChatGLM-Spider", "YandexAdditional", "YandexAdditionalBot", "YiBot", "Diffbot", "omgili",
+    "Omgilibot", "Webzio-Extended", "ImagesiftBot", "img2dataset", "LAIONDownloader",
+    "laion-huggingface-processor", "Timpibot", "ICC-Crawler", "Cotoyogi", "FriendlyCrawler",
+    "Factset_spyderbot", "VelenPublicWebCrawler",
+  ];
+  for (const agent of training) {
+    expect(rulesFor(body, agent, { named: true }), agent).toEqual(["Disallow: /"]);
+  }
+  // RFC 9309 user-agent tokens hold no spaces; a parser could not match one.
+  for (const line of body.split("\n").filter((l) => l.startsWith("User-agent:"))) {
+    expect(line.slice("User-agent:".length).trim(), line).toMatch(/^[A-Za-z0-9_*-]+$/);
   }
   expect(body).toMatch(/^Content-Signal: search=yes, ai-input=yes, ai-train=no$/m);
 });
 
 // The rules of the group that names this user agent, as robots.txt groups
 // them: consecutive User-agent lines share the rules that follow.
-function rulesFor(body, agent) {
+function rulesFor(body, agent, { named = false } = {}) {
   const lines = body.split("\n").map((line) => line.trim()).filter((line) => line && !line.startsWith("#"));
   let names = [];
   let rules = [];
@@ -115,6 +127,6 @@ function rulesFor(body, agent) {
       rules.push(line);
     }
   }
-  if (agent !== "*") return rulesFor(body, "*");
+  if (agent !== "*" && !named) return rulesFor(body, "*");
   throw new Error("robots.txt has no group for *");
 }
