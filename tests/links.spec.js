@@ -86,7 +86,7 @@ for (const locale of locales) {
     await expect(page.locator("[data-links-link]")).toHaveAttribute("href", `${prefix}links/`);
   });
 
-  for (const slug of ["", "no-directory/", "change-your-number/", "beyond-social-network/"]) {
+  for (const slug of ["", "no-directory/", "change-your-number/", "beyond-social-network/", "one-exchange/"]) {
     test(`${prefix}why/${slug} links the projects page`, async ({ page }) => {
       await page.goto(`${prefix}why/${slug}`);
       await expect(page.locator("[data-links-link]")).toHaveAttribute("href", `${prefix}links/`);
