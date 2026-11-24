@@ -58,9 +58,20 @@ LINK_CATEGORIES = [
     ]),
     ("messaging", [
         ("signal", "Signal", "https://signal.org/"),
+        ("threema", "Threema", "https://threema.com/"),
         ("briar", "Briar", "https://briarproject.org/"),
         ("deltachat", "Delta Chat", "https://delta.chat/"),
         ("matrix", "Matrix", "https://matrix.org/"),
+    ]),
+    ("browsing", [
+        ("firefox", "Firefox", "https://www.mozilla.org/firefox/"),
+        ("ublockorigin", "uBlock Origin", "https://github.com/gorhill/uBlock"),
+        ("torproject", "The Tor Project", "https://www.torproject.org/"),
+    ]),
+    ("email", [
+        ("thunderbird", "Thunderbird", "https://www.thunderbird.net/"),
+        ("posteo", "Posteo", "https://posteo.de/en"),
+        ("mailboxorg", "mailbox.org", "https://mailbox.org/en/"),
     ]),
     ("contacts", [
         ("nextcloud", "Nextcloud", "https://nextcloud.com/"),
@@ -69,10 +80,16 @@ LINK_CATEGORIES = [
     ("tools", [
         ("privacyguides", "Privacy Guides", "https://www.privacyguides.org/"),
         ("fdroid", "F-Droid", "https://f-droid.org/"),
-        ("torproject", "The Tor Project", "https://www.torproject.org/"),
         ("grapheneos", "GrapheneOS", "https://grapheneos.org/"),
+        ("keepassxc", "KeePassXC", "https://keepassxc.org/"),
+    ]),
+    ("together", [
+        ("cryptpad", "CryptPad", "https://cryptpad.org/"),
+        ("jitsi", "Jitsi Meet", "https://jitsi.org/jitsi-meet/"),
     ]),
     ("openweb", [
+        ("wikipedia", "Wikipedia", "https://www.wikipedia.org/"),
+        ("openstreetmap", "OpenStreetMap", "https://www.openstreetmap.org/"),
         ("nextgraph", "NextGraph", "https://nextgraph.org/"),
         ("mastodon", "Mastodon", "https://joinmastodon.org/"),
         ("indieweb", "IndieWeb", "https://indieweb.org/"),
