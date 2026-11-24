@@ -15,13 +15,21 @@ const entries = {
   noyb: "https://noyb.eu/",
   edri: "https://edri.org/",
   fsf: "https://www.fsf.org/",
+  digiges: "https://www.digitale-gesellschaft.ch/",
+  ccc: "https://www.ccc.de/en/",
   signal: "https://signal.org/",
   briar: "https://briarproject.org/",
   deltachat: "https://delta.chat/",
+  matrix: "https://matrix.org/",
+  nextcloud: "https://nextcloud.com/",
+  davx5: "https://www.davx5.com/",
   privacyguides: "https://www.privacyguides.org/",
   fdroid: "https://f-droid.org/",
   torproject: "https://www.torproject.org/",
+  grapheneos: "https://grapheneos.org/",
   nlnet: "https://nlnet.nl/",
+  sovereigntech: "https://www.sovereign.tech/",
+  prototypefund: "https://prototypefund.de/en/",
   nextgraph: "https://nextgraph.org/",
   mastodon: "https://joinmastodon.org/",
   indieweb: "https://indieweb.org/",
@@ -45,6 +53,10 @@ for (const locale of locales) {
     expect(description.length).toBeGreaterThanOrEqual(120);
     expect(description.length).toBeLessThanOrEqual(160);
     await expect(page.locator("[data-links-disclaimer]")).toHaveText(copy["linkspage.disclaimer"]);
+    await expect(page.locator("[data-links-checked]")).toHaveText(copy["linkspage.checked"]);
+    await expect(page.locator("[data-links-checked] time")).toHaveAttribute("datetime", "2026-11-24");
+    await expect(page.locator("[data-links-suggest]")).toContainText(copy["linkspage.suggest"]);
+    await expect(page.locator("[data-links-suggest] a")).toHaveAttribute("href", "mailto:hello@vauchi.app");
   });
 
   test(`${prefix}links/ links every project with what it is and how it fits`, async ({ page }) => {
@@ -62,6 +74,13 @@ for (const locale of locales) {
     await page.goto(prefix);
     await expect(page.locator("[data-links-link]")).toHaveAttribute("href", `${prefix}links/`);
   });
+
+  for (const slug of ["", "no-directory/", "change-your-number/", "beyond-social-network/"]) {
+    test(`${prefix}why/${slug} links the projects page`, async ({ page }) => {
+      await page.goto(`${prefix}why/${slug}`);
+      await expect(page.locator("[data-links-link]")).toHaveAttribute("href", `${prefix}links/`);
+    });
+  }
 }
 
 test("sitemap-pages.xml lists /links/ in every locale", async ({ request }) => {
