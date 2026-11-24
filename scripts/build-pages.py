@@ -46,28 +46,41 @@ DEFAULT_LOCALE = "en"
 VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"]
 WHY_TOPICS = ["no-directory", "change-your-number", "beyond-social-network"]
 
+LINKS_CHECKED = "2026-11-24"
 LINK_CATEGORIES = [
     ("rights", [
         ("eff", "Electronic Frontier Foundation (EFF)", "https://www.eff.org/"),
         ("noyb", "noyb – European Center for Digital Rights", "https://noyb.eu/"),
         ("edri", "European Digital Rights (EDRi)", "https://edri.org/"),
         ("fsf", "Free Software Foundation (FSF)", "https://www.fsf.org/"),
+        ("digiges", "Digitale Gesellschaft (Switzerland)", "https://www.digitale-gesellschaft.ch/"),
+        ("ccc", "Chaos Computer Club (CCC)", "https://www.ccc.de/en/"),
     ]),
     ("messaging", [
         ("signal", "Signal", "https://signal.org/"),
         ("briar", "Briar", "https://briarproject.org/"),
         ("deltachat", "Delta Chat", "https://delta.chat/"),
+        ("matrix", "Matrix", "https://matrix.org/"),
+    ]),
+    ("contacts", [
+        ("nextcloud", "Nextcloud", "https://nextcloud.com/"),
+        ("davx5", "DAVx⁵", "https://www.davx5.com/"),
     ]),
     ("tools", [
         ("privacyguides", "Privacy Guides", "https://www.privacyguides.org/"),
         ("fdroid", "F-Droid", "https://f-droid.org/"),
         ("torproject", "The Tor Project", "https://www.torproject.org/"),
+        ("grapheneos", "GrapheneOS", "https://grapheneos.org/"),
     ]),
     ("openweb", [
-        ("nlnet", "NLnet Foundation", "https://nlnet.nl/"),
         ("nextgraph", "NextGraph", "https://nextgraph.org/"),
         ("mastodon", "Mastodon", "https://joinmastodon.org/"),
         ("indieweb", "IndieWeb", "https://indieweb.org/"),
+    ]),
+    ("funding", [
+        ("nlnet", "NLnet Foundation", "https://nlnet.nl/"),
+        ("sovereigntech", "Sovereign Tech Agency", "https://www.sovereign.tech/"),
+        ("prototypefund", "Prototype Fund", "https://prototypefund.de/en/"),
     ]),
     ("spaces", [
         ("typeups", "TypeUps", "https://www.typeups.com/"),
@@ -350,6 +363,7 @@ def write_links_page(env: Environment, locale: str, translations: dict, locales:
         lang=locale,
         locales=locales,
         categories=LINK_CATEGORIES,
+        checked=LINKS_CHECKED,
     )
     with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)

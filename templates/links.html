@@ -57,6 +57,7 @@
       <h1>{{ t['linkspage.heading']|e }}</h1>
       <p>{{ t['linkspage.intro']|e }}</p>
       <p data-links-disclaimer>{{ t['linkspage.disclaimer']|e }}</p>
+      <p data-links-checked><time datetime="{{ checked }}">{{ t['linkspage.checked']|e }}</time></p>
       {% for category, entries in categories %}
       <section aria-labelledby="{{ category }}-heading">
         <h2 id="{{ category }}-heading">{{ t['linkspage.cat.' ~ category]|e }}</h2>
@@ -71,6 +72,7 @@
         </ul>
       </section>
       {% endfor %}
+      <p data-links-suggest>{{ t['linkspage.suggest']|e }} <a href="mailto:hello@vauchi.app">hello@vauchi.app</a></p>
     </main>
     <footer>
       <div class="wrap">
