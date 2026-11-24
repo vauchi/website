@@ -43,7 +43,7 @@ PUBLIC_DIR = os.path.join(ROOT, "public")
 
 DEFAULT_LOCALE = "en"
 VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"]
-WHY_TOPICS = ["no-directory", "change-your-number"]
+WHY_TOPICS = ["no-directory", "change-your-number", "beyond-social-network"]
 
 
 def load_translations(locale: str) -> dict:
