@@ -8,7 +8,7 @@ import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
 const locales = ["en", "de", "es", "fr", "it"];
-const topics = ["no-directory", "change-your-number"];
+const topics = ["no-directory", "change-your-number", "beyond-social-network"];
 const prefixOf = (locale) => (locale === "en" ? "/" : `/${locale}/`);
 
 function jsonLd(page) {
