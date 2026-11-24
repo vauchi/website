@@ -1,0 +1,85 @@
+<!-- SPDX-FileCopyrightText: 2026 Mattia Egloff <mattia.egloff@pm.me> -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+{%- set home = '/' if lang == 'en' else '/' ~ lang ~ '/' %}
+{%- set page_url = 'https://vauchi.app' ~ home ~ 'links/' %}
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ t['linkspage.meta.title']|e }}</title>
+    <meta name="description" content="{{ t['linkspage.meta.description']|e }}">
+    <meta name="theme-color" content="#4fc3f7">
+    <link rel="canonical" href="{{ page_url }}">
+    {% for code in locales %}
+    <link rel="alternate" hreflang="{{ code }}" href="https://vauchi.app{{ '/' if code == 'en' else '/' ~ code ~ '/' }}links/">
+    {% endfor %}
+    <link rel="alternate" hreflang="x-default" href="https://vauchi.app/links/">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ page_url }}">
+    <meta property="og:title" content="{{ t['linkspage.meta.title']|e }}">
+    <meta property="og:description" content="{{ t['linkspage.meta.description']|e }}">
+    <meta property="og:image" content="https://vauchi.app/social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Vauchi">
+    <meta property="og:locale" content="{{ lang }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ t['linkspage.meta.title']|e }}">
+    <meta name="twitter:description" content="{{ t['linkspage.meta.description']|e }}">
+    <meta name="twitter:image" content="https://vauchi.app/social-preview.png">
+    <link rel="stylesheet" href="/css/page.css">
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="{{ home }}"><img src="/logo.webp" alt="" width="28" height="28">Vauchi</a>
+        <div class="theme-controls">
+          <button id="mode-toggle" type="button" aria-label="Toggle light/dark mode">☀️</button>
+          <button id="theme-menu-toggle" type="button" aria-label="Choose theme" aria-haspopup="true" aria-expanded="false">🎨</button>
+          <div id="theme-menu">
+            <div>Dark</div><div id="theme-menu-dark"></div>
+            <div>Light</div><div id="theme-menu-light"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <nav class="languages" aria-label="Languages">
+        {% for code in locales %}
+        <a href="{{ '/' if code == 'en' else '/' ~ code ~ '/' }}links/" lang="{{ code }}" hreflang="{{ code }}">{{ code|upper }}</a>
+        {% endfor %}
+      </nav>
+      <h1>{{ t['linkspage.heading']|e }}</h1>
+      <p>{{ t['linkspage.intro']|e }}</p>
+      <p data-links-disclaimer>{{ t['linkspage.disclaimer']|e }}</p>
+      {% for category, entries in categories %}
+      <section aria-labelledby="{{ category }}-heading">
+        <h2 id="{{ category }}-heading">{{ t['linkspage.cat.' ~ category]|e }}</h2>
+        <ul class="link-list">
+          {% for id, name, url in entries %}
+          <li data-link-entry="{{ id }}">
+            <h3><a href="{{ url }}" rel="noopener">{{ name|e }}</a></h3>
+            <p data-link-about>{{ t['linkspage.' ~ id ~ '.about']|e }}</p>
+            <p data-link-fit><strong>{{ t['linkspage.fit_label']|e }}</strong> {{ t['linkspage.' ~ id ~ '.fit']|e }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endfor %}
+    </main>
+    <footer>
+      <div class="wrap">
+        <a href="{{ home }}">{{ t['footer.home']|e }}</a>
+        <a href="{{ home }}why/">{{ t['footer.why']|e }}</a>
+        <a href="{{ home }}text/">{{ t['footer.text_version']|e }}</a>
+        <a href="https://vauchi.app/docs/legal/privacy-policy.html">{{ t['footer.privacy']|e }}</a>
+      </div>
+    </footer>
+    <script src="/js/theme-picker.js" defer></script>
+  </body>
+</html>

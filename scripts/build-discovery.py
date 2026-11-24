@@ -86,12 +86,12 @@ def generate(root):
     canonical_pages = {}
     homes = {"https://vauchi.app/" + suffix for suffix in ("", "de/", "es/", "fr/", "it/")}
     why_page = re.compile(r"https://vauchi\.app/(?:(?:de|es|fr|it)/)?why/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)?")
-    support_page = re.compile(r"https://vauchi\.app/(?:(?:de|es|fr|it)/)?support/")
+    support_or_links_page = re.compile(r"https://vauchi\.app/(?:(?:de|es|fr|it)/)?(?:support|links)/")
     publisher_page = "https://vauchi.app/authors/vauchi/"
     for location in ElementTree.parse(public / "sitemap-pages.xml").findall(".//{*}loc"):
         url = location.text
         known = url in homes or url == publisher_page
-        if not known and not why_page.fullmatch(url or "") and not support_page.fullmatch(url or ""):
+        if not known and not why_page.fullmatch(url or "") and not support_or_links_page.fullmatch(url or ""):
             raise ValueError(f"unexpected sitemap URL: {url}")
         canonical_pages[url] = public / url.removeprefix("https://vauchi.app/") / "index.html"
     if not homes <= set(canonical_pages):

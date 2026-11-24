@@ -19,6 +19,7 @@ Writes:
     public/index.html        — English (default)
     public/{lang}/index.html — each additional locale
     public/[{lang}/]support/index.html — donation page, addresses from funding.json
+    public/[{lang}/]links/index.html — projects that share Vauchi's values
 """
 
 import json
@@ -44,6 +45,34 @@ PUBLIC_DIR = os.path.join(ROOT, "public")
 DEFAULT_LOCALE = "en"
 VARIANT_IDS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"]
 WHY_TOPICS = ["no-directory", "change-your-number", "beyond-social-network"]
+
+LINK_CATEGORIES = [
+    ("rights", [
+        ("eff", "Electronic Frontier Foundation (EFF)", "https://www.eff.org/"),
+        ("noyb", "noyb – European Center for Digital Rights", "https://noyb.eu/"),
+        ("edri", "European Digital Rights (EDRi)", "https://edri.org/"),
+        ("fsf", "Free Software Foundation (FSF)", "https://www.fsf.org/"),
+    ]),
+    ("messaging", [
+        ("signal", "Signal", "https://signal.org/"),
+        ("briar", "Briar", "https://briarproject.org/"),
+        ("deltachat", "Delta Chat", "https://delta.chat/"),
+    ]),
+    ("tools", [
+        ("privacyguides", "Privacy Guides", "https://www.privacyguides.org/"),
+        ("fdroid", "F-Droid", "https://f-droid.org/"),
+        ("torproject", "The Tor Project", "https://www.torproject.org/"),
+    ]),
+    ("openweb", [
+        ("nlnet", "NLnet Foundation", "https://nlnet.nl/"),
+        ("nextgraph", "NextGraph", "https://nextgraph.org/"),
+        ("mastodon", "Mastodon", "https://joinmastodon.org/"),
+        ("indieweb", "IndieWeb", "https://indieweb.org/"),
+    ]),
+    ("spaces", [
+        ("typeups", "TypeUps", "https://www.typeups.com/"),
+    ]),
+]
 
 
 def load_translations(locale: str) -> dict:
@@ -228,6 +257,13 @@ def write_pages_sitemap(locales: list[str]):
         lines.append("    <priority>0.6</priority>")
         lines.append("  </url>")
 
+    for url in [SITE_URL + locale_prefix(loc) + "links/" for loc in locales]:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{url}</loc>")
+        lines.append("    <changefreq>monthly</changefreq>")
+        lines.append("    <priority>0.4</priority>")
+        lines.append("  </url>")
+
     for url in [SITE_URL + locale_prefix(loc) + "support/" for loc in locales] + [PUBLISHER_URL]:
         lines.append("  <url>")
         lines.append(f"    <loc>{url}</loc>")
@@ -304,6 +340,19 @@ def write_why_pages(env: Environment, locale: str, translations: dict, locales: 
 
 def locale_prefix(locale: str) -> str:
     return "/" if locale == DEFAULT_LOCALE else f"/{locale}/"
+
+
+def write_links_page(env: Environment, locale: str, translations: dict, locales: list[str]):
+    dir_path = os.path.join(PUBLIC_DIR, locale_prefix(locale).strip("/"), "links")
+    os.makedirs(dir_path, exist_ok=True)
+    html = env.get_template("links.html").render(
+        t=translations,
+        lang=locale,
+        locales=locales,
+        categories=LINK_CATEGORIES,
+    )
+    with open(os.path.join(dir_path, "index.html"), "w", encoding="utf-8") as f:
+        f.write(html)
 
 
 def write_support_page(env: Environment, locale: str, translations: dict, locales: list[str], addresses: dict[str, str], qr_files: dict[str, str]):
@@ -428,6 +477,7 @@ def main():
             output.write(env.get_template("text.html").render(t=all_translations[locale], lang=locale))
         write_why_pages(env, locale, all_translations[locale], locales)
         write_support_page(env, locale, all_translations[locale], locales, donation_addresses, qr_files)
+        write_links_page(env, locale, all_translations[locale], locales)
 
     # Build per-variant landing pages for accurate SEO/social previews.
     # Each page is pre-rendered with the variant headline/sub in the meta,
